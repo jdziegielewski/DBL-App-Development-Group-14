@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/tab_alarms">
+
+    <fragment
+        android:id="@+id/tab_alarms"
+        android:name="com.dblgroup14.app.ui.management.ManageAlarmsFragment"
+        android:label="@string/title_tab_alarms"
+        tools:layout="@layout/fragment_manage_alarms" />
+
+    <fragment
+        android:id="@+id/tab_challenges"
+        android:name="com.dblgroup14.app.ui.management.ManageChallengesFragment"
+        android:label="@string/title_tab_challenges"
+        tools:layout="@layout/fragment_manage_challenges" />
+
+    <fragment
+        android:id="@+id/tab_score"
+        android:name="com.dblgroup14.app.ui.score.ScoreFragment"
+        android:label="@string/title_tab_score"
+        tools:layout="@layout/fragment_score" />
+
+    <fragment
+        android:id="@+id/tab_user"
+        android:name="com.dblgroup14.app.ui.management.ManageUserFragment"
+        android:label="@string/title_tab_user"
+        tools:layout="@layout/fragment_manage_user" />
+</navigation>

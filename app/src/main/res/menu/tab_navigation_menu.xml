@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/tab_alarms"
+        android:icon="@drawable/ic_alarm_tab"
+        android:title="@string/title_tab_alarms" />
+
+    <item
+        android:id="@+id/tab_challenges"
+        android:icon="@drawable/ic_challenges_tab"
+        android:title="@string/title_tab_challenges" />
+
+    <item
+        android:id="@+id/tab_score"
+        android:icon="@drawable/ic_score_tab"
+        android:title="@string/title_tab_score" />
+
+    <item
+        android:id="@+id/tab_user"
+        android:icon="@drawable/ic_user_tab"
+        android:title="@string/title_tab_user" />
+
+</menu>

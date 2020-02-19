@@ -1,4 +1,4 @@
-package com.dblgroup14.app.ui.home;
+package com.dblgroup14.app.ui.management;
 
 import android.content.Context;
 import android.graphics.Typeface;

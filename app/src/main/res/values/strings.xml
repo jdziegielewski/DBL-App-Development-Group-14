@@ -1,6 +1,12 @@
 <resources>
-    <string name="app_name">DBLGroup14App</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">Sleap</string>
+
+    <!-- Main tab titles -->
+    <string name="title_tab_alarms">My Alarms</string>
+    <string name="title_tab_challenges">Challenges</string>
+    <string name="title_tab_score">Score</string>
+    <string name="title_tab_user">User</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
