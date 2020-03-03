@@ -4,11 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.ui.management.Alarm;
+import com.dblgroup14.app.ui.management.CustomListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,10 +23,7 @@ import java.util.List;
 
 public class ManageAlarmsFragment extends Fragment {
     
-    private ExpandableListAdapter listAdapter;
-    private ExpandableListView expListView;
-    private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
+    ListView listView;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,19 +33,19 @@ public class ManageAlarmsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         
         // Set title
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
-        
-        // Get components
-        expListView = view.findViewById(R.id.lvExp);
-        
-        // Prepare list data
-        prepareListData();
-        
-        // Set list adapter
-        listAdapter = new AlarmExpandableListAdapter(getContext(), listDataHeader, listDataChild);
-        expListView.setAdapter(listAdapter);
+    
+        Alarm alarm1 = new Alarm("Morning", 7,50,1,100, false);
+        Alarm alarm2 = new Alarm("Noon", 12,30,4,80, false);
+        Alarm alarm3 = new Alarm("Late", 21,15,1,100, true);
+        Alarm alarm4 = new Alarm("I hate Mornings", 5,40,1,100, false);
+        Alarm alarm5 = new Alarm("Let's sleap", 4,25 ,4,80, false);
+        Alarm alarm6 = new Alarm("Insert bad name", 23,20,1,100, true);
+        Alarm alarm7 = new Alarm("Morning", 7,50,1,100, false);
+        Alarm alarms[] = new Alarm[] {alarm1, alarm2, alarm3, alarm4, alarm5, alarm6, alarm7};
         
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,47 +54,31 @@ public class ManageAlarmsFragment extends Fragment {
                 // TODO: Call intent to add alarm activity
             }
         });
+    
+        ArrayList<String> nameAlarms = new ArrayList<String>();
+        ArrayList<String> timeAlarms = new ArrayList<String>();
+        
+        for (Alarm alarm : alarms) {
+            nameAlarms.add(alarm.getName());
+            timeAlarms.add(alarm.getHours()+ ":"+alarm.getMin());
+        }
+    
+    
+        CustomListAdapter adapter = new CustomListAdapter(getActivity(), nameAlarms, timeAlarms);
+        
+        listView = (ListView) view.findViewById(R.id.alarmView);
+        listView.setAdapter(adapter);
+        
+        /*
+        // Get components
+        ListView alarmView = view.findViewById(R.id.alarmView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+        for (Alarm alarm  : alarms) {
+            adapter.add(alarm.getName());
+        }
+        
+        alarmView.setAdapter(adapter); */
+        
     }
     
-    /**
-     * Function to generate list data. Contains dummy data for now.
-     */
-    private void prepareListData() {
-        listDataHeader = new ArrayList<>();
-        listDataChild = new HashMap<>();
-        
-        // Adding child data
-        listDataHeader.add("Alarm 1");
-        listDataHeader.add("Alarm 2");
-        listDataHeader.add("Alarm 3");
-        
-        // Adding child data
-        List<String> top250 = new ArrayList<>();
-        top250.add("The Shawshank Redemption");
-        top250.add("The Godfather");
-        top250.add("The Godfather: Part II");
-        top250.add("Pulp Fiction");
-        top250.add("The Good, the Bad and the Ugly");
-        top250.add("The Dark Knight");
-        top250.add("12 Angry Men");
-        
-        List<String> nowShowing = new ArrayList<>();
-        nowShowing.add("The Conjuring");
-        nowShowing.add("Despicable Me 2");
-        nowShowing.add("Turbo");
-        nowShowing.add("Grown Ups 2");
-        nowShowing.add("Red 2");
-        nowShowing.add("The Wolverine");
-        
-        List<String> comingSoon = new ArrayList<>();
-        comingSoon.add("2 Guns");
-        comingSoon.add("The Smurfs 2");
-        comingSoon.add("The Spectacular Now");
-        comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
-        
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
-    }
 }
