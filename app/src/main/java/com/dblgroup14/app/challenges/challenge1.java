@@ -28,7 +28,7 @@ public class challenge1 extends AppCompatActivity {
                 password = textinput.getText().toString();
                 if(password.equals(correct)) {
                     Toast.makeText(challenge1.this, "Correct", Toast.LENGTH_SHORT).show();
-                    finish();
+                    finish(); //finishes
                 }
                 else textinput.setError("Incorrect Password");
             }
