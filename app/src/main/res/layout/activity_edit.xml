@@ -32,12 +32,23 @@
         app:layout_constraintBottom_toBottomOf="@id/time"/>
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="26dp"
-        android:background="#A6A6A6"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
         android:focusable="false"
         android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,10 +59,12 @@
         android:id="@+id/nameTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/name_alarm"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="10pt"
-        app:layout_constraintBottom_toTopOf="@+id/nameEdit"
-        app:layout_constraintStart_toStartOf="@+id/nameEdit" />
+        app:layout_constraintStart_toStartOf="@+id/nameEdit"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <EditText
         android:id="@+id/nameEdit"
@@ -62,14 +75,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="216dp"
-        android:ems="10"
-        android:inputType="text"
+        android:ems="6"
 
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.137"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/nameTitle" />
 
     <Button
         android:id="@+id/button"
@@ -81,5 +93,165 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:src="@drawable/ic_repeat"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintCircleRadius="15pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/repeatView"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view2">
+
+        <TextView
+            android:id="@+id/repeatDay0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circle_unused"
+            android:gravity="center"
+            android:text="M"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/repeatDay1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/repeatDay1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_used"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/repeatDay2"
+            app:layout_constraintStart_toEndOf="@+id/repeatDay0"
+            app:layout_constraintTop_toTopOf="@+id/repeatDay0" />
+
+        <TextView
+            android:id="@+id/repeatDay2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_unused"
+            android:gravity="center"
+            android:text="W"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/repeatDay3"
+            app:layout_constraintStart_toEndOf="@+id/repeatDay1"
+            app:layout_constraintTop_toTopOf="@+id/repeatDay1" />
+
+        <TextView
+            android:id="@+id/repeatDay3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_unused"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/repeatDay4"
+            app:layout_constraintStart_toEndOf="@+id/repeatDay2"
+            app:layout_constraintTop_toTopOf="@+id/repeatDay2" />
+
+        <TextView
+            android:id="@+id/repeatDay4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_unused"
+            android:gravity="center"
+            android:text="F"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/repeatDay5"
+            app:layout_constraintStart_toEndOf="@+id/repeatDay3"
+            app:layout_constraintTop_toTopOf="@+id/repeatDay3" />
+
+        <TextView
+            android:id="@+id/repeatDay5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_unused"
+            android:gravity="center"
+            android:text="S"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/repeatDay6"
+            app:layout_constraintStart_toEndOf="@+id/repeatDay4"
+            app:layout_constraintTop_toTopOf="@+id/repeatDay4" />
+
+        <TextView
+            android:id="@+id/repeatDay6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_unused"
+            android:gravity="center"
+            android:text="S"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/repeatDay5"
+            app:layout_constraintTop_toTopOf="@+id/repeatDay5" />
+
+
+        <View
+            android:id="@+id/view3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorPrimary"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/repeatDay0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/volumeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/alarm_volume"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="10pt"
+        app:layout_constraintStart_toStartOf="@+id/nameEdit"
+        app:layout_constraintTop_toBottomOf="@+id/repeatView" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_margin="20dp"
+        android:max="100"
+        android:min="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/volumeText" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorPrimary"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
