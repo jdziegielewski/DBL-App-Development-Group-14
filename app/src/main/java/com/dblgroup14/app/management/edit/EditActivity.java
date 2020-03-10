@@ -10,7 +10,7 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.management.ManageAlarmsFragment;
-import com.dblgroup14.app.ui.management.Alarm;
+import com.dblgroup14.support.entities.Alarm;
 import java.util.Calendar;
 
 //https://abhiandroid.com/ui/timepicker
@@ -23,12 +23,12 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newAlarm = new Alarm("My Alarm", 7,0,1,80, false);
+        newAlarm = new Alarm();
         
         setContentView(R.layout.activity_edit);
-        //  initiate the edit text
-        time = (TextView) findViewById(R.id.time);
-        setTimeView(newAlarm.getHours(),newAlarm.getMin());
+        // initiate the edit text
+        time = findViewById(R.id.time);
+        setTimeView(newAlarm.getHours(), newAlarm.getMinutes());
         
         // perform click event listener on edit text
         time.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +47,7 @@ public class EditActivity extends AppCompatActivity {
                 timePicker.show();
             }
         });
-    
+        
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +55,7 @@ public class EditActivity extends AppCompatActivity {
                 finish();
             }
         });
-    
+        
         EditText nameEdit = (EditText) findViewById(R.id.nameEdit);
         nameEdit.setText(newAlarm.getName());
         newAlarm.setName(nameEdit.getText().toString());
@@ -63,8 +63,8 @@ public class EditActivity extends AppCompatActivity {
         b.getAlarmsList().add(newAlarm);
     }
     
-    public void setTimeView(int hours, int min){
-        if(min>=0 && min<10){
+    public void setTimeView(int hours, int min) {
+        if (min >= 0 && min < 10) {
             time.setText(hours + ":0" + min);
         } else {
             time.setText(hours + ":" + min);
