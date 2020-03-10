@@ -23,7 +23,8 @@ public class shakechallenge extends AppCompatActivity implements ShakeDetector.L
     public void hearShake() {
         count=count+1;
         Toast.makeText(this, "You shaked "+count+" time\n Shake, shake\n" +
-                "Shake, shake, shake it\n.", Toast.LENGTH_SHORT).show(); //i dont know how to print it other way
+                "Shake, shake, shake it\n.", Toast.LENGTH_SHORT).show();
+        //i dont know how to print it other way
         if(count==10){
             finish();
         }
