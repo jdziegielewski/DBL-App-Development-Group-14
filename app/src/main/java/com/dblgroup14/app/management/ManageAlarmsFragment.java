@@ -1,5 +1,6 @@
 package com.dblgroup14.app.management;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.management.edit.EditActivity;
 import com.dblgroup14.app.ui.management.Alarm;
 import com.dblgroup14.app.ui.management.CustomListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +26,7 @@ import java.util.List;
 public class ManageAlarmsFragment extends Fragment {
     
     ListView listView;
+    List<Alarm> alarms = new ArrayList<>();
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +36,7 @@ public class ManageAlarmsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+    
         
         // Set title
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
@@ -41,17 +44,17 @@ public class ManageAlarmsFragment extends Fragment {
         Alarm alarm1 = new Alarm("Morning", 7,50,1,100, false);
         Alarm alarm2 = new Alarm("Noon", 12,30,4,80, false);
         Alarm alarm3 = new Alarm("Late", 21,15,1,100, true);
-        Alarm alarm4 = new Alarm("I hate Mornings", 5,40,1,100, false);
-        Alarm alarm5 = new Alarm("Let's sleap", 4,25 ,4,80, false);
-        Alarm alarm6 = new Alarm("Insert bad name", 23,20,1,100, true);
-        Alarm alarm7 = new Alarm("Morning", 7,50,1,100, false);
-        Alarm alarms[] = new Alarm[] {alarm1, alarm2, alarm3, alarm4, alarm5, alarm6, alarm7};
+        alarms.add(alarm1);
+        alarms.add(alarm2);
+        alarms.add(alarm3);
+        
         
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Call intent to add alarm activity
+                Intent intentNewAlarm = new Intent(getActivity(), EditActivity.class);
+                startActivity(intentNewAlarm);
             }
         });
     
@@ -79,6 +82,10 @@ public class ManageAlarmsFragment extends Fragment {
         
         alarmView.setAdapter(adapter); */
         
+    }
+    
+    public List<Alarm> getAlarmsList() {
+        return alarms;
     }
     
 }

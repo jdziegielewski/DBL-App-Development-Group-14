@@ -33,7 +33,7 @@ public class CustomListAdapter extends ArrayAdapter {
     
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.listview_row, null,true);
+        View rowView = inflater.inflate(R.layout.listview_row, null,true);
         
         //this code gets references to objects in the listview_row.xml file
         TextView alarmTimeTextView = (TextView) rowView.findViewById(R.id.alarmTimeTextView);
