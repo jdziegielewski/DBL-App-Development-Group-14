@@ -1,4 +1,4 @@
-package com.dblgroup14.app.ui.management;
+package com.dblgroup14.app.management;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

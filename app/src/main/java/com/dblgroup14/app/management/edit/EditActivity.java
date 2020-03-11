@@ -7,15 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.management.ManageAlarmsFragment;
 import com.dblgroup14.support.entities.Alarm;
-import java.lang.reflect.Array;
 import java.util.Calendar;
 
 //https://abhiandroid.com/ui/timepicker
@@ -28,12 +25,12 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newAlarm = new Alarm("My Alarm", 7, 0, 80, false, 1);
+        newAlarm = new Alarm("My Alarm", 7, 0, true, 80, false, 1);
         
         setContentView(R.layout.activity_edit);
         // initiate the edit text
         time = findViewById(R.id.time);
-        setTimeView(newAlarm.getHours(), newAlarm.getMinutes());
+        setTimeView(newAlarm.hours, newAlarm.minutes);
         
         // perform click event listener on edit text
         time.setOnClickListener(new View.OnClickListener() {
@@ -65,16 +62,16 @@ public class EditActivity extends AppCompatActivity {
         });
         
         EditText nameEdit = (EditText) findViewById(R.id.nameEdit);
-        nameEdit.setText(newAlarm.getName());
+        nameEdit.setText(newAlarm.name);
         newAlarm.setName(nameEdit.getText().toString());
-    
+        
         final ConstraintLayout repeatView = findViewById(R.id.repeatView);
         repeatView.setVisibility(View.GONE);
         ImageView repeat = findViewById(R.id.repeat);
         repeat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(repeatView.isShown()){
+                if (repeatView.isShown()) {
                     repeatView.setVisibility(View.GONE);
                 } else {
                     repeatView.setVisibility(View.VISIBLE);
@@ -91,7 +88,7 @@ public class EditActivity extends AppCompatActivity {
         final TextView repeatDay6 = findViewById(R.id.repeatDay6);
         TextView[] repeatDays = {repeatDay0, repeatDay1, repeatDay2, repeatDay3, repeatDay4, repeatDay5, repeatDay6};
         
-        for(TextView rDays : repeatDays){
+        for (TextView rDays : repeatDays) {
             setBackground(rDays);
         }
         
@@ -105,18 +102,18 @@ public class EditActivity extends AppCompatActivity {
         }
     }
     
-    public void setBackground(final TextView repeatDay){
+    public void setBackground(final TextView repeatDay) {
         repeatDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (repeatDay.getBackground().getConstantState()==getResources().getDrawable(R.drawable.circle_unused).getConstantState()){
+                if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_unused).getConstantState()) {
                     repeatDay.setTextColor(Color.WHITE);
                     repeatDay.setBackgroundResource(R.drawable.circle_used);
-                } else if(repeatDay.getBackground().getConstantState()==getResources().getDrawable(R.drawable.circle_used).getConstantState()){
+                } else if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_used).getConstantState()) {
                     repeatDay.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     repeatDay.setBackgroundResource(R.drawable.circle_unused);
                 }
-            
+                
             }
         });
     }

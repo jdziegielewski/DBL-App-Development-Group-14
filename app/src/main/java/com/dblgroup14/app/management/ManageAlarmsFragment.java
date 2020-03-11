@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.management.edit.EditActivity;
-import com.dblgroup14.app.ui.management.CustomListAdapter;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
@@ -33,9 +32,9 @@ public class ManageAlarmsFragment extends Fragment {
         // Set title
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
         
-        Alarm alarm1 = new Alarm("Morning", 7, 50, 100, false, 1);
-        Alarm alarm2 = new Alarm("Noon", 12, 30, 80, false, 4);
-        Alarm alarm3 = new Alarm("Late", 21, 15, 100, true, 1);
+        Alarm alarm1 = new Alarm("Morning", 7, 50, true, 100, false, 1);
+        Alarm alarm2 = new Alarm("Noon", 12, 30, true, 80, true, 4);
+        Alarm alarm3 = new Alarm("Late", 21, 15, false, 100, true, 1);
         alarms.add(alarm1);
         alarms.add(alarm2);
         alarms.add(alarm3);
@@ -54,8 +53,8 @@ public class ManageAlarmsFragment extends Fragment {
         ArrayList<String> timeAlarms = new ArrayList<String>();
         
         for (Alarm alarm : alarms) {
-            nameAlarms.add(alarm.getName());
-            timeAlarms.add(alarm.getHours() + ":" + alarm.getMinutes());
+            nameAlarms.add(alarm.name);
+            timeAlarms.add(alarm.hours + ":" + alarm.minutes);
         }
         
         
