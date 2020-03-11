@@ -30,8 +30,8 @@ release/
 .idea/caches
 .idea/modules.xml
 .idea/navEditor.xml
+.idea/vcs.xml
 local.properties
-vcs.xml
 
 # Google Services (e.g. APIs or Firebase)
 # google-services.json
