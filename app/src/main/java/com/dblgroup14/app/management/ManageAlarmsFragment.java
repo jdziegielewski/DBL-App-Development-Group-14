@@ -52,10 +52,6 @@ public class ManageAlarmsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AsyncTask.execute(() -> {
-                    Alarm newAlarm = new Alarm("Test alarm", 0, 0, true, 100, false);
-                    AppDatabase.db().alarmDao().insert(newAlarm);
-                });
                 Intent intentNewAlarm = new Intent(getActivity(), EditActivity.class);
                 startActivity(intentNewAlarm);
             }

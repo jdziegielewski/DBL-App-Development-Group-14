@@ -31,9 +31,13 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         
         //this code sets the values of the objects to values from the arrays
         Alarm alarm = getItem(position);
-        alarmTimeTextView.setText(String.format("%d:%d", alarm.hours, alarm.minutes));
+        String hours = String.format("%02d", alarm.hours);
+        String min = String.format("%02d", alarm.minutes);
+        
+        alarmTimeTextView.setText(String.format("%s:%s", hours, min));
         nameTextView.setText(alarm.name);
         
         return rowView;
     }
+   
 }

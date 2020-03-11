@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.challenge1;
-import com.dblgroup14.app.challenges.shakechallenge;
+import com.dblgroup14.app.challenges.shakeChallenge;
 
 public class ManageChallengesFragment extends Fragment {
     
@@ -33,7 +31,7 @@ public class ManageChallengesFragment extends Fragment {
         view.findViewById(R.id.goToShakeITChallenge).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent challengesIntent = new Intent(getContext(), shakechallenge.class);
+                Intent challengesIntent = new Intent(getContext(), shakeChallenge.class);
                 startActivity(challengesIntent);
             }
         });

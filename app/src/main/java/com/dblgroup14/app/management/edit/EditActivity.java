@@ -1,17 +1,22 @@
 package com.dblgroup14.app.management.edit;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.R;
+import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import java.util.Calendar;
 
@@ -21,6 +26,8 @@ public class EditActivity extends AppCompatActivity {
     
     TextView time;
     Alarm newAlarm;
+    SeekBar alarm;
+    AudioManager audioManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,9 @@ public class EditActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AsyncTask.execute(() -> {
+                    AppDatabase.db().alarmDao().insert(newAlarm);
+                });
 //                getAlarmsList().add(newAlarm);
 //                ListView alarmView = view.findViewById(R.id.alarmView);
 //                alarmView.invalidate();
@@ -95,6 +105,27 @@ public class EditActivity extends AppCompatActivity {
         for (TextView rDays : repeatDays) {
             setBackground(rDays);
         }
+    
+        alarm = (SeekBar)findViewById(R.id.seekBar);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        alarm.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM));
+    
+        alarm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, i, 0);
+            }
+        
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            
+            }
+        
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            
+            }
+        });
         
     }
     
