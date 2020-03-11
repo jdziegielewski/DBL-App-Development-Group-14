@@ -1,29 +1,26 @@
 package com.dblgroup14.app.management;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import com.dblgroup14.app.MainActivity;
+import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.ui.management.Alarm;
-import com.dblgroup14.app.ui.management.CustomListAdapter;
+import com.dblgroup14.app.management.edit.EditActivity;
+import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ManageAlarmsFragment extends Fragment {
-    
-    ListView listView;
+    private ListView listView;
+    private CustomListAdapter alarmsListAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,41 +30,36 @@ public class ManageAlarmsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         
         // Set title
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
-    
-        Alarm alarm1 = new Alarm("Morning", 7,50,1,100, false);
-        Alarm alarm2 = new Alarm("Noon", 12,30,4,80, false);
-        Alarm alarm3 = new Alarm("Late", 21,15,1,100, true);
-        Alarm alarm4 = new Alarm("I hate Mornings", 5,40,1,100, false);
-        Alarm alarm5 = new Alarm("Let's sleap", 4,25 ,4,80, false);
-        Alarm alarm6 = new Alarm("Insert bad name", 23,20,1,100, true);
-        Alarm alarm7 = new Alarm("Morning", 7,50,1,100, false);
-        Alarm alarms[] = new Alarm[] {alarm1, alarm2, alarm3, alarm4, alarm5, alarm6, alarm7};
         
+        // Create list adapter
+        alarmsListAdapter = new CustomListAdapter(getActivity());
+        listView = view.findViewById(R.id.alarmView);
+        listView.setAdapter(alarmsListAdapter);
+        
+        // Register live data binding with database
+        LiveData<List<Alarm>> liveAlarms = AppDatabase.db().alarmDao().allLive();
+        liveAlarms.observe(this, l -> {
+            alarmsListAdapter.clear();
+            alarmsListAdapter.addAll(l);
+            alarmsListAdapter.notifyDataSetChanged();
+        });
+        
+        // Create add alarm button
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Call intent to add alarm activity
+                AsyncTask.execute(() -> {
+                    Alarm newAlarm = new Alarm("Test alarm", 0, 0, true, 100, false);
+                    AppDatabase.db().alarmDao().insert(newAlarm);
+                });
+                Intent intentNewAlarm = new Intent(getActivity(), EditActivity.class);
+                startActivity(intentNewAlarm);
             }
         });
-    
-        ArrayList<String> nameAlarms = new ArrayList<String>();
-        ArrayList<String> timeAlarms = new ArrayList<String>();
-        
-        for (Alarm alarm : alarms) {
-            nameAlarms.add(alarm.getName());
-            timeAlarms.add(alarm.getHours()+ ":"+alarm.getMin());
-        }
-    
-    
-        CustomListAdapter adapter = new CustomListAdapter(getActivity(), nameAlarms, timeAlarms);
-        
-        listView = (ListView) view.findViewById(R.id.alarmView);
-        listView.setAdapter(adapter);
         
         /*
         // Get components
@@ -80,5 +72,4 @@ public class ManageAlarmsFragment extends Fragment {
         alarmView.setAdapter(adapter); */
         
     }
-    
 }
