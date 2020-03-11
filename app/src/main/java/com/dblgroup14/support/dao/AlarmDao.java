@@ -1,5 +1,6 @@
 package com.dblgroup14.support.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,6 +14,9 @@ import java.util.List;
 public abstract class AlarmDao {
     @Query("SELECT * FROM alarms")
     public abstract List<Alarm> all();
+    
+    @Query("SELECT * FROM alarms")
+    public abstract LiveData<List<Alarm>> allLive();
     
     @Query("SELECT * FROM alarms WHERE `enabled`=1")
     public abstract List<Alarm> allActive();
