@@ -25,6 +25,10 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    
+        // Set title
+        ((AppCompatActivity) this).getSupportActionBar().setTitle("My new Alarm");
+        
         newAlarm = new Alarm("My Alarm", 7, 0, true, 80, false, 1);
         
         setContentView(R.layout.activity_edit);
