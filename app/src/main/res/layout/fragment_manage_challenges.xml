@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="467dp"
         android:layout_marginBottom="216dp"
-        android:text="Button"
+        android:text="To Play Challenge Page"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.643"
