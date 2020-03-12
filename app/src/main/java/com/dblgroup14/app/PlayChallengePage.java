@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class PlayChallengePage extends AppCompatActivity {
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
      * user interaction before hiding the system UI.
      */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
+    private static final int AUTO_HIDE_DELAY_MILLIS = 1000;
     
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -44,6 +45,8 @@ public class PlayChallengePage extends AppCompatActivity {
     private static final String LOSING_POPUP_BUTTON_MESSAGE = "I'm a sleap...";
     private static final String LOSING_POPUP_TITLE = "You lost!";
     private final Handler mHideHandler = new Handler();
+    private View decorView;
+    
     //private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
         @SuppressLint("InlinedApi")
@@ -108,7 +111,17 @@ public class PlayChallengePage extends AppCompatActivity {
         
         setContentView(R.layout.activity_play_challenge_page);
         
+        decorView = getWindow().getDecorView();
         mVisible = true;
+        
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if (visibility==0){
+                    decorView.setSystemUiVisibility(hideSystemBars());
+                }
+            }
+        });
         // mControlsView = findViewById(R.id.fullscreen_content_controls);
         // mContentView = findViewById(R.id.fullscreen_content);
         
@@ -125,7 +138,7 @@ public class PlayChallengePage extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         
-        hide();
+        //hide();
         
         
         giveUpButton = (ImageButton) findViewById(R.id.giveUpButton);
@@ -164,6 +177,24 @@ public class PlayChallengePage extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
+    
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(hasFocus){
+            hideSystemBars();
+        }
+    }
+    
+    
+    private int hideSystemBars() {
+        return View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
     }
     
     
