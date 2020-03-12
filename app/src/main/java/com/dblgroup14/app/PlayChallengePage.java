@@ -2,11 +2,21 @@ package com.dblgroup14.app;
 
 import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -37,7 +47,7 @@ public class PlayChallengePage extends AppCompatActivity {
         @Override
         public void run() {
             // Delayed removal of status and navigation bar
-    
+            
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
@@ -58,7 +68,7 @@ public class PlayChallengePage extends AppCompatActivity {
             if (actionBar != null) {
                 actionBar.show();
             }
-           // mControlsView.setVisibility(View.VISIBLE);
+            // mControlsView.setVisibility(View.VISIBLE);
         }
     };
     private boolean mVisible;
@@ -83,6 +93,13 @@ public class PlayChallengePage extends AppCompatActivity {
         }
     };
     
+    
+    private ImageButton giveUpButton;
+    private TextView timeTextView;
+    private int i = 0;
+    private Handler handler;
+    
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +107,8 @@ public class PlayChallengePage extends AppCompatActivity {
         setContentView(R.layout.activity_play_challenge_page);
         
         mVisible = true;
-       // mControlsView = findViewById(R.id.fullscreen_content_controls);
-       // mContentView = findViewById(R.id.fullscreen_content);
+        // mControlsView = findViewById(R.id.fullscreen_content_controls);
+        // mContentView = findViewById(R.id.fullscreen_content);
         
         
         // Set up the user interaction to manually show or hide the system UI.
@@ -105,7 +122,47 @@ public class PlayChallengePage extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
+        
+        hide();
+        
+        
+        giveUpButton = (ImageButton) findViewById(R.id.giveUpButton);
+        timeTextView = (TextView) findViewById(R.id.showTimeTextView);
+        String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        
+        handler = new Handler();
+        final Runnable r = new Runnable() {
+            public void run() {
+                handler.postDelayed(this, 5000);
+                String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                i++;
+                timeTextView.setText(Integer.toString(i));
+            }
+        };
+        handler.postDelayed(r, 0000);
+        // TODO add time text view
+        giveUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PlayChallengePage.this);
+                
+                builder.setCancelable(false);
+                builder.setTitle("This is an Alert Dialog's Title"); // TODO convert to string constant
+                builder.setMessage("This is an Alert Dialog's Message"); // TODO same
+                
+                
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent myIntent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(myIntent);
+                    }
+                });
+                builder.show();
+            }
+        });
     }
+    
     
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -138,7 +195,7 @@ public class PlayChallengePage extends AppCompatActivity {
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
-
+    
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
