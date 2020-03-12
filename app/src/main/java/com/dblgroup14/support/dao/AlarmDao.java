@@ -13,25 +13,16 @@ import java.util.List;
 @Dao
 public abstract class AlarmDao {
     @Query("SELECT * FROM alarms")
-    public abstract List<Alarm> all();
-    
-    @Query("SELECT * FROM alarms")
-    public abstract LiveData<List<Alarm>> allLive();
+    public abstract LiveData<List<Alarm>> all();
     
     @Query("SELECT * FROM alarms WHERE `enabled`=1")
-    public abstract List<Alarm> allActive();
+    public abstract LiveData<List<Alarm>> allActive();
     
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insert(Alarm alarm);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertAll(Alarm... alarms);
-    
-    @Update
-    public abstract void update(Alarm alarm);
-    
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void updateAll(Alarm... alarms);
     
     @Delete
     public abstract void delete(Alarm alarm);

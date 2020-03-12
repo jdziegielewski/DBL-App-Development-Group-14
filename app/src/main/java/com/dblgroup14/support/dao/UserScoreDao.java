@@ -1,0 +1,39 @@
+package com.dblgroup14.support.dao;
+
+import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import com.dblgroup14.support.SimpleDatabase;
+import com.dblgroup14.support.entities.UserScore;
+import java.util.List;
+
+@Dao
+public abstract class UserScoreDao {
+    @Query("SELECT * FROM user_scores")
+    public abstract LiveData<List<UserScore>> all();
+    
+    @Query("SELECT * FROM user_scores WHERE `username` = :username LIMIT 1")
+    public abstract UserScore scoreOfUser(String username);
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract void store(UserScore score);
+    
+    /**
+     * Gets the user score object of the current user.
+     *
+     * @return The UserScore object belonging to the current user
+     */
+    public UserScore getActiveUserScore() {
+        // Check if there is a user logged in
+        String currentUsername = SimpleDatabase.getCurrentUsername();
+        
+        // Return null if no user is logged in
+        if (currentUsername == null) {
+            return null;
+        }
+        
+        return scoreOfUser(currentUsername);
+    }
+}

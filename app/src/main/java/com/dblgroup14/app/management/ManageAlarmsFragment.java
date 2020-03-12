@@ -1,7 +1,6 @@
 package com.dblgroup14.app.management;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import com.dblgroup14.app.management.edit.EditActivity;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ManageAlarmsFragment extends Fragment {
@@ -40,7 +38,7 @@ public class ManageAlarmsFragment extends Fragment {
         listView.setAdapter(alarmsListAdapter);
         
         // Register live data binding with database
-        LiveData<List<Alarm>> liveAlarms = AppDatabase.db().alarmDao().allLive();
+        LiveData<List<Alarm>> liveAlarms = AppDatabase.db().alarmDao().all();
         liveAlarms.observe(this, l -> {
             alarmsListAdapter.clear();
             alarmsListAdapter.addAll(l);

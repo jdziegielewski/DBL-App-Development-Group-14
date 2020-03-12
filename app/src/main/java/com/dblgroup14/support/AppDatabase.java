@@ -6,9 +6,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import com.dblgroup14.support.dao.AlarmDao;
+import com.dblgroup14.support.dao.UserScoreDao;
 import com.dblgroup14.support.entities.Alarm;
+import com.dblgroup14.support.entities.UserScore;
 
-@Database(entities = {Alarm.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarm.class, UserScore.class}, version = 1, exportSchema = false)
 @TypeConverters({RoomTypeConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase database = null;
@@ -36,4 +38,6 @@ public abstract class AppDatabase extends RoomDatabase {
     /* DAO definitions */
     
     public abstract AlarmDao alarmDao();
+    
+    public abstract UserScoreDao userScoreDao();
 }
