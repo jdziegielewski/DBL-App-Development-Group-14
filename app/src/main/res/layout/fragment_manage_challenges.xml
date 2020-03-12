@@ -12,7 +12,11 @@
         android:layout_height="wrap_content"
         android:text="Challenge 1"
         app:layout_anchor="@+id/goToShakeITChallenge"
-        app:layout_anchorGravity="center" />
+        app:layout_anchorGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/goToShakeITChallenge"
@@ -23,4 +27,18 @@
         android:text="CHALLENGE 2"
         app:layout_constraintStart_toEndOf="@+id/goToChallengeBtn"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/tochallengebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="467dp"
+        android:layout_marginBottom="216dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.643"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
