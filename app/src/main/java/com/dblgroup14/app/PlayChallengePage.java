@@ -40,6 +40,9 @@ public class PlayChallengePage extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
+    private static final String LOSING_POPUP_MESSAGE = "Snoozer looser";
+    private static final String LOSING_POPUP_BUTTON_MESSAGE = "I'm a sleap...";
+    private static final String LOSING_POPUP_TITLE = "You lost!";
     private final Handler mHideHandler = new Handler();
     //private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -96,7 +99,6 @@ public class PlayChallengePage extends AppCompatActivity {
     
     private ImageButton giveUpButton;
     private TextView timeTextView;
-    private int i = 0;
     private Handler handler;
     
     
@@ -128,15 +130,16 @@ public class PlayChallengePage extends AppCompatActivity {
         
         giveUpButton = (ImageButton) findViewById(R.id.giveUpButton);
         timeTextView = (TextView) findViewById(R.id.showTimeTextView);
-        String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        
         
         handler = new Handler();
         final Runnable r = new Runnable() {
             public void run() {
                 handler.postDelayed(this, 5000);
-                String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-                i++;
-                timeTextView.setText(Integer.toString(i));
+                String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+                //String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                
+                timeTextView.setText(currentTime);
             }
         };
         handler.postDelayed(r, 0000);
@@ -147,11 +150,11 @@ public class PlayChallengePage extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(PlayChallengePage.this);
                 
                 builder.setCancelable(false);
-                builder.setTitle("This is an Alert Dialog's Title"); // TODO convert to string constant
-                builder.setMessage("This is an Alert Dialog's Message"); // TODO same
+                builder.setTitle(LOSING_POPUP_TITLE); // TODO convert to string constant
+                builder.setMessage(LOSING_POPUP_MESSAGE); // TODO same
                 
                 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(LOSING_POPUP_BUTTON_MESSAGE, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent myIntent = new Intent(getBaseContext(), MainActivity.class);
