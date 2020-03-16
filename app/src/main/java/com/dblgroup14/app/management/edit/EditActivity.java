@@ -66,7 +66,7 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 AsyncTask.execute(() -> {
-                    AppDatabase.db().alarmDao().insert(newAlarm);
+                    AppDatabase.db().alarmDao().store(newAlarm);
                 });
 //                getAlarmsList().add(newAlarm);
 //                ListView alarmView = view.findViewById(R.id.alarmView);

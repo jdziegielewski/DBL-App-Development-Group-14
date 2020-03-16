@@ -19,10 +19,10 @@ public abstract class AlarmDao {
     public abstract LiveData<List<Alarm>> allActive();
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insert(Alarm alarm);
+    public abstract void store(Alarm alarm);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insertAll(Alarm... alarms);
+    public abstract void storeAll(Alarm... alarms);
     
     @Delete
     public abstract void delete(Alarm alarm);
