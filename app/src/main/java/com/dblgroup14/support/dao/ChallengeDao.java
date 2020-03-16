@@ -14,6 +14,9 @@ public abstract class ChallengeDao {
     @Query("SELECT * FROM challenges")
     public abstract LiveData<List<Challenge>> all();
     
+    @Query("SELECT * FROM challenges WHERE `id`=:id")
+    public abstract Challenge get(int id);
+    
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void store(Challenge challenge);
     
