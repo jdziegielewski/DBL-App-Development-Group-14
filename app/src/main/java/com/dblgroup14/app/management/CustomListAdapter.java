@@ -2,13 +2,19 @@ package com.dblgroup14.app.management;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.management.edit.EditActivity;
+import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 
 //https://appsandbiscuits.com/listview-tutorial-android-12-ccef4ead27cc
@@ -36,6 +42,31 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         
         alarmTimeTextView.setText(String.format("%s:%s", hours, min));
         nameTextView.setText(alarm.name);
+    
+        ImageView deleteView = rowView.findViewById(R.id.deleteAlarmView);
+        deleteView.setOnClickListener(view1 -> {
+            AsyncTask.execute(() -> {
+                AppDatabase.db().alarmDao().delete(alarm);
+            });
+        });
+    
+        ConstraintLayout dropDownView = rowView.findViewById(R.id.dropDownView);
+        ConstraintLayout mainBoxAlarm = rowView.findViewById(R.id.mainBoxAlarm);
+        dropDownView.setVisibility(View.GONE);
+        mainBoxAlarm.setOnClickListener(view12 -> {
+            if(dropDownView.getVisibility() == rowView.VISIBLE){
+                dropDownView.setVisibility(View.GONE);
+            } else if(dropDownView.getVisibility() == rowView.GONE){
+                dropDownView.setVisibility(View.VISIBLE);
+            }
+        });
+        
+        ImageView editAlarmButton = rowView.findViewById(R.id.editAlarmButton);
+        editAlarmButton.setOnClickListener(view13 -> {
+            Intent intentEditAlarm = new Intent(activity, EditActivity.class);
+            intentEditAlarm.putExtra("edit_alarm", true);
+            activity.startActivity(intentEditAlarm);
+        });
         
         return rowView;
     }

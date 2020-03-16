@@ -19,4 +19,6 @@
     <string name="select_time">06:00</string>
     <string name="name_alarm">Name</string>
     <string name="alarm_volume">Alarm volume</string>
+    <string name="enable_multiple_challenges">Enable multiple challenges</string>
+    <string name="select_your_challenge">Select your challenge</string>
 </resources>

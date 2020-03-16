@@ -47,23 +47,10 @@ public class ManageAlarmsFragment extends Fragment {
         
         // Create add alarm button
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentNewAlarm = new Intent(getActivity(), EditActivity.class);
-                startActivity(intentNewAlarm);
-            }
+        fab.setOnClickListener(view1 -> {
+            Intent intentNewAlarm = new Intent(getActivity(), EditActivity.class);
+            intentNewAlarm.putExtra("edit_alarm", false);
+            startActivity(intentNewAlarm);
         });
-        
-        /*
-        // Get components
-        ListView alarmView = view.findViewById(R.id.alarmView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
-        for (Alarm alarm  : alarms) {
-            adapter.add(alarm.getName());
-        }
-        
-        alarmView.setAdapter(adapter); */
-        
     }
 }

@@ -14,7 +14,6 @@ public class Alarm {
     public String name;
     public boolean enabled;
     public int volume;
-    
     public int hours;
     public int minutes;
     public boolean repeats;

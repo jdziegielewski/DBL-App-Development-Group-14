@@ -2,6 +2,7 @@ package com.dblgroup14.app.management.edit;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.AsyncTask;
@@ -13,107 +14,105 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.Calendar;
 
 //https://abhiandroid.com/ui/timepicker
 public class EditActivity extends AppCompatActivity {
-    // TODO: Determine whether to edit existing object or to create a new one
     
     TextView time;
-    Alarm newAlarm;
-    SeekBar alarm;
+    Alarm alarm;
+    SeekBar seekBar;
     AudioManager audioManager;
+    
+    Button button;
+    TextView selectedChallenge;
+    AlertDialog alertDialog1;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     
         // Set title
-        ((AppCompatActivity) this).getSupportActionBar().setTitle("My new Alarm");
-        
-        newAlarm = new Alarm("My Alarm", 7, 0, true, 80, false, 1);
+       //
+    
+        // getIntent() is a method from the started activity
+        Intent myIntent = getIntent(); // gets the previously created intent
+        boolean editAlarm = myIntent.getBooleanExtra("edit_alarm", false);
+    
+        if(editAlarm){
+            ((AppCompatActivity) this).getSupportActionBar().setTitle("Edit my Alarm");
+            alarm = new Alarm("Edit Alarm", 7, 0, true, 80, false, 1);;
+        } else {
+            ((AppCompatActivity) this).getSupportActionBar().setTitle("My new Alarm");
+            alarm = new Alarm("My Alarm", 7, 0, true, 80, false, 1);
+        }
         
         setContentView(R.layout.activity_edit);
         // initiate the edit text
         time = findViewById(R.id.time);
-        setTimeView(newAlarm.hours, newAlarm.minutes);
+        setTimeView(alarm.hours, alarm.minutes);
         
         // perform click event listener on edit text
-        time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar currentTime = Calendar.getInstance();
-                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = currentTime.get(Calendar.MINUTE);
-                TimePickerDialog timePicker;
-                timePicker = new TimePickerDialog(EditActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        setTimeView(selectedHour, selectedMinute);
-                    }
-                }, hour, minute, true);//Yes 24 hour time
-                timePicker.show();
-            }
-        });
-        
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AsyncTask.execute(() -> {
-                    AppDatabase.db().alarmDao().store(newAlarm);
-                });
-//                getAlarmsList().add(newAlarm);
-//                ListView alarmView = view.findViewById(R.id.alarmView);
-//                alarmView.invalidate();
-                finish();
-            }
+        time.setOnClickListener(v -> {
+            Calendar currentTime = Calendar.getInstance();
+            int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+            int minute = currentTime.get(Calendar.MINUTE);
+            TimePickerDialog timePicker;
+            timePicker = new TimePickerDialog(EditActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                    setTimeView(selectedHour, selectedMinute);
+                    alarm.setHours(selectedHour);
+                    alarm.setMinutes(selectedMinute);
+                }
+            }, hour, minute, true);//Yes 24 hour time
+            timePicker.show();
         });
         
         EditText nameEdit = (EditText) findViewById(R.id.nameEdit);
-        nameEdit.setText(newAlarm.name);
-        newAlarm.setName(nameEdit.getText().toString());
-        
-        final ConstraintLayout repeatView = findViewById(R.id.repeatView);
-        repeatView.setVisibility(View.GONE);
-        ImageView repeat = findViewById(R.id.repeat);
-        repeat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (repeatView.isShown()) {
-                    repeatView.setVisibility(View.GONE);
-                } else {
-                    repeatView.setVisibility(View.VISIBLE);
-                }
-            }
+        nameEdit.setText(alarm.name);
+    
+        // Create add alarm button
+        FloatingActionButton fab = findViewById(R.id.addAlarmButton);
+        fab.setOnClickListener(view1 -> {
+            alarm.setName(nameEdit.getText().toString());
+            AsyncTask.execute(() -> {
+                AppDatabase.db().alarmDao().store(alarm);
+            });
+            finish();
         });
         
-        final TextView repeatDay0 = findViewById(R.id.repeatDay0);
-        final TextView repeatDay1 = findViewById(R.id.repeatDay1);
-        final TextView repeatDay2 = findViewById(R.id.repeatDay2);
-        final TextView repeatDay3 = findViewById(R.id.repeatDay3);
-        final TextView repeatDay4 = findViewById(R.id.repeatDay4);
-        final TextView repeatDay5 = findViewById(R.id.repeatDay5);
-        final TextView repeatDay6 = findViewById(R.id.repeatDay6);
-        TextView[] repeatDays = {repeatDay0, repeatDay1, repeatDay2, repeatDay3, repeatDay4, repeatDay5, repeatDay6};
+        ImageView repeat = findViewById(R.id.repeat);
+        repeat.setOnClickListener(view -> {
+           //repeat is true/false
+        });
+        
+        TextView[] repeatDays = {findViewById(R.id.repeatDay0), findViewById(R.id.repeatDay1), findViewById(R.id.repeatDay2),
+                findViewById(R.id.repeatDay3), findViewById(R.id.repeatDay4), findViewById(R.id.repeatDay5), findViewById(R.id.repeatDay6)};
         
         for (TextView rDays : repeatDays) {
             setBackground(rDays);
         }
     
-        alarm = (SeekBar)findViewById(R.id.seekBar);
+        seekBar = (SeekBar)findViewById(R.id.seekBar);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        alarm.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM));
+        assert audioManager != null;
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        seekBar.setMax(maxVolume);
+        int initialVol = maxVolume* alarm.volume/100;
+        seekBar.setProgress(initialVol);
     
-        alarm.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, i, 0);
+                alarm.setVolume(i/maxVolume*100);
             }
         
             @Override
@@ -126,7 +125,40 @@ public class EditActivity extends AppCompatActivity {
             
             }
         });
+    
+        selectedChallenge = findViewById(R.id.selectChallenge);
+    
+        selectedChallenge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreateAlertDialogWithRadioButtonGroup() ;
+            }
+        });
         
+    }
+    
+    public void CreateAlertDialogWithRadioButtonGroup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
+        builder.setTitle("Select Your Choice");
+        String[] value = {"Rebus","Shaker"};
+        builder.setSingleChoiceItems(value, -1, (dialog, item) -> {
+        
+            switch (item) {
+                case 0:
+                    selectedChallenge.setText(value[0]);
+                    break;
+                case 1:
+                    selectedChallenge.setText(value[1]);
+                    break;
+                case 2:
+                    selectedChallenge.setText(value[2]);
+                    break;
+            }
+            alertDialog1.dismiss();
+        });
+        alertDialog1 = builder.create();
+        alertDialog1.show();
+    
     }
     
     public void setTimeView(int hours, int min) {
@@ -138,21 +170,17 @@ public class EditActivity extends AppCompatActivity {
     }
     
     public void setBackground(final TextView repeatDay) {
-        repeatDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_unused).getConstantState()) {
-                    repeatDay.setTextColor(Color.WHITE);
-                    repeatDay.setBackgroundResource(R.drawable.circle_used);
-                } else if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_used).getConstantState()) {
-                    repeatDay.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                    repeatDay.setBackgroundResource(R.drawable.circle_unused);
-                }
-                
+        repeatDay.setOnClickListener(view -> {
+            if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_unused).getConstantState()) {
+                repeatDay.setTextColor(Color.WHITE);
+                repeatDay.setBackgroundResource(R.drawable.circle_used);
+            } else if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_used).getConstantState()) {
+                repeatDay.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                repeatDay.setBackgroundResource(R.drawable.circle_unused);
             }
+            
         });
     }
     
 }
-//ToDo: repeat & days
 //ToDo: automatic next day alarm
