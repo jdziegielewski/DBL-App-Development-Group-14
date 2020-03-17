@@ -23,8 +23,19 @@ public abstract class AppDatabase extends RoomDatabase {
      * @param context The application context in which to create the database
      */
     public static void createDatabase(Context context) {
+        createDatabase(context, false);
+    }
+    
+    /**
+     * Creates an internal database instance (only once).
+     *
+     * @param context      The application context in which to create the database
+     * @param testDatabase Whether this database is used for instrumented tests
+     */
+    public static void createDatabase(Context context, boolean testDatabase) {
         if (database == null) {
-            database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db").build();
+            String name = testDatabase ? "sleap-db-test" : "sleap-db";
+            database = Room.databaseBuilder(context, AppDatabase.class, name).build();
         }
     }
     
