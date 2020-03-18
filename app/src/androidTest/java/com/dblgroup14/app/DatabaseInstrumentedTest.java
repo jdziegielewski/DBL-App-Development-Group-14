@@ -6,9 +6,11 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.dao.AlarmDao;
 import com.dblgroup14.support.dao.ChallengeDao;
+import com.dblgroup14.support.dao.ChallengeSeriesDao;
 import com.dblgroup14.support.dao.UserScoreDao;
 import com.dblgroup14.support.entities.Alarm;
 import com.dblgroup14.support.entities.Challenge;
+import com.dblgroup14.support.entities.ChallengeSeries;
 import com.dblgroup14.support.entities.UserScore;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -30,7 +32,7 @@ public class DatabaseInstrumentedTest {
     @BeforeClass
     public static void before() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        AppDatabase.createDatabase(appContext);
+        AppDatabase.createDatabase(appContext, true);
         database = AppDatabase.db();
     }
     
@@ -84,9 +86,9 @@ public class DatabaseInstrumentedTest {
         // Store new entity
         Challenge c = new Challenge();
         c.id = TEST_ID;
-        c.put("Test", "String");     // string
-        c.put("Test1", "12");           // number
-        c.put("Test2", "true");         // boolean
+        c.put("Test", "String");    // string
+        c.put("Test1", "12");       // number
+        c.put("Test2", "true");     // boolean
         dao.store(c);
         
         // Assert that entity exists now
@@ -125,6 +127,34 @@ public class DatabaseInstrumentedTest {
         
         // Assert that entity does not exist
         assertNull(dao.get(TEST_ID));
+    }
+    
+    @Test
+    public void testChallengeSeriesEntity() {
+        final int TEST_ID = 37;
+        ChallengeSeriesDao dao = database.challengeSeriesDao();
+        
+        // Assert that non-existing entity is retrieved as NULL
+        assertNull(dao.get(TEST_ID));
+        
+        // Store new entity
+        ChallengeSeries cs = new ChallengeSeries();
+        cs.id = TEST_ID;
+        cs.addChallenge(0);
+        cs.addChallenge(10);
+        cs.addChallenge(15);
+        cs.removeChallenge(10);
+        cs.swap(0, 1);
+        dao.store(cs);
+        
+        // Assert that entity exists now
+        ChallengeSeries cs2 = dao.get(TEST_ID);
+        assertNotNull(cs2);
+        
+        // Assert entity data
+        assertEquals(2, cs2.challengeIds.size());
+        assertEquals((Integer) 15, cs2.challengeIds.get(0));
+        assertEquals((Integer) 0, cs2.challengeIds.get(1));
     }
     
     @Test
