@@ -32,45 +32,38 @@ public class ScoreFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
+        // Create lists of names and scores
         ArrayList<String> names = new ArrayList<String>();
         ArrayList<String> scores = new ArrayList<String>();
-        names.add("1. Mike");
-        names.add("2. YOU");
-        names.add("3. Dad");
-        names.add("4. Sophie");
-        names.add("5. Jess");
-        names.add("6. Danny");
-        scores.add("100 xp");
-        scores.add("80 xp");
-        scores.add("20 xp");
-        scores.add("10 xp");
-        scores.add("7 xp");
-        scores.add("1 xp");
+        names.add("1. Mike"); names.add("2. YOU"); names.add("3. Dad"); names.add("4. Sophie"); names.add("5. Jess"); names.add("6. Danny");
+        scores.add("100 xp"); scores.add("80 xp"); scores.add("20 xp"); scores.add("10 xp"); scores.add("7 xp"); scores.add("1 xp");
     
+        // Display list of names and scores
         ScoreListFriends adapter = new ScoreListFriends(getActivity(), names, scores);
         listView = (ListView) view.findViewById(R.id.scores_list);
         listView.setAdapter(adapter);
         
+        //// PieChart ////
         PieChart pieChart = view.findViewById(R.id.piechart);
+        // Data
+        List<PieEntry> value = new ArrayList<>();
+        value.add(new PieEntry(70f, "Completed"));
+        value.add(new PieEntry(30f, "Not completed"));
+        PieDataSet pieDataSet = new PieDataSet(value, " ");
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        // Styling
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
         pieChart.setHoleRadius(50f);
         pieChart.setTransparentCircleRadius(55f);
-        List<PieEntry> value = new ArrayList<>();
-        value.add(new PieEntry(70f, "Completed"));
-        value.add(new PieEntry(30f, "Not completed"));
-        pieChart.setDrawEntryLabels(false);
         Legend l = pieChart.getLegend();
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        l.setTextSize(15f);
-        PieDataSet pieDataSet = new PieDataSet(value, " ");
-        PieData pieData = new PieData(pieDataSet);
+        l.setEnabled(false);
         pieData.setValueTextSize(16f);
         pieData.setValueFormatter(new PercentFormatter());
-        pieChart.setData(pieData);
-        pieDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+        pieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
         pieChart.animateXY(1400, 1400);
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.setEntryLabelTextSize(14f);
     }
-    
-    
 }
