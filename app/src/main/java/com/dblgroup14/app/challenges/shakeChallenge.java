@@ -32,4 +32,5 @@ public class shakeChallenge extends AppCompatActivity implements ShakeDetector.L
             finish();
         }
     }
+
 }
