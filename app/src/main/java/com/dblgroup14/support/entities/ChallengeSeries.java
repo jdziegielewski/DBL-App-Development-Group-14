@@ -1,5 +1,6 @@
 package com.dblgroup14.support.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import java.util.ArrayList;
@@ -12,10 +13,25 @@ import java.util.ArrayList;
 public class ChallengeSeries {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    
+    @NonNull
+    public String name;
     public ArrayList<Integer> challengeIds;
     
     public ChallengeSeries() {
         challengeIds = new ArrayList<>();
+    }
+    
+    /**
+     * Sets the name of this challenge series.
+     *
+     * @param name The name of the challenge series
+     */
+    public void setName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Given name is null");
+        }
+        this.name = name;
     }
     
     /**

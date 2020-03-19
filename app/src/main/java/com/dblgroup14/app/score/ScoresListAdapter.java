@@ -27,10 +27,17 @@ public class ScoresListAdapter extends ArrayAdapter<UserScore> {
         
         // Inflate new row view
         View rowView = inflater.inflate(R.layout.score_rows, null, true);
+        
+        // Set values
         TextView scoreNameTextView = rowView.findViewById(R.id.score_name);
         TextView scoreTextView = rowView.findViewById(R.id.score_score);
-        scoreTextView.setText(userScore.score);
-        scoreNameTextView.setText(userScore.username);
+        scoreTextView.setText(String.valueOf(userScore.score));
+        
+        if (userScore.username.equals("(default)")) {    // handle own score case
+            scoreNameTextView.setText("You");
+        } else {
+            scoreNameTextView.setText(userScore.username);
+        }
         
         return rowView;
     }

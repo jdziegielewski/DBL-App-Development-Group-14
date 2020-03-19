@@ -1,5 +1,6 @@
 package com.dblgroup14.support.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import java.util.HashMap;
@@ -13,10 +14,38 @@ import java.util.Map;
 public class Challenge {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    @NonNull
+    public String name;
+    @NonNull
+    public String className;
     public Map<String, String> dataStorage;
     
     public Challenge() {
         dataStorage = new HashMap<>();
+    }
+    
+    /**
+     * Sets the name of this challenge.
+     *
+     * @param name The name of the challenge
+     */
+    public void setName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Given name is null");
+        }
+        this.name = name;
+    }
+    
+    /**
+     * Sets the name of the built-in class that belongs to this challenge.
+     *
+     * @param className The built-in class name belonging to this challenge
+     */
+    public void setClassName(String className) {
+        if (className == null) {
+            throw new IllegalArgumentException("Given name is null");
+        }
+        this.className = className;
     }
     
     /**
