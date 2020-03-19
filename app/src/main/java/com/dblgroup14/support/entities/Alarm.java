@@ -121,4 +121,12 @@ public class Alarm {
         }
         days[day] = rings;
     }
+    
+    /**
+     * Get alarm id.
+     */
+    public int getID() {
+        return this.id;
+    }
+    
 }

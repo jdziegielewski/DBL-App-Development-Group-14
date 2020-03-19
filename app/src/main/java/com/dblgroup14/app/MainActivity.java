@@ -1,15 +1,26 @@
 package com.dblgroup14.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import com.dblgroup14.app.challenges.challenge1;
 import com.dblgroup14.support.AppDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
+    GradientDrawable gradientdrawable;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         
         // Setup navigation tabs
         setupNavigationTabs();
+        createActionBarWithGradient();
     }
     
     private void setupNavigationTabs() {
@@ -32,4 +44,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
     
+    private void createActionBarWithGradient() {
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
+    }
+
 }

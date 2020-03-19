@@ -65,6 +65,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         editAlarmButton.setOnClickListener(view13 -> {
             Intent intentEditAlarm = new Intent(activity, EditActivity.class);
             intentEditAlarm.putExtra("edit_alarm", true);
+            intentEditAlarm.putExtra("alarm_id", alarm.getID());
             activity.startActivity(intentEditAlarm);
         });
         

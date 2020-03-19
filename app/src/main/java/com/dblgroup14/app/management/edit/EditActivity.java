@@ -1,12 +1,17 @@
 package com.dblgroup14.app.management.edit;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.AlarmClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,9 +19,14 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.challenges.challenge1;
+import com.dblgroup14.app.management.ManageChallengesFragment;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -37,19 +47,21 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    
-        // Set title
-       //
+        createActionBarWithGradient();
     
         // getIntent() is a method from the started activity
         Intent myIntent = getIntent(); // gets the previously created intent
         boolean editAlarm = myIntent.getBooleanExtra("edit_alarm", false);
-    
+        
         if(editAlarm){
-            ((AppCompatActivity) this).getSupportActionBar().setTitle("Edit my Alarm");
-            alarm = new Alarm("Edit Alarm", 7, 0, true, 80, false, 1);;
+            ((AppCompatActivity) this).getSupportActionBar().setTitle("Edit My Alarm");
+            int id = myIntent.getIntExtra("alarm_id", 0);
+            Toast.makeText(this,"ID = " + id, Toast.LENGTH_LONG).show();
+            AsyncTask.execute(() -> {
+                alarm = AppDatabase.db().alarmDao().get(id);
+            });
         } else {
-            ((AppCompatActivity) this).getSupportActionBar().setTitle("My new Alarm");
+            ((AppCompatActivity) this).getSupportActionBar().setTitle("My New Alarm");
             alarm = new Alarm("My Alarm", 7, 0, true, 80, false, 1);
         }
         
@@ -85,6 +97,7 @@ public class EditActivity extends AppCompatActivity {
             AsyncTask.execute(() -> {
                 AppDatabase.db().alarmDao().store(alarm);
             });
+            setAlarm();
             finish();
         });
         
@@ -180,6 +193,36 @@ public class EditActivity extends AppCompatActivity {
             }
             
         });
+    }
+    
+    public void setAlarm(){
+        Calendar cal = Calendar.getInstance();
+        Calendar currentTime = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
+        cal.set(Calendar.MINUTE, alarm.minutes);
+        cal.set(Calendar.SECOND, 0);
+    
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, challenge1.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        
+    
+        if (cal.compareTo(currentTime) <= 0) {
+            // The set Date/Time already passed
+            Toast.makeText(getApplicationContext(),
+                    "Invalid Date/Time", Toast.LENGTH_LONG).show();
+        } else {
+            assert alarmMgr != null;
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            Toast.makeText(getApplicationContext(),
+                    ""+cal.getTime(), Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    private void createActionBarWithGradient() {
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
 }
