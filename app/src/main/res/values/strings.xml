@@ -20,4 +20,7 @@
     <string name="leaderboard">Leaderboard</string>
     <string name="enable_multiple_challenges">Enable multiple challenges</string>
     <string name="select_your_challenge">Select your challenge</string>
+    <string name="title_activity_play_challenge_page">PlayChallengePage</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

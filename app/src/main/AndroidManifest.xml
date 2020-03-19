@@ -11,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".challenges.shakeChallenge"></activity>
+        <activity
+            android:name=".AlarmActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_play_challenge_page"
+            android:theme="@style/FullscreenTheme"></activity>
         <activity android:name=".challenges.challenge1" />
         <activity android:name=".management.edit.EditActivity" />
         <activity
