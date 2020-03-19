@@ -45,6 +45,17 @@ public class RoomTypeConverters {
     }
     
     @TypeConverter
+    public static ArrayList<Integer> intArrListFromJson(String value) {
+        Type listType = new TypeToken<ArrayList<Integer>>() {}.getType();
+        return new Gson().fromJson(value, listType);
+    }
+    
+    @TypeConverter
+    public static String intArrListToJson(ArrayList<Integer> list) {
+        return new Gson().toJson(list);
+    }
+    
+    @TypeConverter
     public static Map<String, String> mapFromJson(String value) {
         Type listType = new TypeToken<Map<String, String>>() {}.getType();
         return new Gson().fromJson(value, listType);

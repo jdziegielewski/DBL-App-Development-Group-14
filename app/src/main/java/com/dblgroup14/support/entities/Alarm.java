@@ -14,7 +14,6 @@ public class Alarm {
     public String name;
     public boolean enabled;
     public int volume;
-    
     public int hours;
     public int minutes;
     public boolean repeats;
@@ -64,12 +63,12 @@ public class Alarm {
     }
     
     /**
-     * Set alarm volume.
+     * Set alarm volume in the range [0-100]
      *
      * @param volume The new volume of this alarm
      */
     public void setVolume(int volume) {
-        if (volume < 0) {
+        if (volume < 0 || volume > 100) {
             throw new IllegalArgumentException("Invalid volume given");
         }
         this.volume = volume;

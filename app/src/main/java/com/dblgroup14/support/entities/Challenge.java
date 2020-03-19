@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * Entity to store data representing a type of challenge.
- * Please use the setXXX() methods to set instance variables!
+ * Please use the public methods to modify instance variables!
  */
 @Entity(tableName = "challenges")
 public class Challenge {
