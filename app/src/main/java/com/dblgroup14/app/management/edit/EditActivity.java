@@ -10,9 +10,6 @@ import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.AlarmClock;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,16 +17,16 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.challenge1;
-import com.dblgroup14.app.management.ManageChallengesFragment;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Calendar;
 
 //https://abhiandroid.com/ui/timepicker
@@ -56,16 +53,24 @@ public class EditActivity extends AppCompatActivity {
         if(editAlarm){
             ((AppCompatActivity) this).getSupportActionBar().setTitle("Edit My Alarm");
             int id = myIntent.getIntExtra("alarm_id", 0);
-            Toast.makeText(this,"ID = " + id, Toast.LENGTH_LONG).show();
             AsyncTask.execute(() -> {
                 alarm = AppDatabase.db().alarmDao().get(id);
             });
         } else {
             ((AppCompatActivity) this).getSupportActionBar().setTitle("My New Alarm");
-            alarm = new Alarm("My Alarm", 7, 0, true, 80, false, 1);
+            alarm = new Alarm("My Alarm", Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), true, 80, false
+                    , 1);
         }
         
         setContentView(R.layout.activity_edit);
+
+        TextView[] repeatDays = {findViewById(R.id.repeatDay0), findViewById(R.id.repeatDay1), findViewById(R.id.repeatDay2),
+                findViewById(R.id.repeatDay3), findViewById(R.id.repeatDay4), findViewById(R.id.repeatDay5), findViewById(R.id.repeatDay6)};
+    
+        for (int i = 0; i<repeatDays.length;i++) {
+            setBackground(repeatDays,i);
+            setOnClick(repeatDays[i]);
+        }
         // initiate the edit text
         time = findViewById(R.id.time);
         setTimeView(alarm.hours, alarm.minutes);
@@ -97,21 +102,36 @@ public class EditActivity extends AppCompatActivity {
             AsyncTask.execute(() -> {
                 AppDatabase.db().alarmDao().store(alarm);
             });
+            
+            /*if(alarm.repeats){
+                noRepeat();
+            } else {
+                repeat();
+            }*/
             setAlarm();
             finish();
         });
         
-        ImageView repeat = findViewById(R.id.repeat);
-        repeat.setOnClickListener(view -> {
-           //repeat is true/false
+        ImageView repeatButton = findViewById(R.id.repeatButton);
+        if(alarm.repeats){
+            repeatButton.setBackgroundResource(R.drawable.ic_repeat);
+        } else {
+            repeatButton.setBackgroundResource(R.drawable.ic_repeat_one);
+        }
+        repeatButton.setOnClickListener(view -> {
+           if(repeatButton.getBackground().getConstantState() == getResources().getDrawable(R.drawable.ic_repeat_one).getConstantState()){
+               repeatButton.setBackgroundResource(R.drawable.ic_repeat);
+               alarm.setRepeats(true);
+           } else if(repeatButton.getBackground().getConstantState() == getResources().getDrawable(R.drawable.ic_repeat).getConstantState()){
+               repeatButton.setBackgroundResource(R.drawable.ic_repeat_one);
+               alarm.setRepeats(false);
+           }
+            AsyncTask.execute(() -> {
+                AppDatabase.db().alarmDao().store(alarm);
+            });
         });
         
-        TextView[] repeatDays = {findViewById(R.id.repeatDay0), findViewById(R.id.repeatDay1), findViewById(R.id.repeatDay2),
-                findViewById(R.id.repeatDay3), findViewById(R.id.repeatDay4), findViewById(R.id.repeatDay5), findViewById(R.id.repeatDay6)};
         
-        for (TextView rDays : repeatDays) {
-            setBackground(rDays);
-        }
     
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -141,12 +161,7 @@ public class EditActivity extends AppCompatActivity {
     
         selectedChallenge = findViewById(R.id.selectChallenge);
     
-        selectedChallenge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CreateAlertDialogWithRadioButtonGroup() ;
-            }
-        });
+        selectedChallenge.setOnClickListener(view -> CreateAlertDialogWithRadioButtonGroup());
         
     }
     
@@ -182,16 +197,78 @@ public class EditActivity extends AppCompatActivity {
         }
     }
     
-    public void setBackground(final TextView repeatDay) {
+    public void setBackground(TextView[] repeatDay, int j) {
+        for(int i = 0; i < 7; i++){
+            if(alarm.days[i]){
+                repeatDay[i].setTextColor(Color.WHITE);
+                repeatDay[i].setBackgroundResource(R.drawable.circle_used);
+            } else {
+                repeatDay[i].setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                repeatDay[i].setBackgroundResource(R.drawable.circle_unused);
+            }
+        }
+    }
+    
+    public void setOnClick(final TextView repeatDay) {
         repeatDay.setOnClickListener(view -> {
             if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_unused).getConstantState()) {
                 repeatDay.setTextColor(Color.WHITE);
                 repeatDay.setBackgroundResource(R.drawable.circle_used);
+                
+                switch(view.getId()){
+                    case R.id.repeatDay0:
+                        alarm.days[0] = true;
+                        break;
+                    case R.id.repeatDay1:
+                        alarm.days[1] = true;
+                        break;
+                    case R.id.repeatDay2:
+                        alarm.days[2] = true;
+                        break;
+                    case R.id.repeatDay3:
+                        alarm.days[3] = true;
+                        break;
+                    case R.id.repeatDay4:
+                        alarm.days[4] = true;
+                        break;
+                    case R.id.repeatDay5:
+                        alarm.days[5] = true;
+                        break;
+                    case R.id.repeatDay6:
+                        alarm.days[6] = true;
+                        break;
+                }
+                
+                
             } else if (repeatDay.getBackground().getConstantState() == getResources().getDrawable(R.drawable.circle_used).getConstantState()) {
                 repeatDay.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 repeatDay.setBackgroundResource(R.drawable.circle_unused);
+    
+                switch(view.getId()){
+                    case R.id.repeatDay0:
+                        alarm.days[0] = false;
+                        break;
+                    case R.id.repeatDay1:
+                        alarm.days[1] = false;
+                        break;
+                    case R.id.repeatDay2:
+                        alarm.days[2] = false;
+                        break;
+                    case R.id.repeatDay3:
+                        alarm.days[3] = false;
+                        break;
+                    case R.id.repeatDay4:
+                        alarm.days[4] = false;
+                        break;
+                    case R.id.repeatDay5:
+                        alarm.days[5] = false;
+                        break;
+                    case R.id.repeatDay6:
+                        alarm.days[6] = false;
+                        break;
+                }
+
             }
-            
         });
     }
     
@@ -204,18 +281,27 @@ public class EditActivity extends AppCompatActivity {
     
         AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, challenge1.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, alarm.id, intent, 0);
         
-    
-        if (cal.compareTo(currentTime) <= 0) {
-            // The set Date/Time already passed
-            Toast.makeText(getApplicationContext(),
-                    "Invalid Date/Time", Toast.LENGTH_LONG).show();
+        if(alarm.enabled){
+            if (cal.compareTo(currentTime) <= 0) {
+                // The set Date/Time already passed
+                Toast.makeText(getApplicationContext(),
+                        "Invalid Date/Time", Toast.LENGTH_LONG).show();
+            } else {
+                assert alarmMgr != null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                } else {
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                }
+                Toast.makeText(getApplicationContext(),
+                        ""+cal.getTime(), Toast.LENGTH_LONG).show();
+            }
         } else {
-            assert alarmMgr != null;
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-            Toast.makeText(getApplicationContext(),
-                    ""+cal.getTime(), Toast.LENGTH_LONG).show();
+            if (alarmMgr!= null) {
+                alarmMgr.cancel(pendingIntent);
+            }
         }
     }
     
@@ -225,5 +311,23 @@ public class EditActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
+    public void noRepeat(){
+        int trueCount = 0;
+        for(boolean b : alarm.days){
+            if(b){
+                trueCount++;
+            }
+        }
+        if(trueCount==0){
+        
+        }
+        
+    }
+    
+    public void repeat(){
+    
+    }
 }
 //ToDo: automatic next day alarm
+//ToDo: repeat button
+//ToDo: on lock screen alarm

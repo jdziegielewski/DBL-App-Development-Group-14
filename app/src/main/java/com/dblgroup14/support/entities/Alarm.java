@@ -46,7 +46,7 @@ public class Alarm {
         this.repeats = repeats;
         this.days = new boolean[7];
         for (int day : days) {
-            setDay(day, true);
+            setDay(day, false);
         }
     }
     
@@ -87,6 +87,15 @@ public class Alarm {
     }
     
     /**
+     * Set if the alarm is enabled
+     *
+     * @param enabled If the alarm is enabled
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    /**
      * Set the minute at which this alarm will ring.
      *
      * @param minutes The minute at which the alarm will ring
@@ -123,10 +132,10 @@ public class Alarm {
     }
     
     /**
-     * Get alarm id.
+     * Set alarm repeat.
      */
-    public int getID() {
-        return this.id;
+    public void setRepeats(boolean repeat) {
+        this.repeats = repeat;
     }
     
 }
