@@ -1,15 +1,18 @@
 package com.dblgroup14.app.score;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
+import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.entities.UserScore;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -20,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScoreFragment extends Fragment {
-    
-    ListView listView;
+    private ScoresListAdapter scoresListAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,16 +34,10 @@ public class ScoreFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        // Create lists of names and scores
-        ArrayList<String> names = new ArrayList<String>();
-        ArrayList<String> scores = new ArrayList<String>();
-        names.add("1. Mike"); names.add("2. YOU"); names.add("3. Dad"); names.add("4. Sophie"); names.add("5. Jess"); names.add("6. Danny");
-        scores.add("100 xp"); scores.add("80 xp"); scores.add("20 xp"); scores.add("10 xp"); scores.add("7 xp"); scores.add("1 xp");
-    
-        // Display list of names and scores
-        ScoreListFriends adapter = new ScoreListFriends(getActivity(), names, scores);
-        listView = (ListView) view.findViewById(R.id.scores_list);
-        listView.setAdapter(adapter);
+        // Create and set scores list adapter
+        scoresListAdapter = new ScoresListAdapter(getActivity());
+        ListView scoresList = view.findViewById(R.id.scores_list);
+        scoresList.setAdapter(scoresListAdapter);
         
         //// PieChart ////
         PieChart pieChart = view.findViewById(R.id.piechart);
@@ -65,5 +61,17 @@ public class ScoreFragment extends Fragment {
         pieChart.animateXY(1400, 1400);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(14f);
+        
+        // Load database content
+        LiveData<List<UserScore>> liveUserScores = AppDatabase.db().userScoreDao().all();
+        liveUserScores.observe(getActivity(), this::updateUserScores);
+    }
+    
+    private void updateUserScores(final List<UserScore> data) {
+        getActivity().runOnUiThread(() -> {
+            scoresListAdapter.clear();
+            scoresListAdapter.addAll(data);
+            scoresListAdapter.notifyDataSetChanged();
+        });
     }
 }
