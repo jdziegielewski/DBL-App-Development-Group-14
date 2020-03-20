@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.user_login.Login;
 import com.dblgroup14.app.user_login.Register;
@@ -30,12 +31,6 @@ public class ManageUserFragment extends Fragment {
                 startActivity(challengesIntent);
             }
         });
-        view.findViewById(R.id.RegisterBUTTON).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent challengesIntent = new Intent(getContext(), Register.class);
-                startActivity(challengesIntent);
-            }
-        });
+        
     }
 }
