@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -34,7 +36,7 @@ public class AlarmActivity extends AppCompatActivity {
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
      */
-    private static final int UI_ANIMATION_DELAY = 300;
+    private static final int UI_ANIMATION_DELAY = 100;
     
     private static final String LOSING_POPUP_MESSAGE = "Snoozer looser";
     private static final String LOSING_POPUP_BUTTON_MESSAGE = "I'm a sleap...";
@@ -42,6 +44,7 @@ public class AlarmActivity extends AppCompatActivity {
     
     private ImageButton giveUpButton;
     private TextView timeTextView;
+    private TextView hideBarsView;
     
     private Handler repeatingHandler;
     private final Handler mHideHandler = new Handler();
@@ -52,7 +55,7 @@ public class AlarmActivity extends AppCompatActivity {
         @SuppressLint("InlinedApi")
         @Override
         public void run() {
-        
+            decorView.setSystemUiVisibility(hideSystemBars());
         }
     };
     
@@ -74,6 +77,7 @@ public class AlarmActivity extends AppCompatActivity {
             hide();
         }
     };
+    
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
@@ -88,7 +92,12 @@ public class AlarmActivity extends AppCompatActivity {
             return false;
         }
     };
-    
+    private View.OnClickListener hideOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            toggle();
+        }
+    };
     
     private DialogInterface.OnClickListener losingPopupButtonListener = new DialogInterface.OnClickListener() {
         @Override
@@ -119,6 +128,7 @@ public class AlarmActivity extends AppCompatActivity {
             }
         }
     };
+    private AudioManager audioManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,17 +140,19 @@ public class AlarmActivity extends AppCompatActivity {
         mVisible = true;
         
         decorView.setOnSystemUiVisibilityChangeListener(visibilityChangeListener);
-        
+        decorView.setOnClickListener(hideOnClickListener);
         giveUpButton = (ImageButton) findViewById(R.id.giveUpButton);
         timeTextView = (TextView) findViewById(R.id.showTimeTextView);
-        
-        
+        hideBarsView = (TextView) findViewById(R.id.hideBarsView);
+        hideBarsView.setOnClickListener(hideOnClickListener);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         repeatingHandler = new Handler();
         final Runnable r = new Runnable() {
             public void run() {
-                repeatingHandler.postDelayed(this, 5000);
+                repeatingHandler.postDelayed(this, 100);
+                mHidePart2Runnable.run();
                 String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                
+                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
                 timeTextView.setText(currentTime);
             }
         };
@@ -149,11 +161,16 @@ public class AlarmActivity extends AppCompatActivity {
     }
     
     @Override
+    protected void onPause() {
+        super.onPause();
+        delayedHide(100);
+    }
+    
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemBars();
-        }
+        delayedHide(100);
+        
     }
     
     
@@ -202,8 +219,8 @@ public class AlarmActivity extends AppCompatActivity {
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
-//        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         mVisible = true;
         
         // Schedule a runnable to display UI elements after a delay
