@@ -44,7 +44,7 @@ public class DatabaseInstrumentedTest {
     
     @Test
     public void testAlarmEntity() {
-        final int TEST_ID = 95;
+        final int TEST_ID = 1;
         AlarmDao dao = database.alarmDao();
         
         // Assert that non-existing entity is retrieved as NULL
@@ -77,7 +77,7 @@ public class DatabaseInstrumentedTest {
     
     @Test
     public void testChallengeEntity() {
-        final int TEST_ID = 100;
+        final int TEST_ID = 1;
         ChallengeDao dao = database.challengeDao();
         
         // Assert that non-existing entity is retrieved as NULL
@@ -86,6 +86,8 @@ public class DatabaseInstrumentedTest {
         // Store new entity
         Challenge c = new Challenge();
         c.id = TEST_ID;
+        c.setName("Test Challenge");
+        c.setClassName("TestChallenge");
         c.put("Test", "String");    // string
         c.put("Test1", "12");       // number
         c.put("Test2", "true");     // boolean
@@ -131,7 +133,7 @@ public class DatabaseInstrumentedTest {
     
     @Test
     public void testChallengeSeriesEntity() {
-        final int TEST_ID = 37;
+        final int TEST_ID = 1;
         ChallengeSeriesDao dao = database.challengeSeriesDao();
         
         // Assert that non-existing entity is retrieved as NULL
@@ -140,6 +142,7 @@ public class DatabaseInstrumentedTest {
         // Store new entity
         ChallengeSeries cs = new ChallengeSeries();
         cs.id = TEST_ID;
+        cs.setName("Test Challenge Series");
         cs.addChallenge(0);
         cs.addChallenge(10);
         cs.addChallenge(15);
@@ -155,6 +158,12 @@ public class DatabaseInstrumentedTest {
         assertEquals(2, cs2.challengeIds.size());
         assertEquals((Integer) 15, cs2.challengeIds.get(0));
         assertEquals((Integer) 0, cs2.challengeIds.get(1));
+        
+        // Delete entity
+        dao.delete(cs2);
+        
+        // Assert that entity does not exist
+        assertNull(dao.get(TEST_ID));
     }
     
     @Test

@@ -20,6 +20,7 @@ gen/
 out/
 proguard/
 release/
+schemas/
 
 .idea/workspace.xml
 .idea/tasks.xml
@@ -32,6 +33,3 @@ release/
 .idea/navEditor.xml
 .idea/vcs.xml
 local.properties
-
-# Google Services (e.g. APIs or Firebase)
-# google-services.json

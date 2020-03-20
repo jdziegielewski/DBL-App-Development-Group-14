@@ -33,11 +33,10 @@ public abstract class UserScoreDao {
         // Check if there is a user logged in
         String currentUsername = SimpleDatabase.getCurrentUsername();
         
-        // Return null if no user is logged in
         if (currentUsername == null) {
-            return null;
+            return scoreOfUser("(default)");
+        } else {
+            return scoreOfUser(currentUsername);
         }
-        
-        return scoreOfUser(currentUsername);
     }
 }

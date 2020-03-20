@@ -14,7 +14,7 @@ import com.dblgroup14.support.entities.Challenge;
 import com.dblgroup14.support.entities.ChallengeSeries;
 import com.dblgroup14.support.entities.UserScore;
 
-@Database(entities = {Alarm.class, Challenge.class, ChallengeSeries.class, UserScore.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarm.class, Challenge.class, ChallengeSeries.class, UserScore.class}, version = 1)
 @TypeConverters({RoomTypeConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase database = null;
@@ -37,10 +37,20 @@ public abstract class AppDatabase extends RoomDatabase {
     public static void createDatabase(Context context, boolean testDatabase) {
         if (database == null) {
             if (testDatabase) {
-                database = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
+                database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db-test").build();
             } else {
-                database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db").build();
+                database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db")
+                        .createFromAsset("prefab.db").build();
             }
+        }
+    }
+    
+    /**
+     * Closes the internal database instance.
+     */
+    public static void closeDatabase() {
+        if (database != null) {
+            database.close();
         }
     }
     

@@ -23,6 +23,14 @@ public class MainActivity extends AppCompatActivity {
         setupNavigationTabs();
     }
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        // Close database
+        AppDatabase.closeDatabase();
+    }
+    
     private void setupNavigationTabs() {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.tab_alarms, R.id.tab_challenges, R.id.tab_score,
