@@ -27,4 +27,13 @@
         app:layout_constraintStart_toEndOf="@+id/goToChallengeBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/RegisterBUTTON"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="306dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
