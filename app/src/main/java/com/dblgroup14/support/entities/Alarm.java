@@ -14,7 +14,6 @@ public class Alarm {
     public String name;
     public boolean enabled;
     public int volume;
-    
     public int hours;
     public int minutes;
     public boolean repeats;
@@ -47,7 +46,7 @@ public class Alarm {
         this.repeats = repeats;
         this.days = new boolean[7];
         for (int day : days) {
-            setDay(day, true);
+            setDay(day, false);
         }
     }
     
@@ -64,12 +63,12 @@ public class Alarm {
     }
     
     /**
-     * Set alarm volume.
+     * Set alarm volume in the range [0-100]
      *
      * @param volume The new volume of this alarm
      */
     public void setVolume(int volume) {
-        if (volume < 0) {
+        if (volume < 0 || volume > 100) {
             throw new IllegalArgumentException("Invalid volume given");
         }
         this.volume = volume;
@@ -85,6 +84,15 @@ public class Alarm {
             throw new IllegalArgumentException("Invalid hours given");
         }
         this.hours = hours;
+    }
+    
+    /**
+     * Set if the alarm is enabled
+     *
+     * @param enabled If the alarm is enabled
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
     
     /**
@@ -122,4 +130,12 @@ public class Alarm {
         }
         days[day] = rings;
     }
+    
+    /**
+     * Set alarm repeat.
+     */
+    public void setRepeats(boolean repeat) {
+        this.repeats = repeat;
+    }
+    
 }

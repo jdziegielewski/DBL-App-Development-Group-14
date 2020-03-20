@@ -7,12 +7,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import com.dblgroup14.support.dao.AlarmDao;
 import com.dblgroup14.support.dao.ChallengeDao;
+import com.dblgroup14.support.dao.ChallengeSeriesDao;
 import com.dblgroup14.support.dao.UserScoreDao;
 import com.dblgroup14.support.entities.Alarm;
 import com.dblgroup14.support.entities.Challenge;
+import com.dblgroup14.support.entities.ChallengeSeries;
 import com.dblgroup14.support.entities.UserScore;
 
-@Database(entities = {Alarm.class, UserScore.class, Challenge.class}, version = 1, exportSchema = false)
+@Database(entities = {Alarm.class, Challenge.class, ChallengeSeries.class, UserScore.class}, version = 1)
 @TypeConverters({RoomTypeConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase database = null;
@@ -23,8 +25,32 @@ public abstract class AppDatabase extends RoomDatabase {
      * @param context The application context in which to create the database
      */
     public static void createDatabase(Context context) {
+        createDatabase(context, false);
+    }
+    
+    /**
+     * Creates an internal database instance (only once).
+     *
+     * @param context      The application context in which to create the database
+     * @param testDatabase Whether this database is used for instrumented tests
+     */
+    public static void createDatabase(Context context, boolean testDatabase) {
         if (database == null) {
-            database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db").build();
+            if (testDatabase) {
+                database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db-test").build();
+            } else {
+                database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db")
+                        .createFromAsset("prefab.db").build();
+            }
+        }
+    }
+    
+    /**
+     * Closes the internal database instance.
+     */
+    public static void closeDatabase() {
+        if (database != null) {
+            database.close();
         }
     }
     
@@ -41,7 +67,9 @@ public abstract class AppDatabase extends RoomDatabase {
     
     public abstract AlarmDao alarmDao();
     
-    public abstract UserScoreDao userScoreDao();
-    
     public abstract ChallengeDao challengeDao();
+    
+    public abstract ChallengeSeriesDao challengeSeriesDao();
+    
+    public abstract UserScoreDao userScoreDao();
 }

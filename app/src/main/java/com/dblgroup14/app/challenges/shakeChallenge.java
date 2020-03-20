@@ -9,27 +9,34 @@ import com.dblgroup14.app.R;
 
 public class shakeChallenge extends AppCompatActivity implements ShakeDetector.Listener {
     
-    int count;
+    private ShakeDetector detector;
+    private int count = 0;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shakechallenge);
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        ShakeDetector shakeDetector = new ShakeDetector(this);
-        shakeDetector.start(sensorManager);
-        count=0;
+        
+        detector = new ShakeDetector(this);
+        detector.start(sensorManager);
     }
- 
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        detector.stop();
+    }
     
     @Override
     public void hearShake() {
         count++;
-        Toast.makeText(this, "You shaked "+count+" time\n Shake, shake\n" +
+        Toast.makeText(this, "You shaked " + count + " times\n Shake, shake\n" +
                 "Shake, shake, shake it\n.", Toast.LENGTH_SHORT).show();
-        //i dont know how to print it other way
-        if(count==10){
-            count=0;
+        if (count == 10) {
+            detector.stop();
             finish();
         }
     }
+    
 }

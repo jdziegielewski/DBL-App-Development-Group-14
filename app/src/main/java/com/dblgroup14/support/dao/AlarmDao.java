@@ -18,6 +18,9 @@ public abstract class AlarmDao {
     @Query("SELECT * FROM alarms WHERE `enabled`=1")
     public abstract LiveData<List<Alarm>> allActive();
     
+    @Query("SELECT * FROM alarms WHERE `id`=:id")
+    public abstract Alarm get(int id);
+    
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void store(Alarm alarm);
     
