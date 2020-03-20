@@ -30,7 +30,7 @@ public class ManageUserFragment extends Fragment {
                 startActivity(challengesIntent);
             }
         });
-        view.findViewById(R.id.registerButton23).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.RegisterBUTTON).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent challengesIntent = new Intent(getContext(), Register.class);
