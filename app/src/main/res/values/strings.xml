@@ -16,6 +16,9 @@
     <string name="select_time">06:00</string>
     <string name="name_alarm">Name</string>
     <string name="alarm_volume">Alarm volume</string>
+    <string name="challenge_shake_it">Challenge - Shake it!</string>
+    <string name="shake_your_phone">Shake your phone</string>
+    <string name="shake_times">times!</string>
     <string name="completed_challenges">Completed Challenges</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="enable_multiple_challenges">Enable multiple challenges</string>
