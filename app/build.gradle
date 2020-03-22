@@ -55,4 +55,7 @@ dependencies {
 
     // Shaking library
     implementation 'com.squareup:seismic:1.0.2'
+
+    //Scanning barcodes and QR codes
+    implementation 'me.dm7.barcodescanner:zxing:1.9'
 }

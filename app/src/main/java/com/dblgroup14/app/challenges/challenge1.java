@@ -20,6 +20,7 @@ public class challenge1 extends AppCompatActivity {
     String password;
     EditText textinput;
     Random r;
+    //array of pictures of rebuses
     Integer[] images = {
         misunderstood,
         mixed_emotions,
@@ -33,6 +34,8 @@ public class challenge1 extends AppCompatActivity {
         time_is_money,
         too_big_to_fail
         };
+    //array of passwords to rebuses
+    //needs to go with images[]
     String[] correct = {
             "misunderstood",
             "mixed emotions",
