@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.management.ManageUserFragment2;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -71,7 +72,7 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ManageUserFragment2.class));
                         }else{
                             Toast.makeText(Login.this, "Error ! " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -80,6 +81,15 @@ public class Login extends AppCompatActivity {
                 });
     
     
+            }
+        });
+    
+    
+        mCreateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Register.class));
+            
             }
         });
         
