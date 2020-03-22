@@ -20,12 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.challenge1;
 import com.dblgroup14.app.management.edit.EditActivity;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 //https://appsandbiscuits.com/listview-tutorial-android-12-ccef4ead27cc
 public class CustomListAdapter extends ArrayAdapter<Alarm> {
@@ -54,8 +58,16 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         alarmTimeTextView.setText(String.format("%s:%s", hours, min));
         nameTextView.setText(alarm.name);
     
+        AlarmManager alarmMgr = (AlarmManager)activity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(activity.getBaseContext(), AlarmActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), alarm.id, intent, 0);
+        
         ImageView deleteView = rowView.findViewById(R.id.deleteAlarmView);
         deleteView.setOnClickListener(view1 -> {
+            alarm.setEnabled(false);
+            if (alarmMgr!= null) {
+                alarmMgr.cancel(pendingIntent);
+            }
             AsyncTask.execute(() -> {
                 AppDatabase.db().alarmDao().delete(alarm);
             });
@@ -86,12 +98,9 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         } else {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
         }
-    
-        AlarmManager alarmMgr = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), challenge1.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
-
+        
         alarmOnOffView.setOnClickListener(view14 -> {
+            
             if(alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_on).getConstantState()){
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
                 alarm.setEnabled(false);
@@ -110,7 +119,9 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
     
                 if(cal.compareTo(currentTime) > 0) {
                     assert alarmMgr != null;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                     } else {
                         alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
@@ -124,5 +135,6 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         
         return rowView;
     }
-   //ToDo: update alarmManager
+    //ToDo: update alarmManager
+    //ToDO: delete alarm
 }

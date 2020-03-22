@@ -58,4 +58,5 @@ dependencies {
 
     //Scanning barcodes and QR codes
     implementation 'me.dm7.barcodescanner:zxing:1.9'
+
 }

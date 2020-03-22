@@ -20,13 +20,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.challenges.challenge1;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Calendar;
 
 //https://abhiandroid.com/ui/timepicker
@@ -41,12 +39,17 @@ public class EditActivity extends AppCompatActivity {
     TextView selectedChallenge;
     AlertDialog alertDialog1;
     
+    AlarmManager alarmMgr;
+    Intent intent;
+    PendingIntent pendingIntent;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createActionBarWithGradient();
     
         // getIntent() is a method from the started activity
+        
         Intent myIntent = getIntent(); // gets the previously created intent
         boolean editAlarm = myIntent.getBooleanExtra("edit_alarm", false);
         
@@ -102,12 +105,6 @@ public class EditActivity extends AppCompatActivity {
             AsyncTask.execute(() -> {
                 AppDatabase.db().alarmDao().store(alarm);
             });
-            
-            /*if(alarm.repeats){
-                noRepeat();
-            } else {
-                repeat();
-            }*/
             setAlarm();
             finish();
         });
@@ -126,9 +123,6 @@ public class EditActivity extends AppCompatActivity {
                repeatButton.setBackgroundResource(R.drawable.ic_repeat_one);
                alarm.setRepeats(false);
            }
-            AsyncTask.execute(() -> {
-                AppDatabase.db().alarmDao().store(alarm);
-            });
         });
         
         
@@ -273,36 +267,71 @@ public class EditActivity extends AppCompatActivity {
     }
     
     public void setAlarm(){
-        Calendar cal = Calendar.getInstance();
-        Calendar currentTime = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
-        cal.set(Calendar.MINUTE, alarm.minutes);
-        cal.set(Calendar.SECOND, 0);
-    
-        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, challenge1.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, alarm.id, intent, 0);
+        alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        intent = new Intent(getBaseContext(), AlarmActivity.class);
+        pendingIntent = PendingIntent.getActivity(getApplicationContext(), alarm.id, intent, 0);
         
         if(alarm.enabled){
-            if (cal.compareTo(currentTime) <= 0) {
-                // The set Date/Time already passed
-                Toast.makeText(getApplicationContext(),
-                        "Invalid Date/Time", Toast.LENGTH_LONG).show();
+            if(alarm.repeats){
+                //repeat
+                Calendar cal = setAlarmTimeRepeat();
+                assert alarmMgr != null;
+                alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                //Toast.makeText(getApplicationContext(), ""+cal.getTime(), Toast.LENGTH_LONG).show();
             } else {
+                //no repeat
+                Calendar cal = setAlarmTimeNoRepeat();
                 assert alarmMgr != null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    } else {
+                        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    }
                 } else {
                     alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                 }
-                Toast.makeText(getApplicationContext(),
-                        ""+cal.getTime(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "" + cal.getTime(), Toast.LENGTH_LONG).show();
             }
         } else {
             if (alarmMgr!= null) {
                 alarmMgr.cancel(pendingIntent);
             }
         }
+        
+        
+        /*if(alarm.repeats){
+            Calendar cal = setAlarmTimeRepeat();
+            if(alarm.enabled){
+                assert alarmMgr != null;
+                alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                Toast.makeText(getApplicationContext(), ""+cal.getTime(), Toast.LENGTH_LONG).show();
+            } else {
+                if (alarmMgr!= null) {
+                    alarmMgr.cancel(pendingIntent);
+                }
+            }
+        } else {
+            Calendar cal = setAlarmTimeNoRepeat();
+            if (alarm.enabled) {
+                assert alarmMgr != null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    } else {
+                        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    }
+                } else {
+                    alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                }
+                Toast.makeText(getApplicationContext(),
+                        "" + cal.getTime(), Toast.LENGTH_LONG).show();
+            } else {
+                if (alarmMgr != null) {
+                    alarmMgr.cancel(pendingIntent);
+                }
+            }
+        }*/
     }
     
     private void createActionBarWithGradient() {
@@ -311,21 +340,133 @@ public class EditActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
-    public void noRepeat(){
-        int trueCount = 0;
-        for(boolean b : alarm.days){
-            if(b){
-                trueCount++;
-            }
-        }
-        if(trueCount==0){
-        
-        }
-        
+    private Calendar setAlarmTimeRepeat() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
+        cal.set(Calendar.MINUTE, alarm.minutes);
+        cal.set(Calendar.SECOND, 0);
+        setRepeatDay(cal);
+        return cal;
     }
     
-    public void repeat(){
+    public Calendar setAlarmTimeNoRepeat(){
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
+        cal.set(Calendar.MINUTE, alarm.minutes);
+        cal.set(Calendar.SECOND, 0);
+        Calendar currentTime = Calendar.getInstance();
+        if (cal.compareTo(currentTime) <= 0) {
+            cal.add(Calendar.DATE, 1);
+        } else {
+            setNoRepeatDay(cal);
+        }
+        return cal;
+    }
     
+    public Calendar setNoRepeatDay(Calendar cal){
+        for(int i = 0; i < alarm.days.length; i++){
+            if(alarm.days[i]){
+                setDayOfWeek(cal, i);
+            }
+        }
+        return cal;
+    }
+    
+    private Calendar setDayOfWeek(Calendar cal, int i) {
+        switch (i){
+            case 0:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+            case 1:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.TUESDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+            case 2:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+            case 3:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+            case 4:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+            case 5:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+            case 6:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    cal.add(Calendar.DATE, 1);
+                }
+                break;
+        }
+        return cal;
+    }
+    
+    public void setRepeatDay(Calendar cal){
+        for(int i = 0; i < alarm.days.length; i++){
+            if(alarm.days[i]){
+                setDayOfWeekRepeat(cal, i);
+            }
+        }
+    }
+    
+    private void setDayOfWeekRepeat(Calendar cal, int i) {
+        switch (i){
+            case 0:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+            case 1:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.TUESDAY) {
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+            case 2:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.WEDNESDAY) {
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+            case 3:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+            case 4:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) {
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+            case 5:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+            case 6:
+                while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    Toast.makeText(getApplicationContext(), "Zondag set", Toast.LENGTH_LONG).show();
+                    cal.add(Calendar.DATE, 1);
+                    alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+                }
+                break;
+        }
     }
 }
 //ToDo: automatic next day alarm
