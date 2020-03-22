@@ -31,10 +31,7 @@ public class BarcodeScanChallenge extends AppCompatActivity implements ZXingScan
         int currentApiVersion = Build.VERSION.SDK_INT;
     
         if(currentApiVersion >=  Build.VERSION_CODES.M) {
-            if(checkPermission()) {
-                Toast.makeText(getApplicationContext(), "Permission already granted!", Toast.LENGTH_LONG).show();
-            }
-            else {
+            if(!checkPermission()) {
                 requestPermission();
             }
         }
