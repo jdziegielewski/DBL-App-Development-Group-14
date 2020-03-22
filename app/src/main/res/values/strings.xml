@@ -19,6 +19,7 @@
     <string name="challenge_shake_it">Challenge - Shake it!</string>
     <string name="shake_your_phone">Shake your phone</string>
     <string name="shake_times">times!</string>
+    <string name="shake_challenge">Shake challenge</string>
     <string name="completed_challenges">Completed Challenges</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="enable_multiple_challenges">Enable multiple challenges</string>

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.challenge1;
+import com.dblgroup14.app.challenges.editChallenges;
 import com.dblgroup14.app.challenges.shakeChallenge;
 
 public class ManageChallengesFragment extends Fragment {
@@ -35,6 +36,11 @@ public class ManageChallengesFragment extends Fragment {
         view.findViewById(R.id.tochallengebutton).setOnClickListener(v -> {
             Intent myIntent = new Intent(getActivity().getBaseContext(), AlarmActivity.class);
             startActivity(myIntent);
+        });
+    
+        view.findViewById(R.id.edit_challenges_button).setOnClickListener(v -> {
+            Intent editChallengesIntent = new Intent(getContext(), editChallenges.class);
+            startActivity(editChallengesIntent);
         });
     }
 }
