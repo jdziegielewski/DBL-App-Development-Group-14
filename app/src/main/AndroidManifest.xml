@@ -23,6 +23,8 @@
             android:label="@string/title_activity_play_challenge_page"
             android:theme="@style/FullscreenTheme" />
         <activity android:name=".challenges.challenge1" />
+        <activity android:name=".challenges.editChallenges" />
+        <activity android:name=".challenges.editShakeChallenge" />
         <activity android:name=".management.edit.EditActivity" />
         <activity
             android:name=".MainActivity"
