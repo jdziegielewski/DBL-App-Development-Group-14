@@ -11,27 +11,26 @@ import com.dblgroup14.app.R;
 import com.dblgroup14.app.user_login.Login;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ManageUserFragment extends Fragment {
+public class ManageUserFragment2 extends Fragment {
     
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_manage_user, container, false);
+        return inflater.inflate(R.layout.fragment_manage_user2, container, false);
     }
+    
     
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        view.findViewById(R.id.MultiBtn).setOnClickListener(new View.OnClickListener() {
+    
+        view.findViewById(R.id.LogoutBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent challengesIntent = new Intent(getContext(), Login.class);
                 startActivity(challengesIntent);
             }
         });
-        
     }
-    
-    
-}
+    }
+

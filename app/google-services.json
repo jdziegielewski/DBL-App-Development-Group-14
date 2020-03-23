@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "753264296474",
+    "firebase_url": "https://dblgroup14app.firebaseio.com",
+    "project_id": "dblgroup14app",
+    "storage_bucket": "dblgroup14app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753264296474:android:77cf5ca46b845b22b987a3",
+        "android_client_info": {
+          "package_name": "com.dblgroup14.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753264296474-fq7nihp9lupu88mr18t4div2qpm1klu6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dblgroup14.app",
+            "certificate_hash": "d13c2cf1747e4b0895116bf5495e594cb7c8d7b9"
+          }
+        },
+        {
+          "client_id": "753264296474-pp17qct282ujqvi0iv00dofbi17b1l2l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCgVUXoWf4KXlBczxx8YaxGrbZVFQqgIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753264296474-pp17qct282ujqvi0iv00dofbi17b1l2l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
