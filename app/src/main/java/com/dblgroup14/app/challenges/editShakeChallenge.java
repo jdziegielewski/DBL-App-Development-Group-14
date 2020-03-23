@@ -1,7 +1,6 @@
 package com.dblgroup14.app.challenges;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -15,7 +14,7 @@ public class editShakeChallenge extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_shake_challenge);
+        setContentView(R.layout.fragment_edit_shake_challenge);
     
         ((AppCompatActivity) this).getSupportActionBar().setTitle("Edit shake challenge");
         EditText ShakeNumberInput;

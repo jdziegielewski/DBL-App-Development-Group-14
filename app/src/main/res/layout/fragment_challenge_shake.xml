@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".challenges.shakeChallenge">
+    tools:context=".challenges.ShakeChallengeFragment">
 
     <TextView
         android:id="@+id/challenge_shake_title"

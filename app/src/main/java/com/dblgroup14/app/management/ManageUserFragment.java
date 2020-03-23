@@ -12,8 +12,6 @@ import com.dblgroup14.app.user_login.Login;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ManageUserFragment extends Fragment {
-    
-    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_manage_user, container, false);
@@ -23,15 +21,9 @@ public class ManageUserFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        view.findViewById(R.id.MultiBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent challengesIntent = new Intent(getContext(), Login.class);
-                startActivity(challengesIntent);
-            }
+        view.findViewById(R.id.MultiBtn).setOnClickListener(v -> {
+            Intent challengesIntent = new Intent(getContext(), Login.class);
+            startActivity(challengesIntent);
         });
-        
     }
-    
-    
 }

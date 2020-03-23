@@ -3,9 +3,7 @@ package com.dblgroup14.app.challenges;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import android.Manifest;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -24,7 +22,7 @@ public class BarcodeScanChallenge extends AppCompatActivity implements ZXingScan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_barcode_scan_challenge);
+        setContentView(R.layout.fragment_challenge_barcode);
         
         
         //permission
@@ -52,7 +50,7 @@ public class BarcodeScanChallenge extends AppCompatActivity implements ZXingScan
     public void handleResult(Result result) {
         String resultcode = result.getText();
         Toast.makeText(BarcodeScanChallenge.this, resultcode + "Well done, you have woken up!", Toast.LENGTH_SHORT).show();
-        setContentView(R.layout.activity_barcode_scan_challenge);
+        setContentView(R.layout.fragment_challenge_barcode);
         scannerView.stopCamera();
         finish();
     }

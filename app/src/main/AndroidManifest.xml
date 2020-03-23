@@ -19,7 +19,7 @@
 
         <activity android:name=".challenges.MathChallenge"></activity>
         <activity android:name=".challenges.BarcodeScanChallenge" />
-        <activity android:name=".challenges.shakeChallenge" />
+        <activity android:name=".challenges.ShakeChallengeFragment" />
         <activity android:name=".challenges.challenge1" />
         <activity android:name=".challenges.editChallenges" />
         <activity android:name=".challenges.editShakeChallenge" />

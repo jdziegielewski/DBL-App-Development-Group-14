@@ -12,7 +12,7 @@ import com.dblgroup14.app.challenges.BarcodeScanChallenge;
 import com.dblgroup14.app.challenges.MathChallenge;
 import com.dblgroup14.app.challenges.challenge1;
 import com.dblgroup14.app.challenges.editChallenges;
-import com.dblgroup14.app.challenges.shakeChallenge;
+import com.dblgroup14.app.challenges.ShakeChallengeFragment;
 
 public class ManageChallengesFragment extends Fragment {
     
@@ -31,7 +31,7 @@ public class ManageChallengesFragment extends Fragment {
         });
         
         view.findViewById(R.id.goToShakeITChallenge).setOnClickListener(v -> {
-            Intent challengesIntent = new Intent(getContext(), shakeChallenge.class);
+            Intent challengesIntent = new Intent(getContext(), ShakeChallengeFragment.class);
             startActivity(challengesIntent);
         });
         
@@ -44,8 +44,7 @@ public class ManageChallengesFragment extends Fragment {
             Intent challengesIntent = new Intent(getContext(), MathChallenge.class);
             startActivity(challengesIntent);
         });
-    
-    
+        
         view.findViewById(R.id.tochallengebutton).setOnClickListener(v -> {
             Intent myIntent = new Intent(getActivity().getBaseContext(), AlarmActivity.class);
             startActivity(myIntent);

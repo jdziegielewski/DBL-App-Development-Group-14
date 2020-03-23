@@ -50,7 +50,7 @@ public class challenge1 extends AppCompatActivity {
         r = new Random();
         number = r.nextInt(images.length);
         super.onCreate(savedInstanceState);
-        setContentView(layout.activity_challenge1);
+        setContentView(layout.fragment_challenge_rebus);
         textinput = (EditText) findViewById(id.textinput1);
         checkbutton = (Button) findViewById(id.checkbutton);
         imageView = (ImageView) findViewById(id.rebusImage);

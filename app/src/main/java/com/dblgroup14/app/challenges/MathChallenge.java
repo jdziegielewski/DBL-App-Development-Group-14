@@ -34,7 +34,7 @@ public class MathChallenge extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_math_challenge);
+        setContentView(R.layout.fragment_challenge_math);
         textinput1 = (EditText) findViewById(R.id.textinput1);
         checkbutton1 = (Button) findViewById(R.id.checkbutton);
         imageView1 = (ImageView) findViewById(R.id.mathImage);
