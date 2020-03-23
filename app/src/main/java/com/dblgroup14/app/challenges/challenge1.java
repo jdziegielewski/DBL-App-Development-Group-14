@@ -7,8 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.dblgroup14.app.MainActivity;
-import com.dblgroup14.app.R;
 import java.util.Random;
 
 import static com.dblgroup14.app.R.*;
@@ -20,21 +18,22 @@ public class challenge1 extends AppCompatActivity {
     String password;
     EditText textinput;
     Random r;
+    int number;
+    //array of pictures of rebuses
     Integer[] images = {
-        misunderstood,
-        mixed_emotions,
-        balanced_diet,
-        bucket_list,
-        fade_away,
-        feel_free,
-        square_root,
-        stakes_are_high,
-        stick_around,
-        time_is_money,
-        too_big_to_fail
+            rebus_mixed_emotions,
+            rebus_balanced_diet,
+            rebus_bucket_list,
+            rebus_fade_away,
+            rebus_feel_free,
+            rebus_square_root,
+            rebus_stakes_are_high,
+            rebus_stick_around,
+            rebus_time_is_money,
         };
+    //array of passwords to rebuses
+    //needs to go with images[]
     String[] correct = {
-            "misunderstood",
             "mixed emotions",
             "balanced diet",
             "bucket list",
@@ -44,9 +43,8 @@ public class challenge1 extends AppCompatActivity {
             "stakes are high",
             "stick around",
             "time is money",
-            "too big to fail"
     };
-    int number;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         r = new Random();
