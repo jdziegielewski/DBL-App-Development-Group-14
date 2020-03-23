@@ -10,7 +10,7 @@ import com.dblgroup14.support.entities.Challenge;
 import java.util.List;
 
 @Dao
-public abstract class ChallengeDao {
+public abstract class ChallengeDao implements HostDaoInterface<Challenge> {
     @Query("SELECT * FROM challenges")
     public abstract LiveData<List<Challenge>> all();
     
