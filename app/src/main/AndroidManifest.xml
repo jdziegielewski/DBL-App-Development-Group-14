@@ -22,7 +22,6 @@
         <activity android:name=".challenges.ShakeChallengeFragment" />
         <activity android:name=".challenges.challenge1" />
         <activity android:name=".challenges.editChallenges" />
-        <activity android:name=".challenges.editShakeChallenge" />
 
         <activity android:name=".user_login.Login" />
         <activity android:name=".user_login.Register" />

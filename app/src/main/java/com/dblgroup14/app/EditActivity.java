@@ -44,22 +44,33 @@ public class EditActivity extends AppCompatActivity {
     }
     
     private void initializeEditFragment() {
+        // Set arguments
+        Bundle initArgs = new Bundle();
+        initArgs.putInt("id", getIntent().getIntExtra("id", -1));
+        editFragment.setArguments(initArgs);
+        
         // Instantiate edit fragment
         switch (getIntent().getStringExtra("object")) {
             case "alarm":
                 editFragment = new EditAlarmFragment();
                 break;
             case "challenge":
-                editFragment = new EditChallengeFragment();
+                // Get challenge class name
+                String className = getIntent().getStringExtra("edit_fragment_class");
+                if (className == null) {
+                    throw new IllegalArgumentException("No edit fragment class given");
+                }
+                
+                // Instantiate edit challenge fragment
+                try {
+                    editFragment = (EditChallengeFragment) Class.forName(className).newInstance();
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("No valid edit fragment class given");
+                }
                 break;
             default:
                 break;
         }
-        
-        // Set arguments
-        Bundle initArgs = new Bundle();
-        initArgs.putInt("id", getIntent().getIntExtra("id", -1));
-        editFragment.setArguments(initArgs);
         
         // Place fragment into container
         FragmentManager fragMgr = getSupportFragmentManager();

@@ -17,8 +17,8 @@ public class editChallenges extends AppCompatActivity {
         
         Button edit_shake_challenge_button = findViewById(R.id.edit_shake_challenge_button);
         edit_shake_challenge_button.setOnClickListener(view -> {
-            Intent EditShakeIntent = new Intent(getApplicationContext(), editShakeChallenge.class);
-            startActivity(EditShakeIntent);
+//            Intent EditShakeIntent = new Intent(getApplicationContext(), editShakeChallenge.class);
+//            startActivity(EditShakeIntent);
         });
     }
 }
