@@ -138,8 +138,6 @@ public class Login extends AppCompatActivity {
                 });
                 
                 passwordResetDialog.create().show();
-                
-        
             }
         });
     }

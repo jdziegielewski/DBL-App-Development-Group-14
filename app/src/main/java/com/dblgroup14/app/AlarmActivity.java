@@ -1,6 +1,7 @@
 package com.dblgroup14.app;
 
 import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -133,7 +134,6 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         setContentView(R.layout.activity_alarm);
         
         decorView = getWindow().getDecorView();
@@ -141,9 +141,9 @@ public class AlarmActivity extends AppCompatActivity {
         
         decorView.setOnSystemUiVisibilityChangeListener(visibilityChangeListener);
         decorView.setOnClickListener(hideOnClickListener);
-        giveUpButton = (ImageButton) findViewById(R.id.giveUpButton);
-        timeTextView = (TextView) findViewById(R.id.showTimeTextView);
-        hideBarsView = (TextView) findViewById(R.id.hideBarsView);
+        giveUpButton = findViewById(R.id.giveUpBtn);
+        timeTextView = findViewById(R.id.systemTimeText);
+        hideBarsView = findViewById(R.id.hideBarsView);
         hideBarsView.setOnClickListener(hideOnClickListener);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         repeatingHandler = new Handler();
@@ -156,7 +156,7 @@ public class AlarmActivity extends AppCompatActivity {
                 timeTextView.setText(currentTime);
             }
         };
-        repeatingHandler.postDelayed(r, 0000);
+        repeatingHandler.postDelayed(r, 0);
         giveUpButton.setOnClickListener(giveUpbuttonListener);
     }
     
@@ -170,9 +170,12 @@ public class AlarmActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         delayedHide(100);
-        
     }
     
+    @Override
+    public void onBackPressed() {
+        // TODO: Forward to challenge fragment
+    }
     
     private int hideSystemBars() {
         return View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -182,7 +185,6 @@ public class AlarmActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
     }
-    
     
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -17,7 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.challenges.challenge1;
+import com.dblgroup14.app.challenges.RebusChallengeFragment;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import java.util.Calendar;
@@ -83,7 +83,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         }
         
         AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), challenge1.class);
+        Intent intent = new Intent(getContext(), RebusChallengeFragment.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
         
         alarmOnOffView.setOnClickListener(view14 -> {

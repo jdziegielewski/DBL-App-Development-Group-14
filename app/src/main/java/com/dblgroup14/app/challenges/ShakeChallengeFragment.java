@@ -14,7 +14,7 @@ import static android.content.Context.SENSOR_SERVICE;
 public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDetector.Listener {
     
     private ShakeDetector detector;
-    private TextView shakeCounter;
+    private TextView shakeCountText;
     
     private int shakesLeft = 10;
     
@@ -28,7 +28,7 @@ public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDe
         super.onViewCreated(view, savedInstanceState);
         
         // Get shake count text view
-        shakeCounter = view.findViewById(R.id.shake_counter);
+        shakeCountText = view.findViewById(R.id.shakeCountText);
         
         // Start shake sensor
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
@@ -48,7 +48,7 @@ public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDe
         shakesLeft--;
         
         // Update shake counter
-        shakeCounter.setText(String.valueOf(shakesLeft));
+        shakeCountText.setText(String.valueOf(shakesLeft));
         
         // Check for challenge completion
         if (shakesLeft == 0) {

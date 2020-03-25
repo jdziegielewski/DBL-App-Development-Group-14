@@ -7,29 +7,29 @@
     tools:context=".challenges.ShakeChallengeFragment">
 
     <TextView
-        android:id="@+id/challenge_shake_title"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/challenge_shake_it"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="@string/shake_your_phone"
         android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/shake_counter"
+        app:layout_constraintBottom_toTopOf="@+id/shakeCountText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
@@ -38,10 +38,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shake_counter" />
+        app:layout_constraintTop_toBottomOf="@+id/shakeCountText" />
 
     <TextView
-        android:id="@+id/shake_counter"
+        android:id="@+id/shakeCountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10"
