@@ -13,16 +13,6 @@ import java.util.Map;
  */
 public class RoomTypeConverters {
     @TypeConverter
-    public static Date dateFromLong(Long value) {
-        return value == null ? null : new Date(value);
-    }
-    
-    @TypeConverter
-    public static Long dateToLong(Date date) {
-        return date == null ? null : date.getTime();
-    }
-    
-    @TypeConverter
     public static boolean[] booleanArrFromString(String value) {
         String[] parts = value.split(",");
         boolean[] result = new boolean[parts.length];

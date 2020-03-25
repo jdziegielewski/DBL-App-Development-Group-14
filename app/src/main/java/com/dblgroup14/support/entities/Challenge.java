@@ -14,10 +14,14 @@ import java.util.Map;
 public class Challenge {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    
     @NonNull
     public String name;
+    
     @NonNull
     public String className;
+    
+    @NonNull
     public Map<String, String> dataStorage;
     
     public Challenge() {

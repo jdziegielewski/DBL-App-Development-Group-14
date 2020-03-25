@@ -16,20 +16,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        // Instantiate database
-        AppDatabase.createDatabase(getApplicationContext());
-        
         // Setup navigation tabs
         setupNavigationTabs();
         createActionBarWithGradient();
-    }
-    
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        
-        // Close database
-        AppDatabase.closeDatabase();
     }
     
     private void setupNavigationTabs() {

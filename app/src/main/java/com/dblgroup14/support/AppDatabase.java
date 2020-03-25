@@ -38,7 +38,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db-test").build();
             } else {
                 database = Room.databaseBuilder(context, AppDatabase.class, "sleap-db")
-                        .createFromAsset("prefab.db").build();
+                        .createFromAsset("prefab.db")
+                        .build();
             }
         }
     }
