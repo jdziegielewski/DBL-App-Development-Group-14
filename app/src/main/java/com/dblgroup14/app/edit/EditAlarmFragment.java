@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.support.AlarmScheduler;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.dao.HostDaoInterface;
 import com.dblgroup14.support.entities.Alarm;
@@ -157,6 +158,19 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         return R.layout.fragment_edit_alarm;
     }
     
+    @Override
+    public boolean save() {
+        // Save alarm
+        if (!super.save()) {
+            return false;
+        }
+        
+        // Schedule next alarm time
+        AlarmScheduler.scheduleNext(editObject);
+        
+        return true;
+    }
+    
     private void updateTimeView() {
         int hours = editObject.hours, min = editObject.minutes;
         if (min >= 0 && min < 10) {
@@ -240,39 +254,8 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
                     editObject.addChallenge(c.id);
                 }
             });
-    
+            
             challengesListContainer.addView(listItem);
-        }
-    }
-    
-    private void setAlarm() {
-        Calendar cal = Calendar.getInstance();
-        Calendar currentTime = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, editObject.hours);
-        cal.set(Calendar.MINUTE, editObject.minutes);
-        cal.set(Calendar.SECOND, 0);
-        
-        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), AlarmActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), editObject.id, intent, 0);
-        
-        if (editObject.enabled) {
-            if (cal.compareTo(currentTime) <= 0) {
-                // The set Date/Time already passed
-                Toast.makeText(getContext(), "Invalid Date/Time", Toast.LENGTH_LONG).show();
-            } else {
-                assert alarmMgr != null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                } else {
-                    alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                }
-                Toast.makeText(getContext(), cal.getTime().toString(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            if (alarmMgr != null) {
-                alarmMgr.cancel(pendingIntent);
-            }
         }
     }
 }
