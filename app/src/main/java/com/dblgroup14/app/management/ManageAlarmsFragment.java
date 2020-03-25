@@ -1,11 +1,7 @@
 package com.dblgroup14.app.management;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +9,8 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.challenges.challenge1;
-import com.dblgroup14.app.management.edit.EditActivity;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,7 +39,7 @@ public class ManageAlarmsFragment extends Fragment {
         
         // Register live data binding with database
         LiveData<List<Alarm>> liveAlarms = AppDatabase.db().alarmDao().all();
-        liveAlarms.observe(this, l -> {
+        liveAlarms.observe(getViewLifecycleOwner(), l -> {
             alarmsListAdapter.clear();
             alarmsListAdapter.addAll(l);
             alarmsListAdapter.notifyDataSetChanged();
@@ -52,10 +47,10 @@ public class ManageAlarmsFragment extends Fragment {
         
         // Create add alarm button
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(view1 -> {
-            Intent intentNewAlarm = new Intent(getActivity(), EditActivity.class);
-            intentNewAlarm.putExtra("edit_alarm", false);
-            startActivity(intentNewAlarm);
+        fab.setOnClickListener(v -> {
+            Intent editAlarmIntent = new Intent(getContext(), EditActivity.class);
+            editAlarmIntent.putExtra("object", "alarm");
+            startActivity(editAlarmIntent);
         });
     }
 }

@@ -1,0 +1,29 @@
+package com.dblgroup14.app.management;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+import com.dblgroup14.app.R;
+import com.dblgroup14.app.user_login.Login;
+
+public class ManageUserFragment2 extends Fragment {
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_manage_user2, container, false);
+    }
+    
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
+        view.findViewById(R.id.LogoutBtn).setOnClickListener(v -> {
+            Intent challengesIntent = new Intent(getContext(), Login.class);
+            startActivity(challengesIntent);
+        });
+    }
+}
+

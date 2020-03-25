@@ -5,24 +5,19 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.challenges.challenge1;
-import com.dblgroup14.app.management.edit.EditActivity;
+import com.dblgroup14.app.challenges.RebusChallengeFragment;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import java.util.Calendar;
@@ -53,21 +48,21 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         
         alarmTimeTextView.setText(String.format("%s:%s", hours, min));
         nameTextView.setText(alarm.name);
-    
+        
         ImageView deleteView = rowView.findViewById(R.id.deleteAlarmView);
         deleteView.setOnClickListener(view1 -> {
             AsyncTask.execute(() -> {
                 AppDatabase.db().alarmDao().delete(alarm);
             });
         });
-    
+        
         ConstraintLayout dropDownView = rowView.findViewById(R.id.dropDownView);
         ConstraintLayout mainBoxAlarm = rowView.findViewById(R.id.mainBoxAlarm);
         dropDownView.setVisibility(View.GONE);
         mainBoxAlarm.setOnClickListener(view12 -> {
-            if(dropDownView.getVisibility() == rowView.VISIBLE){
+            if (dropDownView.getVisibility() == rowView.VISIBLE) {
                 dropDownView.setVisibility(View.GONE);
-            } else if(dropDownView.getVisibility() == rowView.GONE){
+            } else if (dropDownView.getVisibility() == rowView.GONE) {
                 dropDownView.setVisibility(View.VISIBLE);
             }
         });
@@ -75,30 +70,31 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         ImageView editAlarmButton = rowView.findViewById(R.id.editAlarmButton);
         editAlarmButton.setOnClickListener(view13 -> {
             Intent intentEditAlarm = new Intent(activity, EditActivity.class);
-            intentEditAlarm.putExtra("edit_alarm", true);
-            intentEditAlarm.putExtra("alarm_id", alarm.id);
+            intentEditAlarm.putExtra("object", "alarm");
+            intentEditAlarm.putExtra("id", alarm.id);
             activity.startActivity(intentEditAlarm);
         });
         
         ImageView alarmOnOffView = rowView.findViewById(R.id.alarmOnOffView);
-        if(alarm.enabled){
+        if (alarm.enabled) {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
         } else {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
         }
-    
-        AlarmManager alarmMgr = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), challenge1.class);
+        
+        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), RebusChallengeFragment.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
-
+        
         alarmOnOffView.setOnClickListener(view14 -> {
-            if(alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_on).getConstantState()){
+            if (alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_on).getConstantState()) {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
                 alarm.setEnabled(false);
-                if (alarmMgr!= null) {
+                if (alarmMgr != null) {
                     alarmMgr.cancel(pendingIntent);
                 }
-            } else if(alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_off).getConstantState()){
+            } else if (alarmOnOffView.getBackground().getConstantState() ==
+                    activity.getResources().getDrawable(R.drawable.ic_alarm_off).getConstantState()) {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
                 alarm.setEnabled(true);
                 
@@ -107,8 +103,8 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
                 cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
                 cal.set(Calendar.MINUTE, alarm.minutes);
                 cal.set(Calendar.SECOND, 0);
-    
-                if(cal.compareTo(currentTime) > 0) {
+                
+                if (cal.compareTo(currentTime) > 0) {
                     assert alarmMgr != null;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
@@ -124,5 +120,5 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         
         return rowView;
     }
-   //ToDo: update alarmManager
+    //ToDo: update alarmManager
 }

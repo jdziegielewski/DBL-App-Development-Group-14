@@ -7,82 +7,72 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/goToMath"
+        android:id="@+id/barcodeChallengeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="68dp"
-        android:text="CHALLENGE 4"
-        app:layout_constraintStart_toEndOf="@+id/goToChallengeBtn"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:text="Barcode"
+        app:layout_constraintStart_toEndOf="@+id/mathChallengeBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/goToBarcodeScanChallenge"
+        android:id="@+id/rebusChallengeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CHALLENGE 3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.341"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.251" />
-
-    <Button
-        android:id="@+id/goToChallengeBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Challenge 1"
+        android:text="Rebus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/goToMathChallenge"
+        android:id="@+id/mathChallengeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="156dp"
-        android:layout_marginLeft="156dp"
-        android:text="Challenge 4"
-        app:layout_anchor="@+id/goToShakeITChallenge"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:text="Math"
+        app:layout_anchor="@+id/shakeChallengeBtn"
         app:layout_anchorGravity="center"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/shakeChallengeBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/goToShakeITChallenge"
+        android:id="@+id/shakeChallengeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:text="CHALLENGE 2"
-        app:layout_constraintStart_toEndOf="@+id/goToChallengeBtn"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:text="Shake"
+        app:layout_constraintStart_toEndOf="@+id/rebusChallengeBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/tochallengebutton"
+        android:id="@+id/alarmBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="467dp"
-        android:layout_marginBottom="216dp"
-        android:text="To Play Challenge Page"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.552"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:text="Alarm"
+        app:layout_constraintStart_toEndOf="@+id/editChallengesBtn"
+        app:layout_constraintTop_toBottomOf="@+id/shakeChallengeBtn" />
 
     <Button
-        android:id="@+id/edit_challenges_button"
+        android:id="@+id/editChallengesBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Challenges"
+        android:text="Edit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rebusChallengeBtn" />
+
+    <FrameLayout
+        android:id="@+id/challengeFrameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/goToShakeITChallenge" />
+        app:layout_constraintTop_toBottomOf="@+id/alarmBtn">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
