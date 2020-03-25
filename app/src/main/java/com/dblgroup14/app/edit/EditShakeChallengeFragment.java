@@ -49,7 +49,8 @@ public class EditShakeChallengeFragment extends EditChallengeFragment {
     @Override
     protected Challenge createNew() {
         Challenge shakeChallengeTemplate = new Challenge();
-        shakeChallengeTemplate.className = ShakeChallengeFragment.class.getName();
+        shakeChallengeTemplate.setName("Test");
+        shakeChallengeTemplate.setClassName(ShakeChallengeFragment.class.getName());
         shakeChallengeTemplate.put(KEY_SHAKE_COUNT, SHAKE_AMOUNTS[1]);  // set 10 shakes as default
         return shakeChallengeTemplate;
     }
