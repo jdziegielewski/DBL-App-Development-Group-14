@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 public class AlarmActivity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after

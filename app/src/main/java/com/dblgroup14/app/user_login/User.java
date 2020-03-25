@@ -10,11 +10,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import com.dblgroup14.app.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -40,6 +46,11 @@ public class User extends AppCompatActivity {
     
         super.onCreate(savedInstanceState);
         ///use get activity for fragments
+    
+        // Setup navigation tabs
+        setupNavigationTabs();
+        createActionBarWithGradient();
+        
         setContentView(R.layout.activity_user);
         phone = findViewById(R.id.profilePhone);
         fullName = findViewById(R.id.profileName);
@@ -101,6 +112,21 @@ public class User extends AppCompatActivity {
             }
         });
         
+    }
+    
+    private void setupNavigationTabs() {
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.tab_alarms, R.id.tab_challenges, R.id.tab_score,
+                R.id.tab_user).build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+    }
+    
+    private void createActionBarWithGradient() {
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
     public void logout(View view) {

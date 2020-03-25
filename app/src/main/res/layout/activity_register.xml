@@ -8,6 +8,42 @@
     tools:context=".user_login.Register">
 
 
+        <EditText
+            android:id="@+id/password2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/colorPrimaryDark"
+            android:ems="10"
+            android:hint="Re-type Password"
+            android:fontFamily="@font/aclonica"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="#ECEBE4"
+            android:textColorHint="#656363"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintVertical_bias="0.045" />
+
+
+        <TextView
+            android:id="@+id/EYE2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SHOW"
+            android:textColor="#FFEB3B"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/password2"
+            app:layout_constraintEnd_toEndOf="@+id/password2"
+            app:layout_constraintHorizontal_bias="0.875"
+            app:layout_constraintStart_toStartOf="@+id/password2"
+            app:layout_constraintTop_toTopOf="@+id/password2"
+            app:layout_constraintVertical_bias="0.428" />
 
         <EditText
             android:id="@+id/Full_Name"
@@ -41,7 +77,7 @@
             android:ems="10"
             android:fontFamily="@font/aclonica"
             android:hint="Email"
-            android:inputType="textPersonName"
+            android:inputType="textEmailAddress"
             android:padding="10dp"
             android:textColor="#ECEBE4"
             android:textColorHint="#656363"
@@ -51,7 +87,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Full_Name"
-            app:layout_constraintVertical_bias="0.052" />
+            app:layout_constraintVertical_bias="0.03" />
 
         <TextView
             android:id="@+id/textView1"
@@ -132,7 +168,7 @@
             android:ems="10"
             android:fontFamily="@font/aclonica"
             android:hint="Password"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:padding="10dp"
             android:textColor="#ECEBE4"
             android:textColorHint="#656363"
@@ -142,7 +178,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email"
-            app:layout_constraintVertical_bias="0.055" />
+            app:layout_constraintVertical_bias="0.037" />
 
         <EditText
             android:id="@+id/phone"
@@ -163,8 +199,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password"
-            app:layout_constraintVertical_bias="0.058" />
+            app:layout_constraintTop_toBottomOf="@+id/password2"
+            app:layout_constraintVertical_bias="0.052" />
+
+        <TextView
+            android:id="@+id/EYE"
+            android:layout_width="37dp"
+            android:layout_height="17dp"
+            android:text="SHOW"
+            android:textColor="#FFEB3B"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/password"
+            app:layout_constraintEnd_toEndOf="@+id/password"
+            app:layout_constraintHorizontal_bias="0.88"
+            app:layout_constraintStart_toStartOf="@+id/password"
+            app:layout_constraintTop_toTopOf="@+id/password" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
