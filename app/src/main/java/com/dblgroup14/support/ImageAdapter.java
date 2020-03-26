@@ -53,6 +53,9 @@ public class ImageAdapter extends BaseAdapter
             R.drawable.ic_add_circle_outline_black_24dp,
             R.drawable.ic_friends_challenges_list_black_24dp,
             R.drawable.ic_default_challenge_list_black_24dp,
+            R.drawable.barcode_challenge,
+            R.drawable.math_equation_logo,
+            R.drawable.ic_shake_challenge
  
     };
 }
