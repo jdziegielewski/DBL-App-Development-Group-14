@@ -61,7 +61,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         setDelete();
         setDropDownMenu();
         setEditAlarmButton();
-        setAlarmState();
+        setAlarmState(alarm);
         
         return rowView;
     }
@@ -124,7 +124,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
     /**
      * Set the layout to the state of the alarm: enabled or disabled
      */
-    private void setAlarmState() {
+    private void setAlarmState(Alarm alarm) {
         ImageView alarmOnOffView = rowView.findViewById(R.id.alarmOnOffView);
         if (alarm.enabled) {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
@@ -132,7 +132,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
         }
         
-        changeAlarmStateOnClick(alarmOnOffView);
+        changeAlarmStateOnClick(alarmOnOffView, alarm);
     }
     
     /**
@@ -174,7 +174,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
      *
      * @param alarmOnOffView the ImageView of the on/off-button
      */
-    private void changeAlarmStateOnClick(ImageView alarmOnOffView) {
+    private void changeAlarmStateOnClick(ImageView alarmOnOffView, Alarm alarm) {
         alarmOnOffView.setOnClickListener(view14 -> {
             if (alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_on).getConstantState()) {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
@@ -182,8 +182,7 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
                 if (alarmMgr != null) {
                     alarmMgr.cancel(pendingIntent);
                 }
-            } else if (alarmOnOffView.getBackground().getConstantState() ==
-                    activity.getResources().getDrawable(R.drawable.ic_alarm_off).getConstantState()) {
+            } else if (alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_off).getConstantState()) {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
                 alarm.setEnabled(true);
                 
