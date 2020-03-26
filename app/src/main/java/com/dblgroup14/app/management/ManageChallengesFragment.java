@@ -54,8 +54,8 @@ public class ManageChallengesFragment extends Fragment {
 //            Challenge c = challengesList.get(i);
 //            s = s+c.className;
 //        }
-        List<Integer> nums = new ArrayList<Integer>(Arrays.asList(ImageAdapter.mThumbIds));
-        final ImageArrayAdapter gridViewArrayAdapter = new ImageArrayAdapter(getActivity(), nums);//challengesList
+        List<Integer> Placeholderimages = new ArrayList<Integer>(Arrays.asList(ImageAdapter.mThumbIds));
+        final ImageArrayAdapter gridViewArrayAdapter = new ImageArrayAdapter(getActivity(), Placeholderimages);//challengesList
         gv.setAdapter(gridViewArrayAdapter);
         
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,7 +86,7 @@ public class ManageChallengesFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-//                images.add(images.size(),R.drawable.ic_shake_challenge);
+               Placeholderimages.add(Placeholderimages.size(),R.drawable.ic_shake_challenge);
                 
                 gridViewArrayAdapter.notifyDataSetChanged();
                 
