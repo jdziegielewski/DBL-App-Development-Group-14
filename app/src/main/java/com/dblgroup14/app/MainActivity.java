@@ -11,6 +11,7 @@ import com.dblgroup14.support.AppDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         createActionBarWithGradient();
     }
     
+    /**
+     * Sets up the four navigation tabs in the main screen
+     */
     private void setupNavigationTabs() {
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.tab_alarms, R.id.tab_challenges, R.id.tab_score,
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
     
+    /**
+     * Sets the background of the actionbar to a gradient color
+     */
     private void createActionBarWithGradient() {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;

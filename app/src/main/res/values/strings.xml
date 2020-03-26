@@ -22,7 +22,7 @@
     <string name="shake_challenge">Shake challenge</string>
     <string name="completed_challenges">Completed Challenges</string>
     <string name="leaderboard">Leaderboard</string>
-    <string name="enable_multiple_challenges">Enable multiple challenges</string>
+    <string name="enable_multiple_challenges">Enable challenges</string>
     <string name="select_your_challenge">Select your challenge</string>
     <string name="title_activity_play_challenge_page">PlayChallengePage</string>
     <string name="dummy_button">Dummy Button</string>

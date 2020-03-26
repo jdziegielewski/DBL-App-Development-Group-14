@@ -50,6 +50,10 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         alarmTimeTextView.setText(String.format("%s:%s", hours, min));
         nameTextView.setText(alarm.name);
         
+        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), RebusChallengeFragment.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
+    
         ImageView deleteView = rowView.findViewById(R.id.deleteAlarmView);
         deleteView.setOnClickListener(view1 -> {
             alarm.setEnabled(false);
@@ -88,9 +92,6 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
         }
         
 
-        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), RebusChallengeFragment.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
         
         alarmOnOffView.setOnClickListener(view14 -> {
 

@@ -42,23 +42,37 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     private TextView[] repeatDays;
     private SeekBar volumeSeekBar;
     private LinearLayout challengesListContainer;
-    
     private double maxVolume;
     private List<Challenge> challengesList;
+    private AppCompatActivity activity;
+    private View view;
     
     @Override
-    protected void initialize(View view) {
+    protected void initialize(View views) {
+        view = views;
         // Get activity
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity = (AppCompatActivity) getActivity();
+        // Get challenges list container
+        challengesListContainer = view.findViewById(R.id.challengesListContainer);
         
-        // Set title
+        setTitle();
+        initializeTimeView();
+        initializeNameEditText();
+        initializeRepeatButton();
+        initializeRepeatDays();
+        initializeSeekBar();
+        initializeChallengesLiveData();
+    }
+    
+    private void setTitle() {
         if (isEdit) {
             activity.getSupportActionBar().setTitle("Edit My Alarm");
         } else {
             activity.getSupportActionBar().setTitle("My New Alarm");
         }
-        
-        // Initialize the time view
+    }
+    
+    private void initializeTimeView() {
         time = view.findViewById(R.id.time);
         time.setOnClickListener(v -> {
             // Get current time
@@ -74,12 +88,23 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
             timePicker.show();
         });
         updateTimeView();
-        
-        // Initialize name edit text
+    }
+    
+    private void updateTimeView() {
+        int hours = editObject.hours, min = editObject.minutes;
+        if (min >= 0 && min < 10) {
+            time.setText(hours + ":0" + min);
+        } else {
+            time.setText(hours + ":" + min);
+        }
+    }
+    
+    private void initializeNameEditText() {
         nameEdit = view.findViewById(R.id.alarmNameInput);
         nameEdit.setText(editObject.name);
-        
-        // Initialize repeat button
+    }
+    
+    private void initializeRepeatButton() {
         ImageView repeatButton = view.findViewById(R.id.alarmRepeatBtn);
         if (editObject.repeats) {
             repeatButton.setBackgroundResource(R.drawable.ic_repeat);
@@ -94,31 +119,33 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
             }
             editObject.setRepeats(!editObject.repeats);
         });
-        
-        // Initialize repeat days
+    }
+    
+    private void initializeRepeatDays() {
         repeatDays = new TextView[] {
                 view.findViewById(R.id.repeatDay0), view.findViewById(R.id.repeatDay1), view.findViewById(R.id.repeatDay2),
                 view.findViewById(R.id.repeatDay3), view.findViewById(R.id.repeatDay4), view.findViewById(R.id.repeatDay5),
                 view.findViewById(R.id.repeatDay6)
         };
+    
         for (TextView repeatDay : repeatDays) {
             setOnClick(repeatDay);
         }
         updateRepeatDays();
-        
+    }
+    
+    private void initializeSeekBar() {
         // Get device's maximum volume
         AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
         maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        
+    
         // Initialize volume seek bar
         volumeSeekBar = view.findViewById(R.id.alarmVolumeSeekBar);
         volumeSeekBar.setMax((int) maxVolume);
         volumeSeekBar.setProgress((int) (editObject.volume * maxVolume / 100));
-        
-        // Get challenges list container
-        challengesListContainer = view.findViewById(R.id.challengesListContainer);
-        
-        // Initialize challenges live data
+    }
+    
+    private void initializeChallengesLiveData(){
         LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
         allChallenges.observe(getViewLifecycleOwner(), l -> {
             challengesList = l;
@@ -171,14 +198,6 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         return true;
     }
     
-    private void updateTimeView() {
-        int hours = editObject.hours, min = editObject.minutes;
-        if (min >= 0 && min < 10) {
-            time.setText(hours + ":0" + min);
-        } else {
-            time.setText(hours + ":" + min);
-        }
-    }
     
     private void updateRepeatDays() {
         for (int i = 0; i < repeatDays.length; i++) {
