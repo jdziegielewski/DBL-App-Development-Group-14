@@ -13,47 +13,73 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.RebusChallengeFragment;
-import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import java.util.Calendar;
+import java.util.Locale;
 
 //https://appsandbiscuits.com/listview-tutorial-android-12-ccef4ead27cc
 public class CustomListAdapter extends ArrayAdapter<Alarm> {
     private final Activity activity;    // reference to the activity
+    private AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+    private Intent intent = new Intent(getContext(), RebusChallengeFragment.class);
+    private PendingIntent pendingIntent;
+    private Alarm alarm;
+    private View rowView;
     
-    public CustomListAdapter(Activity activity) {
+    /**
+     * Sets the activity
+     *
+     * @param activity the activity
+     */
+    CustomListAdapter(Activity activity) {
         super(activity.getApplicationContext(), R.layout.listview_row);
         this.activity = activity;
     }
     
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    /**
+     * Sets the time, deletion, drop down menu, edit button and on/off-button
+     *
+     * @param position the position of the list
+     * @param view     the view
+     * @param parent   the view of the parent
+     * @return the view rowView
+     */
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = activity.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.listview_row, null, true);
+        rowView = inflater.inflate(R.layout.listview_row, null, true);
+        alarm = getItem(position);
+        assert alarm != null;
+        pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
         
-        //this code gets references to objects in the listview_row.xml file
+        setTime();
+        setDelete();
+        setDropDownMenu();
+        setEditAlarmButton();
+        setAlarmState();
+        
+        return rowView;
+    }
+    
+    /**
+     * Sets the alarm time and name in the textViews
+     */
+    private void setTime() {
         TextView alarmTimeTextView = rowView.findViewById(R.id.alarmTimeTextView);
         TextView nameTextView = rowView.findViewById(R.id.nameTextView);
-        
-        //this code sets the values of the objects to values from the arrays
-        Alarm alarm = getItem(position);
-        String hours = String.format("%02d", alarm.hours);
-        String min = String.format("%02d", alarm.minutes);
-        
-        alarmTimeTextView.setText(String.format("%s:%s", hours, min));
+        alarmTimeTextView.setText(String.format(Locale.getDefault(), "%02d:%02d", alarm.hours, alarm.minutes));
         nameTextView.setText(alarm.name);
-        
-        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), RebusChallengeFragment.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), alarm.id, intent, 0);
+    }
     
+    /**
+     * Sets the onClickLister of the delete button: the alarm is canceled and the alarm deleted
+     */
+    private void setDelete() {
         ImageView deleteView = rowView.findViewById(R.id.deleteAlarmView);
         deleteView.setOnClickListener(view1 -> {
             alarm.setEnabled(false);
@@ -64,7 +90,25 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
                 AppDatabase.db().alarmDao().delete(alarm);
             });
         });
-        
+    }
+    
+    /**
+     * When the edit button is pressed, the edit activity will be started
+     */
+    private void setEditAlarmButton() {
+        ImageView editAlarmButton = rowView.findViewById(R.id.editAlarmButton);
+        editAlarmButton.setOnClickListener(view13 -> {
+            Intent intentEditAlarm = new Intent(activity, EditActivity.class);
+            intentEditAlarm.putExtra("object", "alarm");
+            intentEditAlarm.putExtra("id", alarm.id);
+            activity.startActivity(intentEditAlarm);
+        });
+    }
+    
+    /**
+     * If the alarm box has been clicked, the drop down menu is shown
+     */
+    private void setDropDownMenu() {
         ConstraintLayout dropDownView = rowView.findViewById(R.id.dropDownView);
         ConstraintLayout mainBoxAlarm = rowView.findViewById(R.id.mainBoxAlarm);
         dropDownView.setVisibility(View.GONE);
@@ -75,15 +119,12 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
                 dropDownView.setVisibility(View.VISIBLE);
             }
         });
-        
-        ImageView editAlarmButton = rowView.findViewById(R.id.editAlarmButton);
-        editAlarmButton.setOnClickListener(view13 -> {
-            Intent intentEditAlarm = new Intent(activity, EditActivity.class);
-            intentEditAlarm.putExtra("object", "alarm");
-            intentEditAlarm.putExtra("id", alarm.id);
-            activity.startActivity(intentEditAlarm);
-        });
-        
+    }
+    
+    /**
+     * Set the layout to the state of the alarm: enabled or disabled
+     */
+    private void setAlarmState() {
         ImageView alarmOnOffView = rowView.findViewById(R.id.alarmOnOffView);
         if (alarm.enabled) {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
@@ -91,10 +132,50 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
             alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
         }
         
-
-        
+        changeAlarmStateOnClick(alarmOnOffView);
+    }
+    
+    /**
+     * Sets the alarm
+     *
+     * @param cal the time and date of the alarm
+     */
+    private void setAlarm(Calendar cal) {
+        Calendar currentTime = Calendar.getInstance();
+        if (cal.compareTo(currentTime) > 0) {
+            assert alarmMgr != null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            } else {
+                alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            }
+        }
+    }
+    
+    /**
+     * Creates a calender at the time and date the alarm should go off
+     *
+     * @param alarm the alarm object
+     * @return the calender with the set time and date
+     */
+    private Calendar createCal(Alarm alarm) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
+        cal.set(Calendar.MINUTE, alarm.minutes);
+        cal.set(Calendar.SECOND, 0);
+        return cal;
+    }
+    
+    /**
+     * Changes the state of the alarm when the on/off-button is pressed. When the alarm is disabled the alarm get canceled, when the alarm is
+     * enabled the alarm gets set
+     *
+     * @param alarmOnOffView the ImageView of the on/off-button
+     */
+    private void changeAlarmStateOnClick(ImageView alarmOnOffView) {
         alarmOnOffView.setOnClickListener(view14 -> {
-
             if (alarmOnOffView.getBackground().getConstantState() == activity.getResources().getDrawable(R.drawable.ic_alarm_on).getConstantState()) {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
                 alarm.setEnabled(false);
@@ -106,30 +187,15 @@ public class CustomListAdapter extends ArrayAdapter<Alarm> {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
                 alarm.setEnabled(true);
                 
-                Calendar cal = Calendar.getInstance();
-                Calendar currentTime = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, alarm.hours);
-                cal.set(Calendar.MINUTE, alarm.minutes);
-                cal.set(Calendar.SECOND, 0);
-                
-                if (cal.compareTo(currentTime) > 0) {
-                    assert alarmMgr != null;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                    } else {
-                        alarmMgr.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                    }
-                }
+                Calendar cal = createCal(alarm);
+                setAlarm(cal);
             }
             AsyncTask.execute(() -> {
                 AppDatabase.db().alarmDao().store(alarm);
             });
         });
-        
-        return rowView;
     }
+    
     //ToDo: update alarmManager
     //ToDO: delete alarm
 }
