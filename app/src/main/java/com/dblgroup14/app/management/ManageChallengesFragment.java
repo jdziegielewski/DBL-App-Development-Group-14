@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.Add_Challenge;
 import com.dblgroup14.app.AlarmActivity;
@@ -42,7 +43,15 @@ public class ManageChallengesFragment extends Fragment {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            
+            switch (position){
+                case 2:
+                    
+                    break;
+                default:
+                    Toast.makeText(getActivity().getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+                    break;
+                    
+            }
             
             
             }
