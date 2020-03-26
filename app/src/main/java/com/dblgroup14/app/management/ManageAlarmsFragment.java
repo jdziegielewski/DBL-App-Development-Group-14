@@ -1,6 +1,7 @@
 package com.dblgroup14.app.management;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class ManageAlarmsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         // Set title
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
         
@@ -53,4 +54,5 @@ public class ManageAlarmsFragment extends Fragment {
             startActivity(editAlarmIntent);
         });
     }
+    
 }

@@ -1,3 +1,4 @@
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
@@ -69,3 +70,4 @@ dependencies {
     // Scanning barcodes and QR codes
     implementation 'me.dm7.barcodescanner:zxing:1.9'
 }
+
