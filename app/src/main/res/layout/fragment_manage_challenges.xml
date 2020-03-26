@@ -27,7 +27,7 @@
     </GridView>
 
     <Button
-            android:id="@+id/button2"
+            android:id="@+id/edit_challenge_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="81dp"
             android:layout_height="43dp"

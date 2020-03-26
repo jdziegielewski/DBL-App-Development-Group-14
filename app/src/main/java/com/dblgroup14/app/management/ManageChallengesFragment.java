@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,10 @@ import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.challenge1;
 import com.dblgroup14.support.ImageAdapter;
+import com.dblgroup14.support.ImageArrayAdapter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ManageChallengesFragment extends Fragment {
     
@@ -30,9 +35,37 @@ public class ManageChallengesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     
         GridView gv = (GridView) getActivity().findViewById(R.id.gv);
-    
-        final ImageAdapter gridViewArrayAdapter = new ImageAdapter(getActivity());
+        List<Integer> images = new ArrayList<Integer>(Arrays.asList(ImageAdapter.mThumbIds));
+        final ImageArrayAdapter gridViewArrayAdapter = new ImageArrayAdapter(getActivity(),images);
         gv.setAdapter(gridViewArrayAdapter);
+        
+        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            
+            
+            
+            }
+        });
+        Button btn = getActivity().findViewById(R.id.edit_challenge_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Add/insert item to ArrayAdapter
+                // Insert at the end of ArrayAdapter
+                // ArrayAdapter is zero based index
+                images.add(images.size(),R.drawable.ic_shake_challenge);
 
+                // Update the GridView
+                gridViewArrayAdapter.notifyDataSetChanged();
+
+                // Get the newly added item from ArrayAdapter
+              //  String addedItemText = plantsList.get(plantsList.size()-1);
+
+                // Confirm the addition
+//                Toast.makeText(getApplicationContext(),
+//                        "Item added : " + addedItemText, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

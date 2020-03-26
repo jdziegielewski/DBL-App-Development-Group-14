@@ -49,7 +49,7 @@ public class ImageAdapter extends BaseAdapter
         imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
-    private Integer[] mThumbIds = {
+    public static Integer[] mThumbIds = {
             R.drawable.math_equation_logo,
             R.drawable.ic_barcode_challenge,
             R.drawable.ic_add_circle_outline_black_24dp,
