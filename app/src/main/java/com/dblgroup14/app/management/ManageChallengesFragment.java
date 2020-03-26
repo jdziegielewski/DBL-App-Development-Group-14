@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.Add_Challenge;
 import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.challenges.challenge1;
 import com.dblgroup14.support.ImageAdapter;
 import com.dblgroup14.support.ImageArrayAdapter;
 import java.util.ArrayList;
@@ -43,37 +42,36 @@ public class ManageChallengesFragment extends Fragment {
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            switch (position){
-                case 2:
-                    
-                    break;
-                default:
-                    Toast.makeText(getActivity().getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
-                    break;
-                    
-            }
+                switch (position) {
+                    case 0:
+                        // Go to Create Custom Challenge Fragment
             
+                        break;
+                    case 1:
+                        // Go to Friends Challenges Fragment
+                        break;
+                    case 2:
+                        // Go to Default Challenges Fragment
+                        break;
+                    default:
             
+                        Toast.makeText(getActivity().getApplicationContext(), "Not implemented yet", Toast.LENGTH_SHORT).show();
+                        break;
+        
+                }
+                
             }
         });
         Button btn = getActivity().findViewById(R.id.edit_challenge_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Add/insert item to ArrayAdapter
-                // Insert at the end of ArrayAdapter
-                // ArrayAdapter is zero based index
+               
                 images.add(images.size(),R.drawable.ic_shake_challenge);
 
-                // Update the GridView
                 gridViewArrayAdapter.notifyDataSetChanged();
 
-                // Get the newly added item from ArrayAdapter
-              //  String addedItemText = plantsList.get(plantsList.size()-1);
 
-                // Confirm the addition
-//                Toast.makeText(getApplicationContext(),
-//                        "Item added : " + addedItemText, Toast.LENGTH_SHORT).show();
             }
         });
     }

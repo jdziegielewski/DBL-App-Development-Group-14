@@ -50,10 +50,10 @@ public class ImageAdapter extends BaseAdapter
         return imageView;
     }
     public static Integer[] mThumbIds = {
-            R.drawable.math_equation_logo,
-            R.drawable.ic_barcode_challenge,
             R.drawable.ic_add_circle_outline_black_24dp,
-            R.drawable.ic_add_circle_outline_black_24dp
+            R.drawable.ic_friends_challenges_list_black_24dp,
+            R.drawable.ic_default_challenge_list_black_24dp,
+ 
     };
 }
 
