@@ -6,39 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/goToChallengeBtn"
-        android:layout_width="wrap_content"
+    <GridView
+        android:id="@+id/gv"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Challenge 1"
-        app:layout_anchor="@+id/goToShakeITChallenge"
-        app:layout_anchorGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/goToShakeITChallenge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:text="CHALLENGE 2"
-        app:layout_constraintStart_toEndOf="@+id/goToChallengeBtn"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/tochallengebutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="467dp"
-        android:layout_marginBottom="216dp"
-        android:text="To Play Challenge Page"
+        android:background="#FFFFFF"
+        android:horizontalSpacing="-10dp"
+        android:numColumns="2"
+        android:padding="10dp"
+        android:columnWidth="150dp"
+        android:gravity="center"
+        android:stretchMode="spacingWidthUniform"
+        android:verticalSpacing="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.643"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.109">
+
+
+    </GridView>
+
+    <Button
+            android:id="@+id/button2"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="81dp"
+            android:layout_height="43dp"
+            android:background="#F9F9F9"
+            android:text="Edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
