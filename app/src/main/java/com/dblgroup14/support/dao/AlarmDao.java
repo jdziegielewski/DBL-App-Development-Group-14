@@ -11,7 +11,7 @@ import com.dblgroup14.support.entities.Alarm;
 import java.util.List;
 
 @Dao
-public abstract class AlarmDao {
+public abstract class AlarmDao implements HostDaoInterface<Alarm> {
     @Query("SELECT * FROM alarms")
     public abstract LiveData<List<Alarm>> all();
     

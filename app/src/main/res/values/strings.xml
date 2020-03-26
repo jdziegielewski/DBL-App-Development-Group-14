@@ -16,13 +16,23 @@
     <string name="select_time">06:00</string>
     <string name="name_alarm">Name</string>
     <string name="alarm_volume">Alarm volume</string>
+    <string name="challenge_shake_it">Challenge - Shake it!</string>
+    <string name="shake_your_phone">Shake your phone</string>
+    <string name="shake_times">times!</string>
+    <string name="shake_challenge">Shake challenge</string>
     <string name="completed_challenges">Completed Challenges</string>
     <string name="leaderboard">Leaderboard</string>
-    <string name="enable_multiple_challenges">Enable multiple challenges</string>
+    <string name="enable_multiple_challenges">Enable challenges</string>
     <string name="select_your_challenge">Select your challenge</string>
     <string name="title_activity_play_challenge_page">PlayChallengePage</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="shake_amount">Current amount of shakes: </string>
+    <string name="edit_shake_text">Here you can change the amount of shakes</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="title_activity_add__challenge">Add_Challenge</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

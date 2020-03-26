@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="50pt"
         android:layout_weight="1"
+        android:background="@drawable/layout_alarm_box"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:background="@drawable/layout_alarm_box">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/alarmTimeTextView"
@@ -39,16 +39,16 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/alarmOnOffView"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="44dp"
-            android:layout_marginRight="44dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
             android:layout_weight="1"
+            android:background="@drawable/ic_alarm_on"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/ic_alarm_on" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -56,17 +56,17 @@
         android:id="@+id/dropDownView"
         android:layout_width="match_parent"
         android:layout_height="76dp"
-        android:background="#23D1B5D8">
+        android:background="#0A23729A">
 
         <ImageView
             android:id="@+id/deleteAlarmView"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
             android:background="@drawable/ic_delete"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editAlarmButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView

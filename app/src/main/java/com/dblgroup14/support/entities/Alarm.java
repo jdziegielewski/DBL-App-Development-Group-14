@@ -1,7 +1,9 @@
 package com.dblgroup14.support.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import java.util.ArrayList;
 
 /**
  * The entity class for an Alarm object.
@@ -11,6 +13,8 @@ import androidx.room.PrimaryKey;
 public class Alarm {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    
+    @NonNull
     public String name;
     public boolean enabled;
     public int volume;
@@ -18,13 +22,12 @@ public class Alarm {
     public int minutes;
     public boolean repeats;
     public boolean[] days;
+    public ArrayList<Integer> challengeIds;
     
     /**
-     * Create an empty alarm instance.
+     * Public constructor to satisfy ROOM. Do not use directly!
      */
-    public Alarm() {
-        this("", 0, 0, false, 0, false);
-    }
+    public Alarm() { this("", 0, 0, false, 0, false); }
     
     /**
      * Create an alarm object with default values.
@@ -45,8 +48,10 @@ public class Alarm {
         this.enabled = enabled;
         this.repeats = repeats;
         this.days = new boolean[7];
+        this.challengeIds = new ArrayList<>();
+        
         for (int day : days) {
-            setDay(day, true);
+            setDay(day, false);
         }
     }
     
@@ -87,6 +92,15 @@ public class Alarm {
     }
     
     /**
+     * Set if the alarm is enabled
+     *
+     * @param enabled If the alarm is enabled
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    
+    /**
      * Set the minute at which this alarm will ring.
      *
      * @param minutes The minute at which the alarm will ring
@@ -120,5 +134,42 @@ public class Alarm {
             throw new IllegalArgumentException("Invalid day ID");
         }
         days[day] = rings;
+    }
+    
+    /**
+     * Set alarm repeat.
+     */
+    public void setRepeats(boolean repeat) {
+        this.repeats = repeat;
+    }
+    
+    /**
+     * Adds a challenge to run to this alarm.
+     *
+     * @param id The ID of the challenge to add
+     */
+    public void addChallenge(int id) {
+        if (!challengeIds.contains(id)) {
+            challengeIds.add(id);
+        }
+    }
+    
+    /**
+     * Checks whether a challenge is currently added to this alarm.
+     *
+     * @param id The id of the challenge to check
+     * @return Whether the challenge is added to this alarm
+     */
+    public boolean hasChallenge(int id) {
+        return challengeIds.contains(id);
+    }
+    
+    /**
+     * Removes a challenge to run from this alarm.
+     *
+     * @param id The ID of the challenge to remove
+     */
+    public void removeChallenge(int id) {
+        challengeIds.remove((Integer) id);
     }
 }
