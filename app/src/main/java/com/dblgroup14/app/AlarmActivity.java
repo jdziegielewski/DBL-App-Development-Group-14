@@ -1,36 +1,27 @@
 package com.dblgroup14.app;
 
 import android.annotation.SuppressLint;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import com.dblgroup14.app.challenges.ChallengeFragment;
+import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.entities.Alarm;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class AlarmActivity extends AppCompatActivity {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
-    
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 1000;
     
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -38,151 +29,114 @@ public class AlarmActivity extends AppCompatActivity {
      */
     private static final int UI_ANIMATION_DELAY = 100;
     
+    /**
+     * Lose message related strings.
+     */
     private static final String LOSING_POPUP_MESSAGE = "Snoozer looser";
     private static final String LOSING_POPUP_BUTTON_MESSAGE = "I'm a sleap...";
     private static final String LOSING_POPUP_TITLE = "You lost!";
     
-    private ImageButton giveUpButton;
     private TextView timeTextView;
-    private TextView hideBarsView;
-    
-    private Handler repeatingHandler;
-    private final Handler mHideHandler = new Handler();
-    
     private View decorView;
     
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
+    private boolean mVisible;
+    private Handler mRepeatHandler;
+    private Handler mHideHandler;
+    private AudioManager mAudioManager;
+    
+    private Alarm mCurrentAlarm;
+    private ChallengeFragment mChallengeFragment;
+    
+    /* Runnables */
+    
+    private final Runnable mHidePart2Runnable = () -> decorView.setSystemUiVisibility(hideSystemBars());
+    private final Runnable mShowPart2Runnable = () -> {
+        // Delayed display of UI elements
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
+        }
+    };
+    private final Runnable mHideRunnable = this::hide;
+    
+    /* View listeners */
+    
+    private final View.OnClickListener hideOnClickListener = v -> toggle();
+    private final DialogInterface.OnClickListener losingPopupButtonListener = (o, i) -> stopAlarm();
+    private final View.OnClickListener giveUpbuttonListener = v -> {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AlarmActivity.this);
+        builder.setCancelable(false);
+        builder.setTitle(LOSING_POPUP_TITLE);
+        builder.setMessage(LOSING_POPUP_MESSAGE);
+        builder.setPositiveButton(LOSING_POPUP_BUTTON_MESSAGE, losingPopupButtonListener);
+        builder.show();
+    };
+    private final View.OnSystemUiVisibilityChangeListener visibilityChangeListener = v -> {
+        if (v == 0) {
             decorView.setSystemUiVisibility(hideSystemBars());
         }
     };
-    
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-            // mControlsView.setVisibility(View.VISIBLE);
-        }
-    };
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-    
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
-    private View.OnClickListener hideOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            toggle();
-        }
-    };
-    
-    private DialogInterface.OnClickListener losingPopupButtonListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            Intent myIntent = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(myIntent);
-        }
-    };
-    
-    
-    private View.OnClickListener giveUpbuttonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(AlarmActivity.this);
-            builder.setCancelable(false);
-            builder.setTitle(LOSING_POPUP_TITLE);
-            builder.setMessage(LOSING_POPUP_MESSAGE);
-            builder.setPositiveButton(LOSING_POPUP_BUTTON_MESSAGE, losingPopupButtonListener);
-            builder.show();
-        }
-    };
-    
-    View.OnSystemUiVisibilityChangeListener visibilityChangeListener = new View.OnSystemUiVisibilityChangeListener() {
-        @Override
-        public void onSystemUiVisibilityChange(int visibility) {
-            if (visibility == 0) {
-                decorView.setSystemUiVisibility(hideSystemBars());
-            }
-        }
-    };
-    private AudioManager audioManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
         
-        decorView = getWindow().getDecorView();
+        // Get alarm object that is run
+        final int alarmId = getIntent().getIntExtra("alarm_id", 0);
+        if (alarmId <= 0) {
+            throw new IllegalArgumentException("No alarm id provided");
+        }
+        AsyncTask.execute(() -> {
+            mCurrentAlarm = AppDatabase.db().alarmDao().get(alarmId);
+            initializeChallenge();
+        });
+        
+        // Set ui to be visible
         mVisible = true;
         
+        // Get audio manager
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        
+        // Initialize decor view
+        decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(visibilityChangeListener);
         decorView.setOnClickListener(hideOnClickListener);
-        giveUpButton = findViewById(R.id.giveUpBtn);
-        timeTextView = findViewById(R.id.systemTimeText);
-        hideBarsView = findViewById(R.id.hideBarsView);
-        hideBarsView.setOnClickListener(hideOnClickListener);
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        repeatingHandler = new Handler();
-        final Runnable r = new Runnable() {
-            public void run() {
-                repeatingHandler.postDelayed(this, 100);
-                mHidePart2Runnable.run();
-                String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
-                timeTextView.setText(currentTime);
-            }
-        };
-        repeatingHandler.postDelayed(r, 0);
+        
+        // Initialize give up button
+        ImageButton giveUpButton = findViewById(R.id.giveUpBtn);
         giveUpButton.setOnClickListener(giveUpbuttonListener);
+        
+        // Initialize time text view
+        timeTextView = findViewById(R.id.systemTimeText);
+        
+        // Initialize hide bars view
+        TextView hideBarsView = findViewById(R.id.hideBarsView);
+        hideBarsView.setOnClickListener(hideOnClickListener);
+        
+        // Initialize hide handler
+        mHideHandler = new Handler();
+        
+        // Start repeat handler
+        mRepeatHandler = new Handler();
+        mRepeatHandler.postDelayed(this::updateView, 0);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
-        delayedHide(100);
+        delayedHide();
     }
     
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        delayedHide(100);
+        delayedHide();
     }
     
     @Override
     public void onBackPressed() {
         // TODO: Forward to challenge fragment
-    }
-    
-    private int hideSystemBars() {
-        return View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
     }
     
     @Override
@@ -192,7 +146,42 @@ public class AlarmActivity extends AppCompatActivity {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(100);
+        delayedHide();
+    }
+    
+    private void updateView() {
+        // Hide system bars
+        mHidePart2Runnable.run();
+        
+        // Update time
+        String currentTime = new SimpleDateFormat("HH:mm").format(new Date());
+        timeTextView.setText(currentTime);
+        
+        // Change volume to alarm volume
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, mCurrentAlarm.volume, 0);
+        
+        // Post another update
+        mRepeatHandler.postDelayed(this::updateView, 1000);
+    }
+    
+    private void initializeChallenge() {
+    
+    }
+    
+    private void stopAlarm() {
+        // TODO: Implement
+    }
+    
+    private int hideSystemBars() {
+        int flags = View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            flags |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        }
+        return flags;
     }
     
     private void toggle() {
@@ -233,8 +222,8 @@ public class AlarmActivity extends AppCompatActivity {
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
      */
-    private void delayedHide(int delayMillis) {
+    private void delayedHide() {
         mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
+        mHideHandler.postDelayed(mHideRunnable, 100);
     }
 }

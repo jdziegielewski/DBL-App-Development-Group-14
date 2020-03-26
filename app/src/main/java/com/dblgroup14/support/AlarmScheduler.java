@@ -1,8 +1,11 @@
 package com.dblgroup14.support;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
+import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.SleapApplication;
 import com.dblgroup14.support.entities.Alarm;
 import java.text.DateFormat;
@@ -69,9 +72,15 @@ public abstract class AlarmScheduler {
     
     private static void setAlarm(Calendar calendar, Alarm alarm) {
         Context context = SleapApplication.getContext();
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    
+        // Create intent
+        Intent intent = new Intent(context, AlarmActivity.class);
+        intent.putExtra("alarm_id", alarm.id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarm.id, intent, 0);
         
-        // TODO: Schedule alarm
+        // Schedule alarm
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         
         // Show user a schedule message
         DateFormat format = new SimpleDateFormat("EEEE dd MMM HH:mm");
