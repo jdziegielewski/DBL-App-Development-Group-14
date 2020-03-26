@@ -14,14 +14,14 @@ public abstract class ChallengeDao implements HostDaoInterface<Challenge> {
     @Query("SELECT * FROM challenges")
     public abstract LiveData<List<Challenge>> all();
     
+    @Query("SELECT * FROM challenges")
+    public abstract List<Challenge> allDirect();
+    
     @Query("SELECT * FROM challenges WHERE `id`=:id")
     public abstract Challenge get(int id);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void store(Challenge challenge);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void storeAll(List<Challenge> challenges);
+    public abstract long store(Challenge challenge);
     
     @Delete
     public abstract void delete(Challenge challenge);

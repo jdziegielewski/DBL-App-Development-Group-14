@@ -58,11 +58,19 @@ public abstract class EditFragment<T extends Object> extends Fragment {
         
         // Save this object in the database
         AsyncTask.execute(() -> {
-            dao().store(editObject);
+            long rowId = dao().store(editObject);
+            saveComplete(rowId);
         });
         
         return true;
     }
+    
+    /**
+     * Callback for when the object has been saved.
+     *
+     * @param rowId The (new) row ID of the stored object
+     */
+    protected void saveComplete(long rowId) {}
     
     /**
      * Initializes the view.

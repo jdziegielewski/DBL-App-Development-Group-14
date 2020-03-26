@@ -1,13 +1,9 @@
 package com.dblgroup14.app.edit;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,10 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AlarmScheduler;
 import com.dblgroup14.support.AppDatabase;
@@ -32,10 +26,6 @@ import java.util.Locale;
 
 /**
  * The fragment that is used to edit an alarm instance.
- *
- * TODO: automatic next day alarm
- * TODO: repeat button
- * TODO: on lock screen alarm
  */
 public class EditAlarmFragment extends EditFragment<Alarm> {
     private EditText nameEdit;
@@ -46,17 +36,16 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     private View view;
     
     /**
-     * initializes the title, timeView, nameText, repeatButton, repeat buttons of the days, seek bar and the challenge list
-     *
-     * @param views the view
+     * {@inheritDoc}
      */
     @Override
     protected void initialize(View views) {
         view = views;
+        
         // Get activity
         activity = (AppCompatActivity) getActivity();
-        // Get challenges list container
         
+        // Initialize UI
         setTitle();
         initializeTimeView();
         initializeNameEditText();
@@ -64,6 +53,61 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         initializeRepeatDays();
         initializeSeekBar();
         initializeChallengesLiveData();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean update() {
+        // Set alarm name
+        String name = nameEdit.getText().toString().trim();
+        if (name.isEmpty()) {
+            return false;
+        }
+        editObject.setName(name);
+        editObject.setVolume((int) ((volumeSeekBar.getProgress() / maxVolume) * 100));
+        return true;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void saveComplete(long rowId) {
+        // Set ID of alarm object if not already set
+        if (editObject.id <= 0) {
+            editObject.id = (int) rowId;
+        }
+        
+        // Schedule next alarm
+        getActivity().runOnUiThread(() -> AlarmScheduler.scheduleNext(editObject));
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Alarm createNew() {
+        int curHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int curMin = Calendar.getInstance().get(Calendar.MINUTE);
+        return new Alarm("New Alarm", curHour, curMin, true, 80, false, 1);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected HostDaoInterface<Alarm> dao() {
+        return AppDatabase.db().alarmDao();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected int getLayoutResourceID() {
+        return R.layout.fragment_edit_alarm;
     }
     
     /**
@@ -267,64 +311,4 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
             challengesListContainer.addView(listItem);
         }
     }
-    
-    /**
-     * Updates the name in the editText and stores the name and volume
-     *
-     * @return true if the update is done correctly, false when the name was empty
-     */
-    @Override
-    protected boolean update() {
-        // Set alarm name
-        String name = nameEdit.getText().toString().trim();
-        if (name.isEmpty()) {
-            return false;
-        }
-        editObject.setName(name);
-        editObject.setVolume((int) ((volumeSeekBar.getProgress() / maxVolume) * 100));
-        return true;
-    }
-    
-    /**
-     * Creates a new alarm
-     *
-     * @return the new alarm
-     */
-    @Override
-    protected Alarm createNew() {
-        int curHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int curMin = Calendar.getInstance().get(Calendar.MINUTE);
-        return new Alarm("New Alarm", curHour, curMin, true, 80, false, 1);
-    }
-    
-    /**
-     * @return the database
-     */
-    @Override
-    protected HostDaoInterface<Alarm> dao() {
-        return AppDatabase.db().alarmDao();
-    }
-    
-    /**
-     * @return the fragment
-     */
-    @Override
-    protected int getLayoutResourceID() {
-        return R.layout.fragment_edit_alarm;
-    }
-    
-    /**
-     * @return true if the alarm is saved, false is the alarm is not saved
-     */
-    @Override
-    public boolean save() {
-        // Save alarm
-        if (!super.save()) {
-            return false;
-        }
-        // Schedule next alarm time
-        AlarmScheduler.scheduleNext(editObject);
-        return true;
-    }
-    
 }
