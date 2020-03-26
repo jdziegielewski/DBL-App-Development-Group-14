@@ -13,6 +13,7 @@ import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.BarcodeChallengeFragment;
 import com.dblgroup14.app.challenges.ChallengeFragment;
 import com.dblgroup14.app.challenges.MathChallengeFragment;
+import com.dblgroup14.app.challenges.MultipleChoiceTriviaChallenge;
 import com.dblgroup14.app.challenges.RebusChallengeFragment;
 import com.dblgroup14.app.challenges.ShakeChallengeFragment;
 import com.dblgroup14.app.edit.EditShakeChallengeFragment;
@@ -44,9 +45,15 @@ public class ManageChallengesFragment extends Fragment {
         view.findViewById(R.id.rebusChallengeBtn).setOnClickListener(v -> {
             showChallenge(new RebusChallengeFragment());
         });
-        
+        /*
         view.findViewById(R.id.mathChallengeBtn).setOnClickListener(v -> {
             showChallenge(new MathChallengeFragment());
+        });
+         */
+        //for testing
+        view.findViewById(R.id.mathChallengeBtn).setOnClickListener(v -> {
+            Intent challengesIntent = new Intent(getContext(), MultipleChoiceTriviaChallenge.class);
+            startActivity(challengesIntent);
         });
         
         view.findViewById(R.id.shakeChallengeBtn).setOnClickListener(v -> {
