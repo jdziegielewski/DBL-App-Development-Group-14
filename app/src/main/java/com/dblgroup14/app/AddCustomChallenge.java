@@ -56,7 +56,7 @@ public class AddCustomChallenge extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     
-        GridView gridview = (GridView) getActivity().findViewById(R.id.gv);
+       /* GridView gridview = (GridView) getActivity().findViewById(R.id.gv);
         gridview.setAdapter(new ImageAdapter(this.getActivity()));
     
     
@@ -72,7 +72,7 @@ public class AddCustomChallenge extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),"Hello Javatpoint",Toast.LENGTH_SHORT).show();
             
             }
-        });
+        });*/
     }
     
     @Override

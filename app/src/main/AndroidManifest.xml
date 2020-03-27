@@ -18,7 +18,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".user_login.Login"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -39,6 +38,7 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -48,4 +48,5 @@
 
         <receiver android:name=".AlarmBroadcastReceiver" />
     </application>
+
 </manifest>
