@@ -10,23 +10,21 @@
         android:id="@+id/checkBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="144dp"
         android:text="Check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/answerInput" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Solve the math question"
-        app:layout_constraintBottom_toTopOf="@+id/answerInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.169" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/answerInput"
@@ -35,20 +33,19 @@
         android:ems="10"
         android:hint="Result"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/checkBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.867" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/mathImage"
-        android:layout_width="368dp"
-        android:layout_height="261dp"
+        android:layout_width="270dp"
+        android:layout_height="198dp"
         app:layout_constraintBottom_toTopOf="@+id/answerInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/math_ans_05" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

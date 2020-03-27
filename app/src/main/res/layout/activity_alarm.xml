@@ -5,47 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context=".AlarmActivity">
 
     <TextView
         android:id="@+id/systemTimeText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
+        android:gravity="center_horizontal"
         android:text="TextView"
-        android:textSize="30sp"
+        android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/scrollView3"
+        tools:layout_gravity="center_horizontal" />
 
-    <TextView
-        android:id="@+id/hideBarsView"
-        android:layout_width="408dp"
-        android:layout_height="726dp"
-        android:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/challengeContainerLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/giveUpBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/systemTimeText">
-
-    </FrameLayout>
-
-    <ImageButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/giveUpBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/quit_challenge_icon"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        app:backgroundTint="#ED7FA5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/quit_challenge_icon" />
+
+    <TextView
+        android:id="@+id/hideBarsView"
+        android:layout_width="match_parent"
+        android:layout_height="680dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        tools:layout_editor_absoluteY="41dp" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/giveUpBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <FrameLayout
+                android:id="@+id/challengeContainerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
