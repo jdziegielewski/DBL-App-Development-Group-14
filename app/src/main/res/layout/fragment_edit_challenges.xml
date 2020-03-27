@@ -7,15 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".management.ui.main.EditChallenges">
 
-    <Button
-        android:id="@+id/add_shake_challenge_button"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="100dp"
-        android:background="@color/common_google_signin_btn_text_dark"
-        android:text="Create Shake Challenge"
-        android:textSize="24sp"
+    <ListView
+        android:id="@+id/listViewEditChallenges"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

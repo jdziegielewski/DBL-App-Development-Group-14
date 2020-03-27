@@ -11,7 +11,7 @@ public abstract class EditChallengeFragment extends EditFragment<Challenge> {
     @Override
     protected void initialize(View view) {
         // Set page title
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Challenge");
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Edit Challenge");
     }
     
     @Override

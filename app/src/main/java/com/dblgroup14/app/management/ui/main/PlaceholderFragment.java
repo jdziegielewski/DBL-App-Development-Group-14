@@ -52,8 +52,6 @@ public class PlaceholderFragment extends Fragment {
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main2, container, false);
         
-        final TextView textView = root.findViewById(R.id.section_label);
-        
         LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
         allChallenges.observe(getViewLifecycleOwner(), l -> {
             challengesList = l;
