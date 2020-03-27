@@ -1,7 +1,7 @@
 package com.dblgroup14.app.score;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.SimpleDatabase;
 import com.dblgroup14.support.entities.UserScore;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,30 +39,40 @@ public class ScoreFragment extends Fragment {
         ListView scoresList = view.findViewById(R.id.scores_list);
         scoresList.setAdapter(scoresListAdapter);
         
-        //// PieChart ////
+        // Get pie chart data
+        SharedPreferences db = SimpleDatabase.getSharedPreferences();
+        int totalChallenges = db.getInt(SimpleDatabase.TOTAL_CHALLENGES, 0);
+        int completedChallenges = db.getInt(SimpleDatabase.COMPLETED_CHALLENGES, 0);
+        int notCompletedChallenges = totalChallenges - completedChallenges;
+        
+        List<PieEntry> data = new ArrayList<>();
+        if (completedChallenges > 0) {
+            data.add(new PieEntry(completedChallenges, "Completed"));
+        }
+        if (notCompletedChallenges > 0) {
+            data.add(new PieEntry(notCompletedChallenges, "Not completed"));
+        }
+        
+        // Initialize pie chart
         PieChart pieChart = view.findViewById(R.id.piechart);
-        // Data
-        List<PieEntry> value = new ArrayList<>();
-        value.add(new PieEntry(70f, "Completed"));
-        value.add(new PieEntry(30f, "Not completed"));
-        PieDataSet pieDataSet = new PieDataSet(value, " ");
+        PieDataSet pieDataSet = new PieDataSet(data, " ");
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
-        // Styling
+        
+        // Style pie chart
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
         pieChart.setHoleRadius(50f);
         pieChart.setTransparentCircleRadius(55f);
-        Legend l = pieChart.getLegend();
-        l.setEnabled(false);
-        pieData.setValueTextSize(16f);
-        pieData.setValueFormatter(new PercentFormatter());
-        pieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
+        pieChart.getLegend().setEnabled(false);
         pieChart.animateXY(1400, 1400);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(14f);
+        pieData.setValueTextSize(16f);
+        pieData.setValueFormatter((value, entry, dataSetIndex, viewPortHandler) -> String.format("%.0f%% (%d)", value, (int) entry.getY()));
+        pieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
         
-        // Load database content
+        // Load user score database content
         LiveData<List<UserScore>> liveUserScores = AppDatabase.db().userScoreDao().all();
         liveUserScores.observe(getViewLifecycleOwner(), this::updateUserScores);
     }

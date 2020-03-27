@@ -5,7 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-import com.dblgroup14.app.AlarmActivity;
+import com.dblgroup14.app.AlarmBroadcastReceiver;
 import com.dblgroup14.app.SleapApplication;
 import com.dblgroup14.support.entities.Alarm;
 import java.text.DateFormat;
@@ -77,9 +77,9 @@ public abstract class AlarmScheduler {
         Context context = SleapApplication.getContext();
         
         // Create intent
-        Intent intent = new Intent(context, AlarmActivity.class);
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         intent.putExtra("alarm_id", alarm.id);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         
         // Schedule alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
