@@ -89,8 +89,11 @@ public class AlarmActivity extends AppCompatActivity {
             throw new IllegalArgumentException("No alarm id provided");
         }
         AsyncTask.execute(() -> {
+            // Get alarm from database
             mCurrentAlarm = AppDatabase.db().alarmDao().get(alarmId);
+            initializeAlarm();
             
+            // Initialize challenge
             final List<Challenge> allChallenges = AppDatabase.db().challengeDao().allDirect();
             runOnUiThread(() -> initializeChallenge(allChallenges));
         });
@@ -159,6 +162,16 @@ public class AlarmActivity extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHidePart2Runnable);
     }
     
+    @Override
+    public void finish() {
+        super.finish();
+        
+        // Stop repeat handler
+        if (mRepeatHandler != null) {
+            mRepeatHandler.removeCallbacks(this::updateView);
+        }
+    }
+    
     private void updateView() {
         // Hide system bars
         mHidePart2Runnable.run();
@@ -175,24 +188,14 @@ public class AlarmActivity extends AppCompatActivity {
         mRepeatHandler.postDelayed(this::updateView, 1000);
     }
     
+    private void initializeAlarm() {
+        // TODO: Start alarm sound
+        // TODO: Reschedule alarm if set to repeat
+    }
+    
     private void initializeChallenge(List<Challenge> allChallenges) {
-        // Get a challenge that belongs to this alarm (or pick a random one if none are selected)
-        Challenge challenge = null;
-        if (mCurrentAlarm.challengeIds.size() == 0) {
-            challenge = allChallenges.get(new Random().nextInt(allChallenges.size()));
-        } else {
-            int i = new Random().nextInt(mCurrentAlarm.challengeIds.size());
-            for (Challenge c : allChallenges) {
-                if (c.id == mCurrentAlarm.challengeIds.get(i)) {
-                    challenge = c;
-                    break;
-                }
-            }
-            if (challenge == null) {
-                // TODO: Handle the case when an alarm uses a deleted challenge
-                throw new IllegalStateException("Invalid challenge id was set in alarm");
-            }
-        }
+        // Find a (random) challenge that belongs to this alarm
+        Challenge challenge = findAlarmChallenge(allChallenges);
         
         // Instantiate challenge fragment
         try {
@@ -208,6 +211,20 @@ public class AlarmActivity extends AppCompatActivity {
         
         // Start repeat handler
         mRepeatHandler.postDelayed(this::updateView, 1);
+    }
+    
+    private Challenge findAlarmChallenge(List<Challenge> allChallenges) {
+        if (mCurrentAlarm.challengeIds.size() > 0) {
+            int i = new Random().nextInt(mCurrentAlarm.challengeIds.size());
+            for (Challenge c : allChallenges) {
+                if (c.id == mCurrentAlarm.challengeIds.get(i)) {
+                    return c;
+                }
+            }
+        }
+        
+        // Return a random challenge
+        return allChallenges.get(new Random().nextInt(allChallenges.size()));
     }
     
     private int hideSystemBars() {
@@ -233,7 +250,6 @@ public class AlarmActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-//        mControlsView.setVisibility(View.GONE);
         mVisible = false;
         
         // Schedule a runnable to remove the status and navigation bar after a delay

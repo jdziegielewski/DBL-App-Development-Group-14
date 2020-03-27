@@ -24,11 +24,6 @@
         <activity android:name=".user_login.User" />
         <activity android:name=".management.ManageUserFragment2" />
         <activity
-            android:name=".Add_Challenge"
-            android:label="@string/title_activity_add__challenge"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity
             android:name=".AlarmActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_play_challenge_page"

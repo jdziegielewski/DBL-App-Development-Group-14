@@ -130,41 +130,6 @@ public class DatabaseInstrumentedTest {
     }
     
     @Test
-    public void testChallengeSeriesEntity() {
-        final int TEST_ID = 1;
-        ChallengeSeriesDao dao = database.challengeSeriesDao();
-        
-        // Assert that non-existing entity is retrieved as NULL
-        assertNull(dao.get(TEST_ID));
-        
-        // Store new entity
-        ChallengeSeries cs = new ChallengeSeries();
-        cs.id = TEST_ID;
-        cs.setName("Test Challenge Series");
-        cs.addChallenge(0);
-        cs.addChallenge(10);
-        cs.addChallenge(15);
-        cs.removeChallenge(10);
-        cs.swap(0, 1);
-        dao.store(cs);
-        
-        // Assert that entity exists now
-        ChallengeSeries cs2 = dao.get(TEST_ID);
-        assertNotNull(cs2);
-        
-        // Assert entity data
-        assertEquals(2, cs2.challengeIds.size());
-        assertEquals((Integer) 15, cs2.challengeIds.get(0));
-        assertEquals((Integer) 0, cs2.challengeIds.get(1));
-        
-        // Delete entity
-        dao.delete(cs2);
-        
-        // Assert that entity does not exist
-        assertNull(dao.get(TEST_ID));
-    }
-    
-    @Test
     public void testUserScoreEntity() {
         final String TEST_USER_NAME = "markus157";
         UserScoreDao dao = database.userScoreDao();

@@ -41,7 +41,7 @@ public class ManageAlarmsFragment extends Fragment {
     }
     
     /**
-     * Sets the title in the action bar
+     * Sets the title in the action bar.
      */
     private void setTitle() {
         if (((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar() != null) {

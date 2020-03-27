@@ -35,9 +35,6 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     private AppCompatActivity activity;
     private View view;
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void initialize(View views) {
         view = views;
@@ -55,9 +52,6 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         initializeChallengesLiveData();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected boolean update() {
         // Set alarm name
@@ -70,9 +64,6 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         return true;
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void saveComplete(long rowId) {
         // Set ID of alarm object if not already set
@@ -84,9 +75,6 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         getActivity().runOnUiThread(() -> AlarmScheduler.scheduleNext(editObject));
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected Alarm createNew() {
         int curHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -94,17 +82,11 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         return new Alarm("New Alarm", curHour, curMin, true, 80, false, 1);
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected HostDaoInterface<Alarm> dao() {
         return AppDatabase.db().alarmDao();
     }
     
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected int getLayoutResourceID() {
         return R.layout.fragment_edit_alarm;
