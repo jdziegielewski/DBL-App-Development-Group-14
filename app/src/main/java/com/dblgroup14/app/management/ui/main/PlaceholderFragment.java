@@ -4,13 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.dblgroup14.app.R;
+import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.entities.Challenge;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -20,6 +25,7 @@ public class PlaceholderFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     
     private PageViewModel pageViewModel;
+    private List<Challenge> challengesList;
     
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -52,6 +58,30 @@ public class PlaceholderFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        
+        LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
+        allChallenges.observe(getViewLifecycleOwner(), l -> {
+            challengesList = l;
+            initializeChallengesLiveData(textView);
+        });
+
+//        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         return root;
     }
+    
+    
+    private void initializeChallengesLiveData(TextView textView) {
+        String allTitles = "";
+        for (Challenge c : challengesList) {
+            allTitles = allTitles + " " + c.name;
+        }
+        textView.setText(allTitles);
+    }
+    
+    
 }
