@@ -1,7 +1,14 @@
 package com.dblgroup14.app;
 
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
+import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,6 +23,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        // Request permission to draw over other apps
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(getApplicationContext())) {
+                AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setMessage("Please allow the Sleap App to display over other applications")
+                        .setTitle("Display over other applications")
+                        .setPositiveButton("NEXT", (o, e) -> {
+                            startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+                            finish();
+                        })
+                        .create();
+                dialog.show();
+            }
+        }
         
         // Setup navigation tabs
         setupNavigationTabs();

@@ -3,6 +3,7 @@ package com.dblgroup14.app;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.dblgroup14.app.challenges.ChallengeFragment;
 import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.SimpleDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.dblgroup14.support.entities.Challenge;
 import java.text.SimpleDateFormat;
@@ -203,8 +205,11 @@ public class AlarmActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Invalid challenge class given");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException(e.getMessage());
         }
+        
+        // Set on completion handler
+        mChallengeFragment.setOnChallengeCompletedListener(this::challengeCompleted);
         
         // Place challenge fragment in lay-out
         getSupportFragmentManager().beginTransaction().replace(R.id.challengeContainerLayout, mChallengeFragment).commit();
@@ -225,6 +230,16 @@ public class AlarmActivity extends AppCompatActivity {
         
         // Return a random challenge
         return allChallenges.get(new Random().nextInt(allChallenges.size()));
+    }
+    
+    private void challengeCompleted() {
+        // Increase amount of completed challenges
+        SharedPreferences db = SimpleDatabase.getSharedPreferences();
+        int completedChallenges = db.getInt(SimpleDatabase.COMPLETED_CHALLENGES, 0) + 1;
+        db.edit().putInt(SimpleDatabase.COMPLETED_CHALLENGES, completedChallenges).apply();
+        
+        // Close activity
+        finish();
     }
     
     private int hideSystemBars() {

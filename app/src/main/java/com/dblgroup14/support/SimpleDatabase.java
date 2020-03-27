@@ -9,9 +9,9 @@ import com.dblgroup14.app.SleapApplication;
  */
 public abstract class SimpleDatabase {
     /* Global keys */
-    public static final String CURRENT_USERNAME = "100_username";
-    public static final String CURRENT_USER_TOKEN = "100_user_token";
-    public static final String CURRENT_USER_SUBSCRIPTIONS = "100_user_subscriptions";
+    public static final String CURRENT_USERNAME = "LGN-username";
+    public static final String COMPLETED_CHALLENGES = "CHA-completed";
+    public static final String TOTAL_CHALLENGES = "CHA-total";
     
     private static final String PREFERENCES_NAME = "sleap-pref";
     
@@ -22,15 +22,6 @@ public abstract class SimpleDatabase {
      */
     public static SharedPreferences getSharedPreferences() {
         return SleapApplication.getContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-    }
-    
-    /**
-     * Returns a SharedPreferences.Editor instance that can be used to edit the simple database directly.
-     *
-     * @return The SharedPreferences.Editor instance
-     */
-    public static SharedPreferences.Editor getSharedPreferencesEditor() {
-        return getSharedPreferences().edit();
     }
     
     /**

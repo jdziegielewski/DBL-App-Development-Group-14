@@ -2,6 +2,9 @@ package com.dblgroup14.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.provider.Settings;
 import com.dblgroup14.support.AppDatabase;
 
 public class SleapApplication extends Application {
@@ -11,7 +14,7 @@ public class SleapApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-    
+        
         // Instantiate database
         AppDatabase.createDatabase(context);
     }

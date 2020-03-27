@@ -12,6 +12,8 @@ import com.dblgroup14.support.entities.UserScore;
 public abstract class ChallengeFragment extends Fragment {
     private static final int CHALLENGE_WIN_POINT = 100;
     
+    private OnChallengeCompletedListener challengeCompletedListener;
+    
     protected void completeChallenge() {
         // Update user score
         AsyncTask.execute(() -> {
@@ -21,11 +23,30 @@ public abstract class ChallengeFragment extends Fragment {
             dao.store(score);
         });
         
-        getActivity().finish();
+        // Call challenge completed listener
+        if (challengeCompletedListener != null) {
+            challengeCompletedListener.onChallengeCompleted();
+        }
+    }
+    
+    /**
+     * Set a handler that is called when the challenge is completed.
+     *
+     * @param listener The handler to call
+     */
+    public void setOnChallengeCompletedListener(OnChallengeCompletedListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Null listener given");
+        }
+        challengeCompletedListener = listener;
     }
     
     /**
      * Placeholder method intended to be overridden in challenge fragments that require onBackPressed() activity events.
      */
     public void onBackPressed() { }
+    
+    public interface OnChallengeCompletedListener {
+        void onChallengeCompleted();
+    }
 }
