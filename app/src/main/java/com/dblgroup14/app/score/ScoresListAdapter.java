@@ -33,11 +33,16 @@ public class ScoresListAdapter extends ArrayAdapter<UserScore> {
         TextView scoreTextView = rowView.findViewById(R.id.score_score);
         scoreTextView.setText(String.valueOf(userScore.score));
         
+        // Get formatted name of user
+        String username;
         if (userScore.username.equals("(default)")) {    // handle own score case
-            scoreNameTextView.setText("You");
+            username = "You";
         } else {
-            scoreNameTextView.setText(userScore.username);
+            username = userScore.username;
         }
+        
+        // Set user name
+        scoreNameTextView.setText(String.format("%d. %s", position + 1, username));
         
         return rowView;
     }

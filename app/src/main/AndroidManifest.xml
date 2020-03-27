@@ -17,28 +17,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".challenges.MultipleChoiceTriviaChallenge" />
-        <activity android:name=".challenges.editChallenges" />
-        <activity android:name=".user_login.Login" />
-        <activity android:name=".user_login.Register" />
-        <activity android:name=".user_login.User" />
-        <activity android:name=".management.ManageUserFragment2" />
+        <activity
+            android:name=".user_login.Login"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".user_login.Register"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".user_login.User"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".AlarmActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_play_challenge_page"
             android:theme="@style/FullscreenTheme" />
-
         <activity
             android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditActivity" />
-
+        <activity
+            android:name=".EditActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
-
 </manifest>

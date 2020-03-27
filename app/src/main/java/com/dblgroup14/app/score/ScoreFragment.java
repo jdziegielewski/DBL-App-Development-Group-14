@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScoreFragment extends Fragment {
@@ -64,14 +65,16 @@ public class ScoreFragment extends Fragment {
         
         // Load database content
         LiveData<List<UserScore>> liveUserScores = AppDatabase.db().userScoreDao().all();
-        liveUserScores.observe(getActivity(), this::updateUserScores);
+        liveUserScores.observe(getViewLifecycleOwner(), this::updateUserScores);
     }
     
     private void updateUserScores(final List<UserScore> data) {
-        getActivity().runOnUiThread(() -> {
-            scoresListAdapter.clear();
-            scoresListAdapter.addAll(data);
-            scoresListAdapter.notifyDataSetChanged();
-        });
+        // Sort user scores
+        Collections.sort(data, (u1, u2) -> -Integer.compare(u1.score, u2.score));
+        
+        // Update adapter
+        scoresListAdapter.clear();
+        scoresListAdapter.addAll(data);
+        scoresListAdapter.notifyDataSetChanged();
     }
 }
