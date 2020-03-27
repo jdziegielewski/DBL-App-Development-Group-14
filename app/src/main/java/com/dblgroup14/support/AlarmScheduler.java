@@ -16,6 +16,9 @@ public abstract class AlarmScheduler {
     public static void scheduleNext(Alarm alarm) {
         // Create calendar
         Calendar now = Calendar.getInstance();
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+        
         Calendar calendar = (Calendar) now.clone();
         calendar.set(Calendar.HOUR_OF_DAY, alarm.hours);
         calendar.set(Calendar.MINUTE, alarm.minutes);
@@ -72,15 +75,15 @@ public abstract class AlarmScheduler {
     
     private static void setAlarm(Calendar calendar, Alarm alarm) {
         Context context = SleapApplication.getContext();
-    
+        
         // Create intent
         Intent intent = new Intent(context, AlarmActivity.class);
         intent.putExtra("alarm_id", alarm.id);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarm.id, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         
         // Schedule alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         
         // Show user a schedule message
         DateFormat format = new SimpleDateFormat("EEEE dd MMM HH:mm");

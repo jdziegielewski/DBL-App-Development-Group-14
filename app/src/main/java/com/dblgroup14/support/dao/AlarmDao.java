@@ -15,17 +15,11 @@ public abstract class AlarmDao implements HostDaoInterface<Alarm> {
     @Query("SELECT * FROM alarms")
     public abstract LiveData<List<Alarm>> all();
     
-    @Query("SELECT * FROM alarms WHERE `enabled`=1")
-    public abstract LiveData<List<Alarm>> allActive();
-    
     @Query("SELECT * FROM alarms WHERE `id`=:id")
     public abstract Alarm get(int id);
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void store(Alarm alarm);
-    
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void storeAll(Alarm... alarms);
+    public abstract long store(Alarm alarm);
     
     @Delete
     public abstract void delete(Alarm alarm);
