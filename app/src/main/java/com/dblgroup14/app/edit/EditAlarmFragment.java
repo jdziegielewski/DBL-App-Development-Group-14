@@ -12,7 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AlarmScheduler;
@@ -150,13 +153,13 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         if (editObject.repeats) {
             repeatButton.setBackgroundResource(R.drawable.ic_repeat);
         } else {
-            repeatButton.setBackgroundResource(R.drawable.ic_repeat_one);
+            repeatButton.setBackgroundResource(R.drawable.ic_repeat_gray);
         }
         repeatButton.setOnClickListener(v -> {
             if (editObject.repeats) {
-                repeatButton.setBackgroundResource(R.drawable.ic_repeat);
+                repeatButton.setBackgroundResource(R.drawable.ic_repeat_gray);
             } else {
-                repeatButton.setBackgroundResource(R.drawable.ic_repeat_one);
+                repeatButton.setBackgroundResource(R.drawable.ic_repeat);
             }
             editObject.setRepeats(!editObject.repeats);
         });
