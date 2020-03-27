@@ -94,8 +94,4 @@ public class MultipleChoiceTriviaChallenge extends AppCompatActivity {
         
     }
     
-    //private void answerCheck() {
-
-    //}
-    
 }

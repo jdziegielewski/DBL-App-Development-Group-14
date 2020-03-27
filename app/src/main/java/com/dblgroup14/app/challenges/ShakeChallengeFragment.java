@@ -11,6 +11,10 @@ import com.squareup.seismic.ShakeDetector;
 
 import static android.content.Context.SENSOR_SERVICE;
 
+/**
+    For detecting a shake of the phone in the shake challenge we used seismic libary: com.squareup:seismic:1.0.2
+ */
+
 public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDetector.Listener {
     
     private ShakeDetector detector;

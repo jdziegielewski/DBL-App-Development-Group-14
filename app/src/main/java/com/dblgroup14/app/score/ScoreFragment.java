@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ For presenting the percentage of challenges completed by the user we have used github library com.github.PhilJay:MPAndroidChart:v3.0.3
+ */
+
 public class ScoreFragment extends Fragment {
     private ScoresListAdapter scoresListAdapter;
     

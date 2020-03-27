@@ -12,8 +12,11 @@ import com.dblgroup14.app.R;
 import com.google.zxing.Result;
 import java.util.Arrays;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
 import static android.Manifest.permission.CAMERA;
+
+/**
+    For reading the barcodes and QR codes in the barcode challenge we used zxing libary 'me.dm7.barcodescanner:zxing:1.9'
+*/
 
 public class BarcodeChallengeFragment extends ChallengeFragment implements ZXingScannerView.ResultHandler {
     private static final int REQUEST_CAMERA_ID = 1;
