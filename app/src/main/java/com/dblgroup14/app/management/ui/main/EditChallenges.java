@@ -14,8 +14,6 @@ import com.dblgroup14.app.R;
 public class EditChallenges extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     
-    private PageViewModel pageViewModel;
-    
     public static EditChallenges newInstance(int index) {
         EditChallenges fragment = new EditChallenges();
         Bundle bundle = new Bundle();

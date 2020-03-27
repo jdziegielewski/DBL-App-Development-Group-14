@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Challenge;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,9 +28,9 @@ import java.util.List;
 public class PlaceholderFragment extends Fragment {
     
     private static final String ARG_SECTION_NUMBER = "section_number";
-    
-    private PageViewModel pageViewModel;
     private List<Challenge> challengesList;
+    ListView listView;
+    TextView defaultChalView;
     
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -38,12 +43,7 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
+        
     }
     
     @Override
@@ -51,37 +51,30 @@ public class PlaceholderFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main2, container, false);
+        
         final TextView textView = root.findViewById(R.id.section_label);
-        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         
         LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
         allChallenges.observe(getViewLifecycleOwner(), l -> {
             challengesList = l;
-            initializeChallengesLiveData(textView);
+            initializeChallengesLiveData();
         });
-
-//        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+        
         return root;
     }
     
+    private void initializeChallengesLiveData() {
+        listView = getActivity().findViewById(R.id.listViewChallenges);
+        defaultChalView = getActivity().findViewById(R.id.textViewDefChal);
     
-    private void initializeChallengesLiveData(TextView textView) {
-        String allTitles = "";
-        for (Challenge c : challengesList) {
-            allTitles = allTitles + " " + c.name;
+        String[] challengeNames = new String[challengesList.size()];
+        
+        for (int i = 0; i < challengesList.size(); i++) {
+            challengeNames[i] = (challengesList.get(i).name);
         }
-        textView.setText(allTitles);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, challengeNames);
+        listView.setAdapter(adapter);
     }
-    
     
 }
