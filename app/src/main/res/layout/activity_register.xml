@@ -54,7 +54,7 @@
             android:background="@color/colorPrimaryDark"
             android:ems="10"
             android:fontFamily="@font/aclonica"
-            android:hint="Full Name"
+            android:hint="Name or User Name"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:textColor="#ECEBE4"

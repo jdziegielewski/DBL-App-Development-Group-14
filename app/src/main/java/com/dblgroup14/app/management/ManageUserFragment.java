@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.user_login.Login;
+import com.dblgroup14.app.user_login.User;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ManageUserFragment extends Fragment {
@@ -25,5 +26,11 @@ public class ManageUserFragment extends Fragment {
             Intent challengesIntent = new Intent(getContext(), Login.class);
             startActivity(challengesIntent);
         });
+    
+        view.findViewById(R.id.ProfileBtn).setOnClickListener(v -> {
+            Intent challengesIntent = new Intent(getContext(), User.class);
+            startActivity(challengesIntent);
+        });
+        
     }
 }
