@@ -18,7 +18,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.management.ManageUserFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +35,7 @@ public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     FirebaseAuth fAuth;
     private TextView mEyeToggle;
+    
     
     
     
@@ -123,9 +126,12 @@ public class Login extends AppCompatActivity {
                 fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                        if(task.isSuccessful()) {
                             Toast.makeText(Login.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), User.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    
+    
+                        
                         }else{
                             Toast.makeText(Login.this, "Error ! " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }

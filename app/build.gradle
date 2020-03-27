@@ -71,4 +71,7 @@ dependencies {
 
     // Scanning barcodes and QR codes
     implementation 'me.dm7.barcodescanner:zxing:1.9'
+
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+    implementation 'com.google.firebase:firebase-database:19.2.1'
 }
