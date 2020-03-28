@@ -1,4 +1,4 @@
-package com.dblgroup14.app.user_login;
+package com.dblgroup14.app.user;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,17 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import com.dblgroup14.app.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -37,7 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 
-public class User extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     
     TextView fullName,email,phone,verifyMail;
@@ -60,7 +53,7 @@ public class User extends AppCompatActivity {
         // Setup navigation tabs
         
        
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_profile);
         phone = findViewById(R.id.profilePhone);
         fullName = findViewById(R.id.profileName);
         email = findViewById(R.id.profileEmail);
@@ -127,7 +120,7 @@ public class User extends AppCompatActivity {
     
     public void logout(View view) {
         FirebaseAuth.getInstance().signOut();//logout
-        startActivity(new Intent(getApplicationContext(),Login.class));
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }
     
@@ -194,13 +187,13 @@ public class User extends AppCompatActivity {
         user.updateProfile(request).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(User.this, "Profile Picture Updated successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, "Profile Picture Updated successfully", Toast.LENGTH_SHORT).show();
                 
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(User.this, "Profile image upload failed...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileActivity.this, "Profile image upload failed...", Toast.LENGTH_SHORT).show();
                 
             }
         });

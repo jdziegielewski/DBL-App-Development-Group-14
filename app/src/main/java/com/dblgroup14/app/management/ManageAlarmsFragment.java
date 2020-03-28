@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ManageAlarmsFragment extends Fragment {
-    private CustomListAdapter alarmsListAdapter;
+    private AlarmListAdapter alarmsListAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class ManageAlarmsFragment extends Fragment {
      * @param view the view
      */
     private void createListAdapter(View view) {
-        alarmsListAdapter = new CustomListAdapter(Objects.requireNonNull(getActivity()));
+        alarmsListAdapter = new AlarmListAdapter(Objects.requireNonNull(getActivity()));
         ListView listView = view.findViewById(R.id.alarmView);
         listView.setAdapter(alarmsListAdapter);
     }
