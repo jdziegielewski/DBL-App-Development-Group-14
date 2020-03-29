@@ -15,7 +15,6 @@ import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
-import java.util.Objects;
 
 public class ManageAlarmsFragment extends Fragment {
     private AlarmListAdapter alarmsListAdapter;
@@ -44,9 +43,7 @@ public class ManageAlarmsFragment extends Fragment {
      * Sets the title in the action bar.
      */
     private void setTitle() {
-        if (((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar() != null) {
-            Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setTitle("My Alarms");
-        }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
     }
     
     /**
@@ -55,7 +52,7 @@ public class ManageAlarmsFragment extends Fragment {
      * @param view the view
      */
     private void createListAdapter(View view) {
-        alarmsListAdapter = new AlarmListAdapter(Objects.requireNonNull(getActivity()));
+        alarmsListAdapter = new AlarmListAdapter(getActivity());
         ListView listView = view.findViewById(R.id.alarmView);
         listView.setAdapter(alarmsListAdapter);
     }

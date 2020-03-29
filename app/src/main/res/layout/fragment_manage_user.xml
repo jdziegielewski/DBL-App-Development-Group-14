@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/userpage_background">
-
 
     <ImageView
         android:id="@+id/ProfileImage"
@@ -35,7 +33,6 @@
         android:id="@+id/textView1"
         android:layout_width="347dp"
         android:layout_height="81dp"
-        android:autoText="false"
         android:gravity="center|center_horizontal|center_vertical"
         android:text="Welcome to Sleap App"
         android:textAllCaps="true"
@@ -92,6 +89,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MultiBtn"
         app:layout_constraintVertical_bias="0.812" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

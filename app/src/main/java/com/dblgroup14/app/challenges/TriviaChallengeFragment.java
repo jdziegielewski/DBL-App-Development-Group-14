@@ -25,7 +25,7 @@ public class TriviaChallengeFragment extends ChallengeFragment {
             {"Nile", "Amazon River", "Yangtze", "Yellow River"},
             {"Rafael Nadal", "Novak Djokovic", "Roger Federer", "Pete Sampras"}
     };
-    private static final Integer[] correctAnswerIndices = {2, 1, 3};
+    private static final Integer[] correctAnswerIndices = {1, 0, 2};
     
     private TextView questionTextView;
     private RadioGroup answerRadioGroup;

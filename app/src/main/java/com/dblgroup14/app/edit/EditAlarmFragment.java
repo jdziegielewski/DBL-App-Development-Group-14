@@ -59,7 +59,13 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
             return false;
         }
         editObject.setName(name);
+        
+        // Set alarm volume
         editObject.setVolume((int) ((volumeSeekBar.getProgress() / maxVolume) * 100));
+        
+        // Set alarm enabled
+        editObject.setEnabled(true);
+        
         return true;
     }
     

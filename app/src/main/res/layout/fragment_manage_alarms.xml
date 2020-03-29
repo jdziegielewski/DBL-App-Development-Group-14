@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_fab"
+        app:srcCompat="@drawable/ic_fab"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="auto" />
 

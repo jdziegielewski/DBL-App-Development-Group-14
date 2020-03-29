@@ -2,6 +2,7 @@ package com.dblgroup14.app.management;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AlarmScheduler;
+import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import java.util.Locale;
 
@@ -45,7 +47,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         
         // Inflate new row
         LayoutInflater inflater = activity.getLayoutInflater();
-        View newRow = inflater.inflate(R.layout.alarm_row, null, true);
+        View newRow = inflater.inflate(R.layout.alarm_row, parent, false);
         
         // Initialize new row
         setTime(newRow, alarm);
@@ -76,9 +78,15 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
      * @param newRow The newly inflated row
      * @param alarm  The alarm matching alarm object
      */
-    private void setDelete(View newRow, Alarm alarm) {
+    private void setDelete(View newRow, final Alarm alarm) {
         ImageView deleteView = newRow.findViewById(R.id.deleteAlarmView);
-        deleteView.setOnClickListener(v -> AlarmScheduler.unschedule(alarm));
+        deleteView.setOnClickListener(v -> {
+            // Unschedule alarm
+            AlarmScheduler.unschedule(alarm);
+            
+            // Delete alarm object
+            AsyncTask.execute(() -> AppDatabase.db().alarmDao().delete(alarm));
+        });
     }
     
     /**
@@ -142,6 +150,9 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
             
             // Change enabled state
             alarm.enabled = !alarm.enabled;
+            
+            // Store object in database
+            AsyncTask.execute(() -> AppDatabase.db().alarmDao().store(alarm));
         });
     }
 }
