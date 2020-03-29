@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
@@ -48,6 +49,8 @@ public class ChallengesListFragment extends Fragment {
             Challenge c = challengesList.get(pos);
             if (c.isEditable) {
                 showManageDialog(c);
+            } else {
+                Toast.makeText(getContext(), "No options are available for this challenge", Toast.LENGTH_SHORT).show();
             }
         });
         
