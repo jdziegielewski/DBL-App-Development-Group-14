@@ -21,6 +21,7 @@ import com.dblgroup14.support.dao.HostDaoInterface;
 import com.dblgroup14.support.entities.Alarm;
 import com.dblgroup14.support.entities.Challenge;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -198,6 +199,10 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         // Register live data binding
         LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
         allChallenges.observe(getViewLifecycleOwner(), data -> {
+            // Sort data based on challenge name length
+            Collections.sort(data, (c1, c2) -> Integer.compare(c1.name.length(), c2.name.length()));
+            
+            // Inflate challenges list
             inflateChallengesList(data);
         });
     }
