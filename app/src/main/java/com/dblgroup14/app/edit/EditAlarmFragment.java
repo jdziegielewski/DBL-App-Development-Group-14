@@ -204,13 +204,7 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         
         // Register live data binding
         LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
-        allChallenges.observe(getViewLifecycleOwner(), data -> {
-            // Sort data based on challenge name length
-            Collections.sort(data, (c1, c2) -> Integer.compare(c1.name.length(), c2.name.length()));
-            
-            // Inflate challenges list
-            inflateChallengesList(data);
-        });
+        allChallenges.observe(getViewLifecycleOwner(), this::inflateChallengesList);
     }
     
     /**

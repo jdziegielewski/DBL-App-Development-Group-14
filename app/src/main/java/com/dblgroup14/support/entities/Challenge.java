@@ -20,11 +20,15 @@ public class Challenge {
     
     @NonNull
     public String className;
+    public boolean isDefault;
+    public boolean isEditable;
     
     @NonNull
     public Map<String, String> dataStorage;
     
     public Challenge() {
+        isDefault = false;
+        isEditable = false;
         dataStorage = new HashMap<>();
     }
     

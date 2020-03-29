@@ -43,6 +43,6 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="tab_text_1">My Challenges</string>
-    <string name="tab_text_2">Edit Challenges</string>
+    <string name="tab_text_1">Built-in Challenges</string>
+    <string name="tab_text_2">My Challenges</string>
 </resources>

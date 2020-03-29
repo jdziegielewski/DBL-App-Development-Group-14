@@ -1,26 +1,21 @@
 package com.dblgroup14.app.management;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.management.ui.main.SectionsPagerAdapter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class ManageChallengesFragment extends Fragment {
+    @StringRes
+    private static final int[] TITLES = new int[] {R.string.tab_text_1, R.string.tab_text_2};
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,13 +25,41 @@ public class ManageChallengesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //getActivity().setContentView(R.layout.challenge_fragment_tab1);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), getChildFragmentManager());
-        ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = getActivity().findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
         
+        // Get components
+        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
+        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+        
+        // Set view pager adapter
+        viewPager.setAdapter(new ViewPagerAdapter());
+        
+        // Attach view pager to tab layout through TabLayoutMediator
+        TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, (tab, pos) -> tab.setText(TITLES[pos]));
+        mediator.attach();
     }
     
+    private class ViewPagerAdapter extends FragmentStateAdapter {
+        public ViewPagerAdapter() {
+            super(getActivity());
+        }
+        
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            // Create arguments
+            Bundle args = new Bundle();
+            args.putInt(ChallengesListFragment.ARGS_KEY_TYPE, position);
+            
+            // Create new challenges list fragment
+            ChallengesListFragment fragment = new ChallengesListFragment();
+            fragment.setArguments(args);
+            
+            return fragment;
+        }
+        
+        @Override
+        public int getItemCount() {
+            return 2;   // two tabs
+        }
+    }
 }
