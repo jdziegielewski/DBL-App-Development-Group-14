@@ -25,7 +25,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
      * @param activity The activity in which this adapter is created
      */
     public AlarmListAdapter(Activity activity) {
-        super(activity.getApplicationContext(), R.layout.listview_row);
+        super(activity.getApplicationContext(), R.layout.alarm_row);
         this.activity = activity;
     }
     
@@ -45,7 +45,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         
         // Inflate new row
         LayoutInflater inflater = activity.getLayoutInflater();
-        View newRow = inflater.inflate(R.layout.listview_row, null, true);
+        View newRow = inflater.inflate(R.layout.alarm_row, null, true);
         
         // Initialize new row
         setTime(newRow, alarm);

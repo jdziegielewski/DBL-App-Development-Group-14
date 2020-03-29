@@ -30,7 +30,6 @@ public class PlaceholderFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private List<Challenge> challengesList;
     ListView listView;
-    TextView defaultChalView;
     
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -63,7 +62,6 @@ public class PlaceholderFragment extends Fragment {
     
     private void initializeChallengesLiveData() {
         listView = getActivity().findViewById(R.id.listViewChallenges);
-        defaultChalView = getActivity().findViewById(R.id.textViewDefChal);
     
         String[] challengeNames = new String[challengesList.size()];
         

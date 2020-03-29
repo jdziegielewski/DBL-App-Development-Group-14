@@ -10,7 +10,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.dblgroup14.app.R;
-import java.util.Arrays;
 import java.util.Random;
 
 public class TriviaChallengeFragment extends ChallengeFragment {
@@ -31,6 +30,7 @@ public class TriviaChallengeFragment extends ChallengeFragment {
     private TextView questionTextView;
     private RadioGroup answerRadioGroup;
     private RadioButton[] answerRadioButtons;
+    private int questionIndex;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,43 +52,51 @@ public class TriviaChallengeFragment extends ChallengeFragment {
                 view.findViewById(R.id.radioButton4)
         };
         
-        // Pick a random question and set texts
-        int questionIndex = selectRandomQuestion();
+        // Select a random question
+        selectRandomQuestion();
         
         // Add click listener to check answer button
         view.findViewById(R.id.check_ans_button).setOnClickListener(v -> {
+            int selectedRadioButtonId = answerRadioGroup.getCheckedRadioButtonId();
+            
             // Handle case when no answer is selected
-            if (answerRadioGroup.getCheckedRadioButtonId() < 0) {
+            if (selectedRadioButtonId < 0) {
                 Toast.makeText(getContext(), "Select an answer first!", Toast.LENGTH_SHORT).show();
                 return;
             }
             
             // Get selected answer index
-            int selectedAnswerIndex = Arrays.binarySearch(answerRadioButtons, view.findViewById(answerRadioGroup.getCheckedRadioButtonId()));
+            int selectedAnswerIndex = -1;
+            for (int i = 0; i < answerRadioButtons.length; i++) {
+                if (answerRadioButtons[i].getId() == selectedRadioButtonId) {
+                    selectedAnswerIndex = i;
+                    break;
+                }
+            }
+            
             if (selectedAnswerIndex == correctAnswerIndices[questionIndex]) {
                 Toast.makeText(getContext(), "Correct", Toast.LENGTH_SHORT).show();
                 completeChallenge();
             } else {
                 Toast.makeText(getContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+                selectRandomQuestion();
             }
         });
     }
     
-    private int selectRandomQuestion() {
-        // Select random question ID
-        int randomQuestionIndex = new Random().nextInt(questions.length);
+    private void selectRandomQuestion() {
+        // Select random question index
+        questionIndex = new Random().nextInt(questions.length);
         
         // Set question text
-        questionTextView.setText(questions[randomQuestionIndex]);
+        questionTextView.setText(questions[questionIndex]);
         
         // Set answers text
         for (int i = 0; i < answerRadioButtons.length; i++) {
-            answerRadioButtons[i].setText(answers[randomQuestionIndex][i]);
+            answerRadioButtons[i].setText(answers[questionIndex][i]);
         }
         
         // Clear selected radio button
         answerRadioGroup.clearCheck();
-        
-        return randomQuestionIndex;
     }
 }
