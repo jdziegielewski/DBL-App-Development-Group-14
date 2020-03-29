@@ -201,7 +201,7 @@ public class AlarmActivity extends AppCompatActivity {
         
         // Instantiate challenge fragment
         try {
-            mChallengeFragment = (ChallengeFragment) Class.forName(challenge.className).newInstance();
+            mChallengeFragment = (ChallengeFragment) Class.forName(challenge.getShowFragmentClassName()).newInstance();
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Invalid challenge class given");
         } catch (Exception e) {

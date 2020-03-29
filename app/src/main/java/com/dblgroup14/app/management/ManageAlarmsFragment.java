@@ -66,7 +66,7 @@ public class ManageAlarmsFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent editAlarmIntent = new Intent(getContext(), EditActivity.class);
-            editAlarmIntent.putExtra("object", "alarm");
+            editAlarmIntent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_ALARM);
             startActivity(editAlarmIntent);
         });
     }

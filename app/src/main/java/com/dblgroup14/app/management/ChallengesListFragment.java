@@ -1,6 +1,7 @@
 package com.dblgroup14.app.management;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.dao.ChallengeDao;
@@ -104,11 +106,18 @@ public class ChallengesListFragment extends Fragment {
     }
     
     private void createFromTemplate(Challenge c) {
-        // TODO: Implement
+        Intent intent = new Intent(getContext(), EditActivity.class);
+        intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
+        intent.putExtra(EditActivity.KEY_EDIT_FRAGMENT_CLASS_NAME, c.getEditFragmentClassName());
+        startActivity(intent);
     }
     
     private void editOwnChallenge(Challenge c) {
-        // TODO: Implement
+        Intent intent = new Intent(getContext(), EditActivity.class);
+        intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
+        intent.putExtra(EditActivity.KEY_OBJECT_ID, c.id);
+        intent.putExtra(EditActivity.KEY_EDIT_FRAGMENT_CLASS_NAME, c.getEditFragmentClassName());
+        startActivity(intent);
     }
     
     private void deleteOwnChallenge(Challenge c) {

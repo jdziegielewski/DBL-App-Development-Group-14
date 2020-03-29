@@ -97,10 +97,10 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
      */
     private void setEditAlarmButton(View newRow, Alarm alarm) {
         ImageView editAlarmButton = newRow.findViewById(R.id.editAlarmButton);
-        editAlarmButton.setOnClickListener(view13 -> {
+        editAlarmButton.setOnClickListener(v -> {
             Intent intentEditAlarm = new Intent(activity, EditActivity.class);
-            intentEditAlarm.putExtra("object", "alarm");
-            intentEditAlarm.putExtra("id", alarm.id);
+            intentEditAlarm.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_ALARM);
+            intentEditAlarm.putExtra(EditActivity.KEY_OBJECT_ID, alarm.id);
             activity.startActivity(intentEditAlarm);
         });
     }
