@@ -50,6 +50,7 @@ public class EditShakeChallengeFragment extends EditChallengeFragment {
     protected Challenge createNew() {
         Challenge template = new Challenge();
         template.isEditable = true;
+        template.setName("My Shake Challenge");     // TODO: Temporary
         template.setSimpleClassName(ShakeChallengeFragment.class.getSimpleName());
         template.put(KEY_SHAKE_COUNT, SHAKE_AMOUNTS[1]);    // set 10 shakes as default
         
