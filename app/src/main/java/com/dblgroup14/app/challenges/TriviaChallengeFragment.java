@@ -14,22 +14,22 @@ import java.util.Random;
 
 public class TriviaChallengeFragment extends ChallengeFragment {
     /* Questions, answers and correct answers */
-    
-    private static final String[] questions = {
+    private static final String[] QUESTIONS = {
             "What is the capital of the USA?",
             "What is the longest river in the world?",
             "Who won the most grand slams in tennis?",
     };
-    private static final String[][] answers = {
+    private static final String[][] ANSWERS = {
             {"New York", "Washington DC", "Seattle", "Los Angeles"},
             {"Nile", "Amazon River", "Yangtze", "Yellow River"},
             {"Rafael Nadal", "Novak Djokovic", "Roger Federer", "Pete Sampras"}
     };
-    private static final Integer[] correctAnswerIndices = {1, 0, 2};
+    private static final Integer[] CORRECT_ANSWER_INDICES = {1, 0, 2};
     
     private TextView questionTextView;
     private RadioGroup answerRadioGroup;
     private RadioButton[] answerRadioButtons;
+    
     private int questionIndex;
     
     @Override
@@ -74,7 +74,7 @@ public class TriviaChallengeFragment extends ChallengeFragment {
                 }
             }
             
-            if (selectedAnswerIndex == correctAnswerIndices[questionIndex]) {
+            if (selectedAnswerIndex == CORRECT_ANSWER_INDICES[questionIndex]) {
                 Toast.makeText(getContext(), "Correct", Toast.LENGTH_SHORT).show();
                 completeChallenge();
             } else {
@@ -86,14 +86,14 @@ public class TriviaChallengeFragment extends ChallengeFragment {
     
     private void selectRandomQuestion() {
         // Select random question index
-        questionIndex = new Random().nextInt(questions.length);
+        questionIndex = new Random().nextInt(QUESTIONS.length);
         
         // Set question text
-        questionTextView.setText(questions[questionIndex]);
+        questionTextView.setText(QUESTIONS[questionIndex]);
         
         // Set answers text
         for (int i = 0; i < answerRadioButtons.length; i++) {
-            answerRadioButtons[i].setText(answers[questionIndex][i]);
+            answerRadioButtons[i].setText(ANSWERS[questionIndex][i]);
         }
         
         // Clear selected radio button

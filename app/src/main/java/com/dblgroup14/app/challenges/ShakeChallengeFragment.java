@@ -18,9 +18,9 @@ import static android.content.Context.SENSOR_SERVICE;
  * For detecting a shake of the phone in the shake challenge we use seismic library: com.squareup:seismic:1.0.2
  */
 public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDetector.Listener {
-    private ShakeDetector detector;
     private TextView shakeCountText;
     
+    private ShakeDetector shakeDetector;
     private int shakesLeft = 10;
     
     @Override
@@ -41,14 +41,14 @@ public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDe
         
         // Start shake sensor
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
-        detector = new ShakeDetector(this);
-        detector.start(sensorManager);
+        shakeDetector = new ShakeDetector(this);
+        shakeDetector.start(sensorManager);
     }
     
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        detector.stop();
+        shakeDetector.stop();
     }
     
     @Override
@@ -61,9 +61,8 @@ public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDe
         
         // Check for challenge completion
         if (shakesLeft == 0) {
-            detector.stop();
+            shakeDetector.stop();
             completeChallenge();
         }
     }
-    
 }
