@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +52,7 @@ public class AlarmActivity extends AppCompatActivity {
     
     private Alarm mCurrentAlarm;
     private ChallengeFragment mChallengeFragment;
+    private Ringtone r;
     
     /* Runnables */
     
@@ -73,6 +77,7 @@ public class AlarmActivity extends AppCompatActivity {
         builder.setMessage(LOSING_POPUP_MESSAGE);
         builder.setPositiveButton(LOSING_POPUP_BUTTON_MESSAGE, losingPopupButtonListener);
         builder.show();
+        r.stop();
     };
     private final View.OnSystemUiVisibilityChangeListener visibilityChangeListener = v -> {
         if (v == 0) {
@@ -183,7 +188,7 @@ public class AlarmActivity extends AppCompatActivity {
         timeTextView.setText(currentTime);
         
         // Change volume to alarm volume
-        int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) ((mCurrentAlarm.volume / 100.0) * maxVolume), 0);
         
         // Post next update
@@ -191,8 +196,15 @@ public class AlarmActivity extends AppCompatActivity {
     }
     
     private void initializeAlarm() {
-        // TODO: Start alarm sound
         // TODO: Reschedule alarm if set to repeat
+        
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     private void initializeChallenge(List<Challenge> allChallenges) {
@@ -237,7 +249,7 @@ public class AlarmActivity extends AppCompatActivity {
         SharedPreferences db = SimpleDatabase.getSharedPreferences();
         int completedChallenges = db.getInt(SimpleDatabase.COMPLETED_CHALLENGES, 0) + 1;
         db.edit().putInt(SimpleDatabase.COMPLETED_CHALLENGES, completedChallenges).apply();
-        
+        r.stop();
         // Close activity
         finish();
     }
