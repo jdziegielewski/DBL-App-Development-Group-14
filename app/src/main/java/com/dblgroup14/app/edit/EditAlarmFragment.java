@@ -12,10 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AlarmScheduler;
@@ -24,6 +21,7 @@ import com.dblgroup14.support.dao.HostDaoInterface;
 import com.dblgroup14.support.entities.Alarm;
 import com.dblgroup14.support.entities.Challenge;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,26 +31,24 @@ import java.util.Locale;
 public class EditAlarmFragment extends EditFragment<Alarm> {
     private EditText nameEdit;
     private SeekBar volumeSeekBar;
+    private LinearLayout challengesListContainer;
+    
     private double maxVolume;
-    private List<Challenge> challengesList;
     private AppCompatActivity activity;
-    private View view;
     
     @Override
-    protected void initialize(View views) {
-        view = views;
-        
+    protected void initialize(View view) {
         // Get activity
         activity = (AppCompatActivity) getActivity();
         
         // Initialize UI
         setTitle();
-        initializeTimeView();
-        initializeNameEditText();
-        initializeRepeatButton();
-        initializeRepeatDays();
-        initializeSeekBar();
-        initializeChallengesLiveData();
+        initializeTimeView(view);
+        initializeNameEditText(view);
+        initializeRepeatButton(view);
+        initializeRepeatDays(view);
+        initializeSeekBar(view);
+        initializeChallengesLiveData(view);
     }
     
     @Override
@@ -63,7 +59,13 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
             return false;
         }
         editObject.setName(name);
+        
+        // Set alarm volume
         editObject.setVolume((int) ((volumeSeekBar.getProgress() / maxVolume) * 100));
+        
+        // Set alarm enabled
+        editObject.setEnabled(true);
+        
         return true;
     }
     
@@ -111,7 +113,7 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     /**
      * Sets the timeView to the current time, sets a timePicker when the user clicks on the timeView
      */
-    private void initializeTimeView() {
+    private void initializeTimeView(View view) {
         TextView time = view.findViewById(R.id.time);
         time.setOnClickListener(v -> {
             Calendar currentTime = Calendar.getInstance();
@@ -140,7 +142,7 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     /**
      * Sets the name of the alarm in the nameEditText
      */
-    private void initializeNameEditText() {
+    private void initializeNameEditText(View view) {
         nameEdit = view.findViewById(R.id.alarmNameInput);
         nameEdit.setText(editObject.name);
     }
@@ -148,7 +150,7 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     /**
      * Sets the repeat button to the right drawable and changes the layout and sets the repeat variable when the repeat button is clicked
      */
-    private void initializeRepeatButton() {
+    private void initializeRepeatButton(View view) {
         ImageView repeatButton = view.findViewById(R.id.alarmRepeatBtn);
         if (editObject.repeats) {
             repeatButton.setBackgroundResource(R.drawable.ic_repeat);
@@ -166,9 +168,9 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     }
     
     /**
-     * Sets for every day an onClicklistener and changes the layout of the days to the enabled layouts if the day is enabled
+     * Sets for every day an onClickListener and changes the layout of the days to the enabled layouts if the day is enabled
      */
-    private void initializeRepeatDays() {
+    private void initializeRepeatDays(View view) {
         TextView[] repeatDays = new TextView[] {
                 view.findViewById(R.id.repeatDay0), view.findViewById(R.id.repeatDay1), view.findViewById(R.id.repeatDay2),
                 view.findViewById(R.id.repeatDay3), view.findViewById(R.id.repeatDay4), view.findViewById(R.id.repeatDay5),
@@ -184,7 +186,7 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     /**
      * Sets the max volume and current volume in the seek bar
      */
-    private void initializeSeekBar() {
+    private void initializeSeekBar(View view) {
         AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
         assert audioManager != null;
         maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -196,13 +198,13 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     /**
      * Puts all the available challenges in the layout
      */
-    private void initializeChallengesLiveData() {
-        LinearLayout challengesListContainer = view.findViewById(R.id.challengesListContainer);
+    private void initializeChallengesLiveData(View view) {
+        // Get challenges list container
+        challengesListContainer = view.findViewById(R.id.challengesListContainer);
+        
+        // Register live data binding
         LiveData<List<Challenge>> allChallenges = AppDatabase.db().challengeDao().all();
-        allChallenges.observe(getViewLifecycleOwner(), l -> {
-            challengesList = l;
-            inflateChallengesList(challengesListContainer);
-        });
+        allChallenges.observe(getViewLifecycleOwner(), this::inflateChallengesList);
     }
     
     /**
@@ -269,14 +271,15 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     /**
      * Clears any existing views, inflates a new view for each challenge
      *
-     * @param challengesListContainer the linearLayout of the containers
+     * @param challenges The list of all challenges
      */
-    private void inflateChallengesList(LinearLayout challengesListContainer) {
+    private void inflateChallengesList(List<Challenge> challenges) {
+        // Clear all existing challenge rows
         challengesListContainer.removeAllViews();
-        LayoutInflater inflater = getLayoutInflater();
         
-        for (int i = 0; i < challengesList.size(); i++) {
-            Challenge c = challengesList.get(i);
+        LayoutInflater inflater = getLayoutInflater();
+        for (int i = 0; i < challenges.size(); i++) {
+            Challenge c = challenges.get(i);
             View listItem = inflater.inflate(R.layout.challenge_list_item, challengesListContainer, false);
             
             // Set name

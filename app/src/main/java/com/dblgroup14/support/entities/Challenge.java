@@ -12,6 +12,9 @@ import java.util.Map;
  */
 @Entity(tableName = "challenges")
 public class Challenge {
+    private static final String SHOW_FRAGMENT_PACKAGE = "com.dblgroup14.app.challenges";
+    private static final String EDIT_FRAGMENT_PACKAGE = "com.dblgroup14.app.edit";
+    
     @PrimaryKey(autoGenerate = true)
     public int id;
     
@@ -19,12 +22,18 @@ public class Challenge {
     public String name;
     
     @NonNull
-    public String className;
+    public String simpleClassName;
+    public boolean isDefault;
+    public boolean isEditable;
     
     @NonNull
     public Map<String, String> dataStorage;
     
     public Challenge() {
+        name = "UNDEFINED";
+        simpleClassName = "UNDEFINED";
+        isDefault = false;
+        isEditable = false;
         dataStorage = new HashMap<>();
     }
     
@@ -41,15 +50,33 @@ public class Challenge {
     }
     
     /**
-     * Sets the name of the built-in class that belongs to this challenge.
+     * Sets the simpel class name (i.e. without package indication) of the fragment class that displays this challenge.
      *
-     * @param className The built-in class name belonging to this challenge
+     * @param simpleClassName The simple class name of the fragment class that displays to this challenge
      */
-    public void setClassName(String className) {
-        if (className == null) {
-            throw new IllegalArgumentException("Given name is null");
+    public void setSimpleClassName(String simpleClassName) {
+        if (simpleClassName == null) {
+            throw new IllegalArgumentException("Given class name is null");
         }
-        this.className = className;
+        this.simpleClassName = simpleClassName;
+    }
+    
+    /**
+     * Gets the full class name of the fragment class that displays this type of challenge.
+     *
+     * @return The full show fragment class name
+     */
+    public String getShowFragmentClassName() {
+        return String.format("%s.%s", SHOW_FRAGMENT_PACKAGE, simpleClassName);
+    }
+    
+    /**
+     * Gets the full class name of the fragment class that edits this type of challenge.
+     *
+     * @return The full edit fragment class name
+     */
+    public String getEditFragmentClassName() {
+        return String.format("%s.Edit%s", EDIT_FRAGMENT_PACKAGE, simpleClassName);
     }
     
     /**

@@ -15,10 +15,9 @@ import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.entities.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
-import java.util.Objects;
 
 public class ManageAlarmsFragment extends Fragment {
-    private CustomListAdapter alarmsListAdapter;
+    private AlarmListAdapter alarmsListAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,9 +43,7 @@ public class ManageAlarmsFragment extends Fragment {
      * Sets the title in the action bar.
      */
     private void setTitle() {
-        if (((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar() != null) {
-            Objects.requireNonNull(((AppCompatActivity) getActivity()).getSupportActionBar()).setTitle("My Alarms");
-        }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My Alarms");
     }
     
     /**
@@ -55,7 +52,7 @@ public class ManageAlarmsFragment extends Fragment {
      * @param view the view
      */
     private void createListAdapter(View view) {
-        alarmsListAdapter = new CustomListAdapter(Objects.requireNonNull(getActivity()));
+        alarmsListAdapter = new AlarmListAdapter(getActivity());
         ListView listView = view.findViewById(R.id.alarmView);
         listView.setAdapter(alarmsListAdapter);
     }
@@ -69,7 +66,7 @@ public class ManageAlarmsFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent editAlarmIntent = new Intent(getContext(), EditActivity.class);
-            editAlarmIntent.putExtra("object", "alarm");
+            editAlarmIntent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_ALARM);
             startActivity(editAlarmIntent);
         });
     }

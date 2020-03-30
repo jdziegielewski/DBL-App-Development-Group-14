@@ -13,6 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public abstract class AlarmScheduler {
+    /**
+     * Schedule next time that a specific alarm will ring.
+     *
+     * @param alarm The alarm object
+     */
     public static void scheduleNext(Alarm alarm) {
         // Create calendar
         Calendar now = Calendar.getInstance();
@@ -73,13 +78,17 @@ public abstract class AlarmScheduler {
         }
     }
     
+    /**
+     * Creates intent and calls Android AlarmManager API to trigger alarm at the requested time.
+     *
+     * @param calendar A Calendar instance containing the time that an alarm should ring
+     * @param alarm    The alarm object
+     */
     private static void setAlarm(Calendar calendar, Alarm alarm) {
         Context context = SleapApplication.getContext();
         
-        // Create intent
-        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        intent.putExtra("alarm_id", alarm.id);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Get PendingIntent
+        PendingIntent pendingIntent = createAlarmPendingIntent(alarm);
         
         // Schedule alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -90,7 +99,28 @@ public abstract class AlarmScheduler {
         Toast.makeText(context, "Alarm will ring next at\n" + format.format(calendar.getTime()), Toast.LENGTH_LONG).show();
     }
     
+    private static PendingIntent createAlarmPendingIntent(Alarm alarm) {
+        Context context = SleapApplication.getContext();
+        
+        // Create intent
+        Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
+        intent.putExtra("alarm_id", alarm.id);
+        
+        // Return PendingIntent
+        return PendingIntent.getBroadcast(context, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+    
+    /**
+     * Unschedule an already set alarm.
+     *
+     * @param alarm The alarm object
+     */
     public static void unschedule(Alarm alarm) {
-        // TODO: Unschedule alarm
+        // Grab (existing) PendingIntent
+        PendingIntent pendingIntent = createAlarmPendingIntent(alarm);
+        
+        // Unschedule alarm
+        AlarmManager alarmManager = (AlarmManager) SleapApplication.getContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 }

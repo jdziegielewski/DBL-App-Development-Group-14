@@ -51,6 +51,7 @@ public class AlarmActivity extends AppCompatActivity {
     private AudioManager mAudioManager;
     
     private Alarm mCurrentAlarm;
+    private Challenge mCurrentChallenge;
     private ChallengeFragment mChallengeFragment;
     private Ringtone r;
     
@@ -209,11 +210,11 @@ public class AlarmActivity extends AppCompatActivity {
     
     private void initializeChallenge(List<Challenge> allChallenges) {
         // Find a (random) challenge that belongs to this alarm
-        Challenge challenge = findAlarmChallenge(allChallenges);
+        mCurrentChallenge = findAlarmChallenge(allChallenges);
         
         // Instantiate challenge fragment
         try {
-            mChallengeFragment = (ChallengeFragment) Class.forName(challenge.className).newInstance();
+            mChallengeFragment = (ChallengeFragment) Class.forName(mCurrentChallenge.getShowFragmentClassName()).newInstance();
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Invalid challenge class given");
         } catch (Exception e) {
@@ -242,6 +243,10 @@ public class AlarmActivity extends AppCompatActivity {
         
         // Return a random challenge
         return allChallenges.get(new Random().nextInt(allChallenges.size()));
+    }
+    
+    public Challenge getCurrentChallenge() {
+        return mCurrentChallenge;
     }
     
     private void challengeCompleted() {

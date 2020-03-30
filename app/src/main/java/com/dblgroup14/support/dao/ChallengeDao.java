@@ -11,8 +11,14 @@ import java.util.List;
 
 @Dao
 public abstract class ChallengeDao implements HostDaoInterface<Challenge> {
-    @Query("SELECT * FROM challenges")
+    @Query("SELECT * FROM challenges ORDER BY LENGTH(name)")
     public abstract LiveData<List<Challenge>> all();
+    
+    @Query("SELECT * FROM challenges WHERE isDefault=1 ORDER BY LENGTH(name)")
+    public abstract LiveData<List<Challenge>> allDefault();
+    
+    @Query("SELECT * FROM challenges WHERE isDefault=0 ORDER BY LENGTH(name)")
+    public abstract LiveData<List<Challenge>> allCustom();
     
     @Query("SELECT * FROM challenges")
     public abstract List<Challenge> allDirect();
