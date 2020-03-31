@@ -10,7 +10,7 @@ import com.dblgroup14.support.entities.Challenge;
 import java.util.List;
 
 @Dao
-public abstract class ChallengeDao implements HostDaoInterface<Challenge> {
+public abstract class ChallengeDao implements EditDaoInterface<Challenge> {
     @Query("SELECT * FROM challenges ORDER BY LENGTH(name)")
     public abstract LiveData<List<Challenge>> all();
     

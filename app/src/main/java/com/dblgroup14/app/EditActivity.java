@@ -55,8 +55,12 @@ public class EditActivity extends AppCompatActivity {
                     throw new IllegalArgumentException("No edit fragment class given");
                 }
                 
-                // Instantiate edit challenge fragment
-                instantiateEditChallengeFragment(className);
+                // Instantiate edit challenge fragment child class
+                try {
+                    editFragment = (EditChallengeFragment) Class.forName(className).newInstance();
+                } catch (Exception e) {
+                    throw new IllegalArgumentException("No valid edit fragment class given");
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Invalid object type given");
@@ -81,18 +85,5 @@ public class EditActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-    
-    /**
-     * Instantiates the EditChallenge fragment
-     *
-     * @param className the name of the class of the challenge
-     */
-    private void instantiateEditChallengeFragment(String className) {
-        try {
-            editFragment = (EditChallengeFragment) Class.forName(className).newInstance();
-        } catch (Exception e) {
-            throw new IllegalArgumentException("No valid edit fragment class given");
-        }
     }
 }

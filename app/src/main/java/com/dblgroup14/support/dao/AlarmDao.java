@@ -6,12 +6,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 import com.dblgroup14.support.entities.Alarm;
 import java.util.List;
 
 @Dao
-public abstract class AlarmDao implements HostDaoInterface<Alarm> {
+public abstract class AlarmDao implements EditDaoInterface<Alarm> {
     @Query("SELECT * FROM alarms")
     public abstract LiveData<List<Alarm>> all();
     

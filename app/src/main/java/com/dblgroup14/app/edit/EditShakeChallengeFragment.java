@@ -58,7 +58,7 @@ public class EditShakeChallengeFragment extends EditChallengeFragment {
     }
     
     @Override
-    protected int getLayoutResourceID() {
+    protected int getLayoutResourceId() {
         return R.layout.fragment_edit_shake_challenge;
     }
 }

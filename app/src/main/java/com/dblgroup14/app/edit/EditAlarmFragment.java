@@ -17,11 +17,10 @@ import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AlarmScheduler;
 import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.dao.HostDaoInterface;
+import com.dblgroup14.support.dao.EditDaoInterface;
 import com.dblgroup14.support.entities.Alarm;
 import com.dblgroup14.support.entities.Challenge;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -88,12 +87,12 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
     }
     
     @Override
-    protected HostDaoInterface<Alarm> dao() {
+    protected EditDaoInterface<Alarm> dao() {
         return AppDatabase.db().alarmDao();
     }
     
     @Override
-    protected int getLayoutResourceID() {
+    protected int getLayoutResourceId() {
         return R.layout.fragment_edit_alarm;
     }
     

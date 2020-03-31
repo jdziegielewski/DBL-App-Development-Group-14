@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmActivity extends AppCompatActivity implements ChallengeFragment.OnChallengeCompletedListener {
     
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -45,27 +45,27 @@ public class AlarmActivity extends AppCompatActivity {
     private TextView timeTextView;
     private View decorView;
     
-    private boolean mVisible;
-    private Handler mRepeatHandler;
-    private Handler mHideHandler;
-    private AudioManager mAudioManager;
+    private boolean visible;
+    private Alarm currentAlarm;
+    private Challenge currentChallenge;
+    private ChallengeFragment challengeFragment;
     
-    private Alarm mCurrentAlarm;
-    private Challenge mCurrentChallenge;
-    private ChallengeFragment mChallengeFragment;
-    MediaPlayer mediaPlayer;
+    private Handler repeatHandler;
+    private Handler hideHandler;
+    private AudioManager audioManager;
+    private MediaPlayer alarmSoundPlayer;
     
     /* Runnables */
     
-    private final Runnable mHidePart2Runnable = () -> decorView.setSystemUiVisibility(hideSystemBars());
-    private final Runnable mShowPart2Runnable = () -> {
+    private final Runnable hidePart2Runnable = () -> decorView.setSystemUiVisibility(hideSystemBars());
+    private final Runnable showPart2Runnable = () -> {
         // Delayed display of UI elements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.show();
         }
     };
-    private final Runnable mHideRunnable = this::hide;
+    private final Runnable hideRunnable = this::hide;
     
     /* View listeners */
     
@@ -78,8 +78,9 @@ public class AlarmActivity extends AppCompatActivity {
         builder.setMessage(LOSING_POPUP_MESSAGE);
         builder.setPositiveButton(LOSING_POPUP_BUTTON_MESSAGE, losingPopupButtonListener);
         builder.show();
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        
+        alarmSoundPlayer.stop();
+        alarmSoundPlayer.release();
     };
     private final View.OnSystemUiVisibilityChangeListener visibilityChangeListener = v -> {
         if (v == 0) {
@@ -99,7 +100,7 @@ public class AlarmActivity extends AppCompatActivity {
         }
         AsyncTask.execute(() -> {
             // Get alarm from database
-            mCurrentAlarm = AppDatabase.db().alarmDao().get(alarmId);
+            currentAlarm = AppDatabase.db().alarmDao().get(alarmId);
             initializeAlarm();
             
             // Initialize challenge
@@ -108,10 +109,10 @@ public class AlarmActivity extends AppCompatActivity {
         });
         
         // Set ui to be visible
-        mVisible = true;
+        visible = true;
         
         // Get audio manager
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         
         // Initialize decor view
         decorView = getWindow().getDecorView();
@@ -130,8 +131,8 @@ public class AlarmActivity extends AppCompatActivity {
         hideBarsView.setOnClickListener(hideOnClickListener);
         
         // Initialize handlers
-        mHideHandler = new Handler();
-        mRepeatHandler = new Handler();
+        hideHandler = new Handler();
+        repeatHandler = new Handler();
     }
     
     @Override
@@ -148,8 +149,8 @@ public class AlarmActivity extends AppCompatActivity {
     
     @Override
     public void onBackPressed() {
-        if (mChallengeFragment != null) {
-            mChallengeFragment.onBackPressed();
+        if (challengeFragment != null) {
+            challengeFragment.onBackPressed();
         }
     }
     
@@ -167,48 +168,60 @@ public class AlarmActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
+        hideHandler.removeCallbacks(showPart2Runnable);
+        hideHandler.removeCallbacks(hidePart2Runnable);
     }
     
     @Override
     public void finish() {
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        super.finish();
+        // Stop ringtone sound
+        if (alarmSoundPlayer != null && alarmSoundPlayer.isPlaying()) {
+            alarmSoundPlayer.stop();
+            alarmSoundPlayer.release();
+        }
         
         // Stop repeat handler
-        if (mRepeatHandler != null) {
-            mRepeatHandler.removeCallbacks(this::updateView);
+        if (repeatHandler != null) {
+            repeatHandler.removeCallbacks(this::updateView);
         }
+    }
+    
+    @Override
+    public void onChallengeCompleted() {
+        // Increase amount of completed challenges
+        SharedPreferences db = SimpleDatabase.getSharedPreferences();
+        int completedChallenges = db.getInt(SimpleDatabase.COMPLETED_CHALLENGES, 0) + 1;
+        db.edit().putInt(SimpleDatabase.COMPLETED_CHALLENGES, completedChallenges).apply();
+        
+        // Close activity
+        finish();
     }
     
     private void updateView() {
         // Hide system bars
-        mHidePart2Runnable.run();
+        hidePart2Runnable.run();
         
         // Update time
         String currentTime = new SimpleDateFormat("HH:mm").format(new Date());
         timeTextView.setText(currentTime);
         
         // Change volume to alarm volume
-        int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) ((mCurrentAlarm.volume / 100.0) * maxVolume), 0);
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) ((currentAlarm.volume / 100.0) * maxVolume), 0);
         
         // Post next update
-        mRepeatHandler.postDelayed(this::updateView, 1000);
+        repeatHandler.postDelayed(this::updateView, 1000);
     }
     
     private void initializeAlarm() {
         // TODO: Reschedule alarm if set to repeat
         
         try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            mediaPlayer = MediaPlayer.create(getApplicationContext(), notification);
-            mediaPlayer.start();
-           
-            //r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            //r.play();
+            Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            alarmSoundPlayer = MediaPlayer.create(getApplicationContext(), ringtoneUri);
+            alarmSoundPlayer.setScreenOnWhilePlaying(true);
+            alarmSoundPlayer.setLooping(true);
+            alarmSoundPlayer.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,11 +229,11 @@ public class AlarmActivity extends AppCompatActivity {
     
     private void initializeChallenge(List<Challenge> allChallenges) {
         // Find a (random) challenge that belongs to this alarm
-        mCurrentChallenge = findAlarmChallenge(allChallenges);
+        currentChallenge = findAlarmChallenge(allChallenges);
         
         // Instantiate challenge fragment
         try {
-            mChallengeFragment = (ChallengeFragment) Class.forName(mCurrentChallenge.getShowFragmentClassName()).newInstance();
+            challengeFragment = (ChallengeFragment) Class.forName(currentChallenge.getShowFragmentClassName()).newInstance();
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Invalid challenge class given");
         } catch (Exception e) {
@@ -228,20 +241,20 @@ public class AlarmActivity extends AppCompatActivity {
         }
         
         // Set on completion handler
-        mChallengeFragment.setOnChallengeCompletedListener(this::challengeCompleted);
+        challengeFragment.setOnChallengeCompletedListener(this);
         
         // Place challenge fragment in lay-out
-        getSupportFragmentManager().beginTransaction().replace(R.id.challengeContainerLayout, mChallengeFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.challengeContainerLayout, challengeFragment).commit();
         
         // Start repeat handler
-        mRepeatHandler.postDelayed(this::updateView, 1);
+        repeatHandler.postDelayed(this::updateView, 1);
     }
     
     private Challenge findAlarmChallenge(List<Challenge> allChallenges) {
-        if (mCurrentAlarm.challengeIds.size() > 0) {
-            int i = new Random().nextInt(mCurrentAlarm.challengeIds.size());
+        if (currentAlarm.challengeIds.size() > 0) {
+            int i = new Random().nextInt(currentAlarm.challengeIds.size());
             for (Challenge c : allChallenges) {
-                if (c.id == mCurrentAlarm.challengeIds.get(i)) {
+                if (c.id == currentAlarm.challengeIds.get(i)) {
                     return c;
                 }
             }
@@ -252,16 +265,7 @@ public class AlarmActivity extends AppCompatActivity {
     }
     
     public Challenge getCurrentChallenge() {
-        return mCurrentChallenge;
-    }
-    
-    private void challengeCompleted() {
-        // Increase amount of completed challenges
-        SharedPreferences db = SimpleDatabase.getSharedPreferences();
-        int completedChallenges = db.getInt(SimpleDatabase.COMPLETED_CHALLENGES, 0) + 1;
-        db.edit().putInt(SimpleDatabase.COMPLETED_CHALLENGES, completedChallenges).apply();
-        // Close activity
-        finish();
+        return currentChallenge;
     }
     
     private int hideSystemBars() {
@@ -274,7 +278,7 @@ public class AlarmActivity extends AppCompatActivity {
     }
     
     private void toggle() {
-        if (mVisible) {
+        if (visible) {
             hide();
         } else {
             show();
@@ -287,11 +291,11 @@ public class AlarmActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        mVisible = false;
+        visible = false;
         
         // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+        hideHandler.removeCallbacks(showPart2Runnable);
+        hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY);
     }
     
     @SuppressLint("InlinedApi")
@@ -299,11 +303,11 @@ public class AlarmActivity extends AppCompatActivity {
         // Show the system bar
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
+        visible = true;
         
         // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
+        hideHandler.removeCallbacks(hidePart2Runnable);
+        hideHandler.postDelayed(showPart2Runnable, UI_ANIMATION_DELAY);
     }
     
     /**
@@ -311,7 +315,7 @@ public class AlarmActivity extends AppCompatActivity {
      * previously scheduled calls.
      */
     private void delayedHide() {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, 100);
+        hideHandler.removeCallbacks(hideRunnable);
+        hideHandler.postDelayed(hideRunnable, 100);
     }
 }

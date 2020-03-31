@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
-import com.dblgroup14.support.dao.HostDaoInterface;
+import com.dblgroup14.support.dao.EditDaoInterface;
 
 /**
  * The abstract superclass that hosts a fragment that shows or edits any type of object in this app.
@@ -17,7 +17,7 @@ public abstract class EditFragment<T extends Object> extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutResourceID(), container, false);
+        return inflater.inflate(getLayoutResourceId(), container, false);
     }
     
     @Override
@@ -98,12 +98,12 @@ public abstract class EditFragment<T extends Object> extends Fragment {
      *
      * @return DAO of this object type
      */
-    protected abstract HostDaoInterface<T> dao();
+    protected abstract EditDaoInterface<T> dao();
     
     /**
      * Gets the layout resource ID that is used to edit this object.
      *
      * @return The layout resource ID
      */
-    protected abstract int getLayoutResourceID();
+    protected abstract int getLayoutResourceId();
 }

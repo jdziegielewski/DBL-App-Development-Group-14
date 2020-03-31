@@ -79,6 +79,20 @@ public abstract class AlarmScheduler {
     }
     
     /**
+     * Cancels an already set alarm.
+     *
+     * @param alarm The alarm object
+     */
+    public static void cancel(Alarm alarm) {
+        // Grab (existing) PendingIntent
+        PendingIntent pendingIntent = createPendingIntent(alarm);
+        
+        // Cancel alarm
+        AlarmManager alarmManager = (AlarmManager) SleapApplication.getContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
+    
+    /**
      * Creates intent and calls Android AlarmManager API to trigger alarm at the requested time.
      *
      * @param calendar A Calendar instance containing the time that an alarm should ring
@@ -88,7 +102,7 @@ public abstract class AlarmScheduler {
         Context context = SleapApplication.getContext();
         
         // Get PendingIntent
-        PendingIntent pendingIntent = createAlarmPendingIntent(alarm);
+        PendingIntent pendingIntent = createPendingIntent(alarm);
         
         // Schedule alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -99,7 +113,7 @@ public abstract class AlarmScheduler {
         Toast.makeText(context, "Alarm will ring next at\n" + format.format(calendar.getTime()), Toast.LENGTH_LONG).show();
     }
     
-    private static PendingIntent createAlarmPendingIntent(Alarm alarm) {
+    private static PendingIntent createPendingIntent(Alarm alarm) {
         Context context = SleapApplication.getContext();
         
         // Create intent
@@ -108,19 +122,5 @@ public abstract class AlarmScheduler {
         
         // Return PendingIntent
         return PendingIntent.getBroadcast(context, alarm.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-    
-    /**
-     * Unschedule an already set alarm.
-     *
-     * @param alarm The alarm object
-     */
-    public static void unschedule(Alarm alarm) {
-        // Grab (existing) PendingIntent
-        PendingIntent pendingIntent = createAlarmPendingIntent(alarm);
-        
-        // Unschedule alarm
-        AlarmManager alarmManager = (AlarmManager) SleapApplication.getContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
     }
 }

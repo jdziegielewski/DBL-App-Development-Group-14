@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Type converter functions for the Room Database library
  */
-public class RoomTypeConverters {
+public abstract class RoomTypeConverters {
     @TypeConverter
     public static boolean[] booleanArrFromString(String value) {
         String[] parts = value.split(",");

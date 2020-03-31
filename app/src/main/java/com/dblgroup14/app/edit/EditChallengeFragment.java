@@ -1,9 +1,8 @@
 package com.dblgroup14.app.edit;
 
 import android.view.View;
-import androidx.appcompat.app.AppCompatActivity;
 import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.dao.HostDaoInterface;
+import com.dblgroup14.support.dao.EditDaoInterface;
 import com.dblgroup14.support.entities.Challenge;
 
 public abstract class EditChallengeFragment extends EditFragment<Challenge> {
@@ -21,13 +20,13 @@ public abstract class EditChallengeFragment extends EditFragment<Challenge> {
     }
     
     @Override
+    protected EditDaoInterface<Challenge> dao() {
+        return AppDatabase.db().challengeDao();
+    }
+    
+    @Override
     protected abstract Challenge createNew();
     
     @Override
-    protected abstract int getLayoutResourceID();
-    
-    @Override
-    protected HostDaoInterface<Challenge> dao() {
-        return AppDatabase.db().challengeDao();
-    }
+    protected abstract int getLayoutResourceId();
 }

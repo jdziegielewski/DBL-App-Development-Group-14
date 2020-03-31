@@ -81,8 +81,8 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
     private void setDelete(View newRow, final Alarm alarm) {
         ImageView deleteView = newRow.findViewById(R.id.deleteAlarmView);
         deleteView.setOnClickListener(v -> {
-            // Unschedule alarm
-            AlarmScheduler.unschedule(alarm);
+            // Cancel alarm
+            AlarmScheduler.cancel(alarm);
             
             // Delete alarm object
             AsyncTask.execute(() -> AppDatabase.db().alarmDao().delete(alarm));
@@ -139,10 +139,10 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         }
         
         alarmOnOffView.setOnClickListener(v -> {
-            // Change button background resource and (un)schedule alarm
+            // Change button background resource and schedule or cancel alarm
             if (alarm.enabled) {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_off);
-                AlarmScheduler.unschedule(alarm);
+                AlarmScheduler.cancel(alarm);
             } else {
                 alarmOnOffView.setBackgroundResource(R.drawable.ic_alarm_on);
                 AlarmScheduler.scheduleNext(alarm);
