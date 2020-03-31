@@ -53,7 +53,7 @@ public class AlarmActivity extends AppCompatActivity {
     private Alarm mCurrentAlarm;
     private Challenge mCurrentChallenge;
     private ChallengeFragment mChallengeFragment;
-    private MediaPlayer mRingtonePlayer;
+    MediaPlayer mediaPlayer;
     
     /* Runnables */
     
@@ -73,11 +73,13 @@ public class AlarmActivity extends AppCompatActivity {
     private final DialogInterface.OnClickListener losingPopupButtonListener = (o, i) -> finish();
     private final View.OnClickListener giveUpButtonListener = v -> {
         AlertDialog.Builder builder = new AlertDialog.Builder(AlarmActivity.this);
-        builder.setCancelable(false);
+        builder.setCancelable(true);
         builder.setTitle(LOSING_POPUP_TITLE);
         builder.setMessage(LOSING_POPUP_MESSAGE);
         builder.setPositiveButton(LOSING_POPUP_BUTTON_MESSAGE, losingPopupButtonListener);
         builder.show();
+        mediaPlayer.stop();
+        mediaPlayer.release();
     };
     private final View.OnSystemUiVisibilityChangeListener visibilityChangeListener = v -> {
         if (v == 0) {
@@ -171,17 +173,14 @@ public class AlarmActivity extends AppCompatActivity {
     
     @Override
     public void finish() {
-        // Stop ringtone sound
-        if (mRingtonePlayer != null) {
-            mRingtonePlayer.stop();
-        }
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        super.finish();
         
         // Stop repeat handler
         if (mRepeatHandler != null) {
             mRepeatHandler.removeCallbacks(this::updateView);
         }
-        
-        super.finish();
     }
     
     private void updateView() {
@@ -193,7 +192,7 @@ public class AlarmActivity extends AppCompatActivity {
         timeTextView.setText(currentTime);
         
         // Change volume to alarm volume
-        int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int maxVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM);
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) ((mCurrentAlarm.volume / 100.0) * maxVolume), 0);
         
         // Post next update
@@ -204,11 +203,12 @@ public class AlarmActivity extends AppCompatActivity {
         // TODO: Reschedule alarm if set to repeat
         
         try {
-            Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            mRingtonePlayer = MediaPlayer.create(this, ringtoneUri);
-            mRingtonePlayer.setScreenOnWhilePlaying(true);
-            mRingtonePlayer.setLooping(true);
-            mRingtonePlayer.start();
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), notification);
+            mediaPlayer.start();
+           
+            //r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            //r.play();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -260,7 +260,6 @@ public class AlarmActivity extends AppCompatActivity {
         SharedPreferences db = SimpleDatabase.getSharedPreferences();
         int completedChallenges = db.getInt(SimpleDatabase.COMPLETED_CHALLENGES, 0) + 1;
         db.edit().putInt(SimpleDatabase.COMPLETED_CHALLENGES, completedChallenges).apply();
-        
         // Close activity
         finish();
     }
