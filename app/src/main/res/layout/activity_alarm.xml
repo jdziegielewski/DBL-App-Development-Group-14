@@ -32,38 +32,45 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/alarmActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/hideBarsView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/alarmActivityScroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/systemTimeText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center_horizontal"
-                android:text="TextView"
-                android:textSize="60sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <FrameLayout
-                android:id="@+id/challengeContainerLayout"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                app:layout_constraintTop_toBottomOf="@+id/systemTimeText" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/systemTimeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_horizontal"
+                    android:text="TextView"
+                    android:textSize="60sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <FrameLayout
+                    android:id="@+id/challengeContainerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    app:layout_constraintTop_toBottomOf="@+id/systemTimeText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

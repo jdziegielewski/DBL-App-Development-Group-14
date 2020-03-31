@@ -10,26 +10,25 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import com.dblgroup14.app.R;
 import com.google.zxing.Result;
-import java.util.Arrays;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
 import static android.Manifest.permission.CAMERA;
 
 /**
-    For reading the barcodes and QR codes in the barcode challenge we used zxing libary 'me.dm7.barcodescanner:zxing:1.9'
-*/
+ * For reading the barcodes and QR codes in the barcode challenge we used zxing libary 'me.dm7.barcodescanner:zxing:1.9'
+ */
 
 public class BarcodeChallengeFragment extends ChallengeFragment implements ZXingScannerView.ResultHandler {
     private static final int REQUEST_CAMERA_ID = 1;
     
-    private ViewGroup container;
-    private View mainView;
+    private ViewGroup alarmActivityContainer;
+    private ViewGroup alarmActivityScrollView;
     
     private ZXingScannerView scannerView;
     private boolean scannerIsRunning = false;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.container = container;
         return inflater.inflate(R.layout.fragment_challenge_barcode, container, false);
     }
     
@@ -37,8 +36,9 @@ public class BarcodeChallengeFragment extends ChallengeFragment implements ZXing
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        // Set main views
-        mainView = view;
+        // Get alarm activity components
+        alarmActivityContainer = getActivity().findViewById(R.id.alarmActivityContainer);
+        alarmActivityScrollView = getActivity().findViewById(R.id.alarmActivityScroll);
         
         // Request camera permission
         checkAndRequestPermission();
@@ -88,19 +88,19 @@ public class BarcodeChallengeFragment extends ChallengeFragment implements ZXing
     
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void requestPermission() {
-        requestPermissions(new String[]{CAMERA}, REQUEST_CAMERA_ID);
+        requestPermissions(new String[] {CAMERA}, REQUEST_CAMERA_ID);
     }
     
     private void startScanner() {
         // Initialize scanner view
         if (scannerView == null) {
-            scannerView = new ZXingScannerView(getContext());
-            scannerView.setResultHandler(this::handleResult);
+            scannerView = new ZXingScannerView(getActivity());
+            scannerView.setResultHandler(this);
         }
         
         // Swap scanner view
-        container.removeAllViews();
-        container.addView(scannerView);
+        alarmActivityContainer.removeAllViews();
+        alarmActivityContainer.addView(scannerView);
         
         // Start camera
         scannerView.startCamera();
@@ -114,8 +114,8 @@ public class BarcodeChallengeFragment extends ChallengeFragment implements ZXing
         scannerView.stopCamera();
         
         // Swap back views
-        container.removeAllViews();
-        container.addView(mainView);
+        alarmActivityContainer.removeAllViews();
+        alarmActivityContainer.addView(alarmActivityScrollView);
     }
     
     @Override
