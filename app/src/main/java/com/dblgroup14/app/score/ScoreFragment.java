@@ -19,8 +19,10 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ import java.util.List;
 public class ScoreFragment extends Fragment {
     private LinearLayout scoresListContainer;
     private PieChart pieChart;
-    
+    private TextView scoreTime;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_score, container, false);
@@ -38,6 +40,12 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    
+        // Set last completed time
+        scoreTime = view.findViewById(R.id.time_completed);
+        String currentTime = new SimpleDateFormat("MMM dd - HH:mm").format(new Date());
+        String scoreTimeText = "Last completed:  " + currentTime;
+        scoreTime.setText(scoreTimeText);
         
         // Get components
         scoresListContainer = view.findViewById(R.id.scoresListContainer);

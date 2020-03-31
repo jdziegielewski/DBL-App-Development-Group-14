@@ -27,7 +27,7 @@
     <string name="title_activity_play_challenge_page">PlayChallengePage</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="shake_amount">Current amount of shakes: </string>
+    <string name="shake_amount">Amount of shakes: </string>
     <string name="edit_shake_text">Here you can change the amount of shakes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
