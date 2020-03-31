@@ -20,6 +20,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -34,13 +39,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     
     TextView fullName,email,phone,verifyMail;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
-    String userId;
+    private FirebaseAuth fAuth;
+    //FirebaseFirestore fStore;
+    private String currentUserId;
     String TAKE_IMAGE_URL = null;
     int TAKE_IMAGE_CODE = 10001;
     Button resendCode;
     ImageView ProfileImage;
+    private DatabaseReference profileUserRef;
+    
+    
     
     
     
@@ -59,9 +67,10 @@ public class ProfileActivity extends AppCompatActivity {
         email = findViewById(R.id.profileEmail);
         
         fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
+        //fStore = FirebaseFirestore.getInstance();
         
-        userId = fAuth.getCurrentUser().getUid();
+        currentUserId = fAuth.getCurrentUser().getUid();
+        profileUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserId);
         
         resendCode = findViewById(R.id.ErrVerifyBtn);
         verifyMail = findViewById(R.id.MsgVerifyErr);
@@ -96,21 +105,31 @@ public class ProfileActivity extends AppCompatActivity {
             });
         }
         
-        DocumentReference documentReference = fStore.collection("users").document(userId);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        
+        profileUserRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e!=null){
-                    Log.d("TAG","Error:"+e.getMessage());
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    String myUserName = dataSnapshot.child("username").getValue().toString();
+                    String myPhone = dataSnapshot.child("phone").getValue().toString();
+                    String myEmail = dataSnapshot.child("email").getValue().toString();
+                    String myProfileStatus = dataSnapshot.child("status").getValue().toString();
+    
+                    fullName.setText(myUserName);
+                    email.setText(myEmail);
+                    phone.setText(myPhone);
+                    
                     
                 }
-                else {
-                    phone.setText(documentSnapshot.getString("phone"));
-                    fullName.setText(documentSnapshot.getString("fName"));
-                    email.setText(documentSnapshot.getString("email"));
-                }
+            
+        
+            }
     
-    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
             }
         });
         
