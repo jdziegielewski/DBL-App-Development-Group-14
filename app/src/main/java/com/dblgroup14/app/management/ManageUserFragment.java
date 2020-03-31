@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.user.LoginActivity;
+import com.dblgroup14.app.user.Manage3;
 import com.dblgroup14.app.user.ProfileActivity;
 
 public class ManageUserFragment extends Fragment {
@@ -26,7 +27,7 @@ public class ManageUserFragment extends Fragment {
         });
         
         view.findViewById(R.id.ProfileBtn).setOnClickListener(v -> {
-            Intent challengesIntent = new Intent(getContext(), ProfileActivity.class);
+            Intent challengesIntent = new Intent(getContext(), Manage3.class);
             startActivity(challengesIntent);
         });
     }

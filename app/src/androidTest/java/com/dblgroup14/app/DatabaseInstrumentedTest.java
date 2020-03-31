@@ -85,7 +85,7 @@ public class DatabaseInstrumentedTest {
         Challenge c = new Challenge();
         c.id = TEST_ID;
         c.setName("Test Challenge");
-        c.setClassName("TestChallenge");
+        //c.setClassName("TestChallenge");
         c.put("Test", "String");    // string
         c.put("Test1", "12");       // number
         c.put("Test2", "true");     // boolean

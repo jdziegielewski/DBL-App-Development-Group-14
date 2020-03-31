@@ -17,12 +17,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
+        <activity android:name=".user.FriendsActivity"
+            android:parentActivityName=".management.ManageUserFragment"></activity>
         <activity
             android:name=".user.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullUser" />
         <activity
             android:name=".user.RegisterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="fullUser" />
+        <activity
+            android:name=".user.Manage3"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullUser" />
         <activity
@@ -42,6 +48,7 @@
             android:screenOrientation="fullUser">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
