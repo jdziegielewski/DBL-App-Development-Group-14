@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.PersonProfileActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/my_profile_picture"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/profile">
+
+            </de.hdodenhof.circleimageview.CircleImageView>
+
+
+            <TextView
+                android:id="@+id/my_profile_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User Name"
+                android:layout_below="@+id/my_profile_picture"
+                android:layout_marginTop="5dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/my_profile_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_profile_username"
+                android:layout_marginTop="5dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:text="Hey there, I am using the Sleap App"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/my_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_profile_status"
+                android:layout_marginTop="60dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:text="Email"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/my_profile_phoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_profile_email"
+                android:layout_marginTop="5dp"
+                android:gravity="center|center_horizontal|center_vertical"
+                android:text="Phone Number"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/person_send_friend_request_btn"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_profile_phoneNumber"
+                android:layout_marginTop="45dp"
+                android:background="@android:color/holo_green_dark"
+                android:text="Send Friend Request"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"/>
+
+            <Button
+                android:id="@+id/person_decline_friend_request"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/person_send_friend_request_btn"
+                android:layout_marginTop="20dp"
+                android:background="#FF0000"
+                android:text="Decline Friend Request"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"/>
+
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+</RelativeLayout>
