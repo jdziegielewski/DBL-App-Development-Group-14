@@ -1,11 +1,9 @@
-package com.dblgroup14;
+package com.dblgroup14.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import com.dblgroup14.app.MainActivity;
-import com.dblgroup14.app.R;
 
 
 public class SplashScreenActivity extends AppCompatActivity {

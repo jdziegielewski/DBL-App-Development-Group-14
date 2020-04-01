@@ -184,6 +184,9 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
         if (repeatHandler != null) {
             repeatHandler.removeCallbacks(this::updateView);
         }
+        
+        // Finish activity
+        super.finish();
     }
     
     @Override

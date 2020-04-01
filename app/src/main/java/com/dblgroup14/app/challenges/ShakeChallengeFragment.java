@@ -38,6 +38,7 @@ public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDe
         
         // Get shake count text view
         shakeCountText = view.findViewById(R.id.shakeCountText);
+        updateShakeCount();
         
         // Start shake sensor
         SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
@@ -57,12 +58,16 @@ public class ShakeChallengeFragment extends ChallengeFragment implements ShakeDe
         shakesLeft--;
         
         // Update shake counter
-        shakeCountText.setText(String.valueOf(shakesLeft));
+        updateShakeCount();
         
         // Check for challenge completion
         if (shakesLeft == 0) {
             shakeDetector.stop();
             completeChallenge();
         }
+    }
+    
+    private void updateShakeCount() {
+        shakeCountText.setText(String.valueOf(shakesLeft));
     }
 }
