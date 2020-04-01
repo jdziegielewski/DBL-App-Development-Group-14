@@ -88,6 +88,8 @@ public class Manage3 extends AppCompatActivity {
     
     }
     
+    
+    
     private void SendUserToLoginActivity()
     {
         Intent loginIntent = new Intent(Manage3.this, ManageUserFragment.class);

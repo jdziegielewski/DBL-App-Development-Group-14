@@ -20,6 +20,14 @@
             android:layout_alignParentTop="true">
 
 
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:text="Slide from the left to right to acces the menu"
+                android:textColor="#23729A"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </FrameLayout>
     </RelativeLayout>
 
