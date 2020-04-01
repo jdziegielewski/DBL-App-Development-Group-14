@@ -69,6 +69,14 @@ public class Manage3 extends AppCompatActivity {
         finish();
     }
     
+    private void SendUserToFriendsListActivity()
+    {
+        Intent friendsListIntent = new Intent(Manage3.this, FriendsListActivity.class);
+        friendsListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(friendsListIntent);
+        finish();
+    }
+    
     private void SendUserToFindProfileActivity()
     {
         Intent loginIntent = new Intent(Manage3.this, ProfileActivity.class);
@@ -100,6 +108,7 @@ public class Manage3 extends AppCompatActivity {
                 break;
     
             case R.id.nav_friends:
+                SendUserToFriendsListActivity();
                 Toast.makeText(this, "Friend list", Toast.LENGTH_SHORT).show();
                 break;
     
