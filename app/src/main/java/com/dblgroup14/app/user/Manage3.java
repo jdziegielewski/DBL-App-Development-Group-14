@@ -72,9 +72,9 @@ public class Manage3 extends AppCompatActivity {
     private void SendUserToFriendsListActivity()
     {
         Intent friendsListIntent = new Intent(Manage3.this, FriendsListActivity.class);
-        friendsListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //friendsListIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(friendsListIntent);
-        finish();
+        //finish();
     }
     
     private void SendUserToFindProfileActivity()

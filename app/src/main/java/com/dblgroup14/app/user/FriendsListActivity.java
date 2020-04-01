@@ -31,7 +31,7 @@ public class FriendsListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends_list.xml);
+        setContentView(R.layout.activity_friends_list);
         
         fAuth = FirebaseAuth.getInstance();
         online_user_id = fAuth.getCurrentUser().getUid();

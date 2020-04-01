@@ -34,6 +34,7 @@
             android:name=".user.Manage3"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullUser" />
+
         <activity
             android:name=".user.ProfileActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
