@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,14 +19,23 @@ import com.dblgroup14.app.R;
 import com.dblgroup14.app.management.ManageUserFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import org.w3c.dom.Text;
 
 public class Manage3 extends AppCompatActivity {
     
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
+    private TextView NavProfileUserName;
+    private FirebaseAuth fAuth;
+    private DatabaseReference UsersRef;
     
-    
+    String CurrentUserID;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -37,6 +47,31 @@ public class Manage3 extends AppCompatActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawable_layout); //search for drawer
         navigationView = (NavigationView) findViewById(R.id.navigation_view); //search for navigation
         View navView = navigationView.inflateHeaderView(R.layout.navigation_header); //including navigation header
+        
+        fAuth = FirebaseAuth.getInstance();
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        CurrentUserID = fAuth.getCurrentUser().getUid();
+        
+        NavProfileUserName = (TextView) navView.findViewById(R.id.nav_user_user_name);
+        
+        UsersRef.child(CurrentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.exists())
+                {
+                    String username = dataSnapshot.child("username") .getValue().toString();
+                    
+                    NavProfileUserName.setText(username);
+                }
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
         
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -64,17 +99,22 @@ public class Manage3 extends AppCompatActivity {
     private void SendUserToFindFriendsActivity()
     {
         Intent loginIntent = new Intent(Manage3.this, FriendsActivity.class);
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
-        finish();
+        
+    }
+    
+    private void SendUserToFriendsListActivity()
+    {
+        Intent friendsListIntent = new Intent(Manage3.this, FriendsListActivity.class);
+        startActivity(friendsListIntent);
+        
     }
     
     private void SendUserToFindProfileActivity()
     {
         Intent loginIntent = new Intent(Manage3.this, ProfileActivity.class);
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
-        finish();
+       
     }
     
     private void SendUserToFindHomeActivity()
@@ -100,6 +140,7 @@ public class Manage3 extends AppCompatActivity {
                 break;
     
             case R.id.nav_friends:
+                SendUserToFriendsListActivity();
                 Toast.makeText(this, "Friend list", Toast.LENGTH_SHORT).show();
                 break;
     
