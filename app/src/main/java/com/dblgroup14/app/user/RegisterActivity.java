@@ -24,8 +24,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
@@ -174,100 +178,127 @@ public class RegisterActivity extends AppCompatActivity {
                 String fullName = mFullName.getText().toString();
                 String phone = mPhone.getText().toString();
                 String rePassword = mRePassword.getText().toString().trim();
-                
-                
-                
-                if (TextUtils.isEmpty(fullName)){
-                    mFullName.setError("Name is Required");
-                    return;
-                }
-                
-                if(fullName.length() < 4 | fullName.length() > 12 ) {
-                    mFullName.setError("Name should be between 4 to 12 characters");
-                }
-                
-                if (TextUtils.isEmpty(email)){
-                    mEmail.setError("Email is Required");
-                    return;
-                }
-                
-                if (TextUtils.isEmpty(password)){
-                    mPassword.setError("Password is Required");
-                    
-                    return;
-                }
-                
-                if (!password.equals(rePassword))
-                {
-                    mRePassword.setError("Passwords don't match");
-                    return;
-                }
-                
-                if(password.length() < 6 ) {
-                    mPassword.setError("Password Must be greater or equal to 6 characters");
-                }
-                
-                
-                progressBar.setVisibility(View.VISIBLE);
-                
-                //start registering the user in our database
     
-                fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                Query userNameQuery = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("username").equalTo(fullName);
+                userNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                
-                            //send verification link to email
-                
-                            FirebaseUser fuser = fAuth.getCurrentUser();
-                            fuser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(RegisterActivity.this, "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
-                        
-                        
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG,"onFailure: Email not sent " + e.getMessage());
-                                }
-                            });
-                
-                
-                            Toast.makeText(RegisterActivity.this, "User Created", Toast.LENGTH_SHORT).show();
-                            userID = fAuth.getCurrentUser().getUid();
-                            UsersRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-                            //DocumentReference documentReference = fStore.collection("users").document(userID);
-                            HashMap user = new HashMap();
-                            user.put("username",fullName);
-                            user.put("email",email);
-                            user.put("phone",phone);
-                            user.put("status","Hey there, I am using Sleap app!");
-                            UsersRef.updateChildren(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "onSuccess: user Profile is created for"+ userID);
-                        
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG,"onFailure: " + e.toString());
-                        
-                                }
-                            });
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                
-                
-                        }else {
-                            Toast.makeText(RegisterActivity.this, "Error ! " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                    {
+                        if (dataSnapshot.getChildrenCount() > 0)
+                        {
+                            Toast.makeText(RegisterActivity.this, "Choose a different username or name", Toast.LENGTH_SHORT).show();
                         }
+                        else
+                            {
+    
+                                if (TextUtils.isEmpty(fullName)){
+                                    mFullName.setError("Name is Required");
+                                    return;
+                                }
+    
+                                if(fullName.length() < 4 | fullName.length() > 12 ) {
+                                    mFullName.setError("Name should be between 4 to 12 characters");
+                                }
+    
+                                if (TextUtils.isEmpty(email)){
+                                    mEmail.setError("Email is Required");
+                                    return;
+                                }
+    
+                                if (TextUtils.isEmpty(password)){
+                                    mPassword.setError("Password is Required");
+        
+                                    return;
+                                }
+    
+                                if (!password.equals(rePassword))
+                                {
+                                    mRePassword.setError("Passwords don't match");
+                                    return;
+                                }
+    
+                                if(password.length() < 6 ) {
+                                    mPassword.setError("Password Must be greater or equal to 6 characters");
+                                }
+    
+    
+                                progressBar.setVisibility(View.VISIBLE);
+    
+                                //start registering the user in our database
+    
+                                fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if(task.isSuccessful()) {
+                
+                                            //send verification link to email
+                
+                                            FirebaseUser fuser = fAuth.getCurrentUser();
+                                            fuser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(RegisterActivity.this, "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
+                        
+                        
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG,"onFailure: Email not sent " + e.getMessage());
+                                                }
+                                            });
+                
+                
+                                            Toast.makeText(RegisterActivity.this, "User Created", Toast.LENGTH_SHORT).show();
+                                            userID = fAuth.getCurrentUser().getUid();
+                                            UsersRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+                                            //DocumentReference documentReference = fStore.collection("users").document(userID);
+                                            HashMap user = new HashMap();
+                                            user.put("username",fullName);
+                                            user.put("email",email);
+                                            user.put("phone",phone);
+                                            user.put("status","Hey there, I am using Sleap app!");
+                                            UsersRef.updateChildren(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "onSuccess: user Profile is created for"+ userID);
+                        
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG,"onFailure: " + e.toString());
+                        
+                                                }
+                                            });
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                
+                
+                                        }else {
+                                            Toast.makeText(RegisterActivity.this, "Error ! " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                
+                                        }
             
+                                    }
+                                });
+    
+    
+    
+    
+                            }
+        
+                    }
+    
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+        
                     }
                 });
-    
+                
+                
+                
+                
+               
     
     
     
