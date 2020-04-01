@@ -21,7 +21,7 @@ public class ManageUserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         
         // Set button click listeners
-        //setRedirectBtnClickListeners(view);
+        setRedirectBtnClickListeners(view);
     }
     
     private void setRedirectBtnClickListeners(View view) {
