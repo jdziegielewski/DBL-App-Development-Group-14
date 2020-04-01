@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 public class ManageAlarmsFragment extends Fragment {
-    private AlarmListAdapter alarmsListAdapter;
+    private AlarmListAdapter alarmListAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,9 +52,9 @@ public class ManageAlarmsFragment extends Fragment {
      * @param view the view
      */
     private void createListAdapter(View view) {
-        alarmsListAdapter = new AlarmListAdapter(getActivity());
+        alarmListAdapter = new AlarmListAdapter(getActivity());
         ListView listView = view.findViewById(R.id.alarmView);
-        listView.setAdapter(alarmsListAdapter);
+        listView.setAdapter(alarmListAdapter);
     }
     
     /**
@@ -77,9 +77,9 @@ public class ManageAlarmsFragment extends Fragment {
     private void setListAdapter() {
         LiveData<List<Alarm>> liveAlarms = AppDatabase.db().alarmDao().all();
         liveAlarms.observe(getViewLifecycleOwner(), l -> {
-            alarmsListAdapter.clear();
-            alarmsListAdapter.addAll(l);
-            alarmsListAdapter.notifyDataSetChanged();
+            alarmListAdapter.clear();
+            alarmListAdapter.addAll(l);
+            alarmListAdapter.notifyDataSetChanged();
         });
     }
 }

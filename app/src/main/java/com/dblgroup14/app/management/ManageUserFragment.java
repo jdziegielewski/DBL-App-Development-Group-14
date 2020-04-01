@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.user.LoginActivity;
 import com.dblgroup14.app.user.Manage3;
-import com.dblgroup14.app.user.ProfileActivity;
 
 public class ManageUserFragment extends Fragment {
     @Override
@@ -21,6 +20,11 @@ public class ManageUserFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
+        // Set button click listeners
+        setRedirectBtnClickListeners(view);
+    }
+    
+    private void setRedirectBtnClickListeners(View view) {
         view.findViewById(R.id.MultiBtn).setOnClickListener(v -> {
             Intent challengesIntent = new Intent(getContext(), LoginActivity.class);
             startActivity(challengesIntent);

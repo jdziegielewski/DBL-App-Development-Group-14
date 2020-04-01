@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * For presenting the percentage of challenges completed by the user we have used github library com.github.PhilJay:MPAndroidChart:v3.0.3
+ * For presenting the percentage of challenges completed by the user we have used github library com.github.PhilJay:MPAndroidChart.
  */
 public class ScoreFragment extends Fragment {
     private LinearLayout scoresListContainer;

@@ -17,6 +17,9 @@ public class ManageChallengesFragment extends Fragment {
     @StringRes
     private static final int[] TITLES = new int[] {R.string.tab_text_1, R.string.tab_text_2};
     
+    private ViewPager2 viewPager;
+    private TabLayout tabLayout;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_manage_challenges, container, false);
@@ -27,9 +30,14 @@ public class ManageChallengesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         
         // Get components
-        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.viewPager);
+        tabLayout = view.findViewById(R.id.tabLayout);
         
+        // Initialize tabs
+        initializeTabs();
+    }
+    
+    private void initializeTabs() {
         // Set view pager adapter
         viewPager.setAdapter(new ViewPagerAdapter());
         
@@ -48,7 +56,7 @@ public class ManageChallengesFragment extends Fragment {
         public Fragment createFragment(int position) {
             // Create arguments
             Bundle args = new Bundle();
-            args.putInt(ChallengesListFragment.ARGS_KEY_TYPE, position);
+            args.putInt(ChallengesListFragment.KEY_TYPE, position);
             
             // Create new challenges list fragment
             ChallengesListFragment fragment = new ChallengesListFragment();

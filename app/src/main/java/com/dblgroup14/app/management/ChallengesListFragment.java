@@ -19,11 +19,11 @@ import com.dblgroup14.support.entities.Challenge;
 import java.util.List;
 
 public class ChallengesListFragment extends Fragment {
-    public static final String ARGS_KEY_TYPE = "type";
+    public static final String KEY_TYPE = "type";
     
     private boolean showDefaultsOnly;
-    private List<Challenge> challengesList;
-    private ArrayAdapter<String> challengesListAdapter;
+    private List<Challenge> challengeList;
+    private ArrayAdapter<String> challengeListAdapter;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,19 +36,19 @@ public class ChallengesListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         
         // Check if only default (built-in) challenges should be listed
-        if (getArguments() == null || !getArguments().containsKey(ARGS_KEY_TYPE)) {
+        if (getArguments() == null || !getArguments().containsKey(KEY_TYPE)) {
             throw new IllegalArgumentException("No type provided");
         }
-        showDefaultsOnly = getArguments().getInt(ARGS_KEY_TYPE, 0) == 0;
+        showDefaultsOnly = getArguments().getInt(KEY_TYPE, 0) == 0;
         
         // Create array adapter
-        challengesListAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, android.R.id.text1);
+        challengeListAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, android.R.id.text1);
         
         // Initialize challenges list view
         ListView challengeListView = view.findViewById(R.id.challengesListView);
-        challengeListView.setAdapter(challengesListAdapter);
+        challengeListView.setAdapter(challengeListAdapter);
         challengeListView.setOnItemClickListener((parent, v, pos, id) -> {
-            Challenge c = challengesList.get(pos);
+            Challenge c = challengeList.get(pos);
             if (c.isEditable) {
                 showManageDialog(c);
             } else {
@@ -63,12 +63,12 @@ public class ChallengesListFragment extends Fragment {
     }
     
     private void updateChallengeListAdapter(List<Challenge> data) {
-        challengesList = data;
+        challengeList = data;
         
         // Put challenge names in list adapter
-        challengesListAdapter.clear();
+        challengeListAdapter.clear();
         for (Challenge c : data) {
-            challengesListAdapter.add(c.name);
+            challengeListAdapter.add(c.name);
         }
     }
     
