@@ -16,15 +16,17 @@ public class ManageUserFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_manage_user, container, false);
     }
     
+    
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Set button click listeners
-        setRedirectBtnClickListeners(view);
+        //setRedirectBtnClickListeners(view);
     }
     
     private void setRedirectBtnClickListeners(View view) {
+
         view.findViewById(R.id.MultiBtn).setOnClickListener(v -> {
             Intent challengesIntent = new Intent(getContext(), LoginActivity.class);
             startActivity(challengesIntent);
@@ -34,5 +36,9 @@ public class ManageUserFragment extends Fragment {
             Intent challengesIntent = new Intent(getContext(), Manage3.class);
             startActivity(challengesIntent);
         });
+        
+        
     }
+    
+    
 }
