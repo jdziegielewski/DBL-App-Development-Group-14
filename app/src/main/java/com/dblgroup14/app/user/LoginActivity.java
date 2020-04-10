@@ -92,7 +92,7 @@ public class LoginActivity extends Fragment {
                 if (mEyeToggle.getText() == "SHOW") {
                     mEyeToggle.setText("HIDE");
                     mPassword.setInputType((InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
-                    mPassword.setSelection(mEyeToggle.length());
+                    mPassword.setSelection(mPassword.length());
                     
                 } else {
                     mEyeToggle.setText("SHOW");

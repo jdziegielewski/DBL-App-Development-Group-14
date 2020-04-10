@@ -110,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (mEyeToggle.getText() == "SHOW") {
                     mEyeToggle.setText("HIDE");
                     mPassword.setInputType((InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
-                    mPassword.setSelection(mEyeToggle.length());
+                    mPassword.setSelection(mPassword.length());
                     
                 } else {
                     mEyeToggle.setText("SHOW");
@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (mEyeToggle2.getText() == "SHOW") {
                     mEyeToggle2.setText("HIDE");
                     mRePassword.setInputType((InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
-                    mRePassword.setSelection(mEyeToggle2.length());
+                    mRePassword.setSelection(mRePassword.length());
                     
                 } else {
                     mEyeToggle2.setText("SHOW");
