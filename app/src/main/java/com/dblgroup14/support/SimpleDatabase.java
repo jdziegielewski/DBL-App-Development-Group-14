@@ -28,9 +28,18 @@ public abstract class SimpleDatabase {
     /**
      * Gets the username of the currently logged in user.
      *
-     * @return The current user's username
+     * @return The current user's username or null if no user is logged in
      */
     public static String getCurrentUsername() {
         return getSharedPreferences().getString(CURRENT_USERNAME, null);
+    }
+    
+    /**
+     * Checks whether there is a record of a logged in user.
+     *
+     * @return Whether there is a user logged in
+     */
+    public static boolean isLoggedIn() {
+        return getSharedPreferences().contains(CURRENT_USERNAME);
     }
 }
