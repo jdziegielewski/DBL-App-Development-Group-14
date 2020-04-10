@@ -4,56 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
     tools:context=".user.FriendsActivity">
-
-
-
-
-
 
   <RelativeLayout
     android:id="@+id/MyLayout"
     android:layout_width="match_parent"
-    android:layout_marginTop="15dp"
-    android:layout_height="wrap_content">
+    android:layout_height="150dp"
+      android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/MyText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="20dp"
-        android:text="Search for people in our App "
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Search for people friends"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         android:textStyle="bold"/>
 
-      <EditText
-          android:id="@+id/Search_Box"
-          android:layout_width="280dp"
-          android:layout_height="70dp"
-          android:layout_below="@+id/MyText"
-          android:layout_alignParentStart="true"
-          android:layout_marginLeft="21dp"
-          android:layout_marginTop="10dp"
-          android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-          android:ems="10"
-          android:hint="Search here...."
-          android:inputType="textMultiLine"
-          android:padding="10dp"
-          android:textColor="@color/black"
-          android:textColorHint="@color/black"/>
-      
-      <ImageButton
-          android:id="@+id/Search_Friends_button"
-          android:layout_width="70dp"
-          android:layout_height="70dp"
-          android:layout_marginTop="10dp"
-          android:layout_below="@+id/MyText"
-          android:layout_toEndOf="@+id/Search_Box"
-          android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-          android:src="@drawable/search"/>
+    <EditText
+        android:id="@+id/Search_Box"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/MyText"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/search_box"
+        android:ems="11"
+        android:hint="Search here...."
+        android:inputType="textMultiLine"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black" />
+
+    <ImageButton
+        android:id="@+id/Search_Friends_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/MyText"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginEnd="19dp"
+        android:layout_toEndOf="@+id/Search_Box"
+        android:background="#0023729A"
+        app:srcCompat="@drawable/ic_search_black_24dp" />
 
 
   </RelativeLayout>

@@ -2,13 +2,19 @@ package com.dblgroup14.app.user;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.dblgroup14.FindFriends;
 import com.dblgroup14.Friends;
 import com.dblgroup14.app.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -19,38 +25,42 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class FriendsListActivity extends AppCompatActivity
-{
+public class FriendsListFragment extends Fragment {
     
     private RecyclerView myFriendList;
     private DatabaseReference FriendsRef, UserRef;
     private FirebaseAuth fAuth;
     private String online_user_id;
     
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.activity_friends_list, container, false);
+    }
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends_list);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
+        ImageView addFriends = view.findViewById(R.id.addFriend);
+        addFriends.setOnClickListener(view1 -> {
+            startActivity(new Intent(getActivity(), FriendsActivity.class));
+        });
         
         fAuth = FirebaseAuth.getInstance();
         online_user_id = fAuth.getCurrentUser().getUid();
         FriendsRef = FirebaseDatabase.getInstance().getReference().child("Friends").child(online_user_id);
         UserRef = FirebaseDatabase.getInstance().getReference().child("users");
         
-        
-        myFriendList = (RecyclerView) findViewById(R.id.Friend_list);
-        myFriendList.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        myFriendList = view.findViewById(R.id.Friend_list);
+        //myFriendList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         myFriendList.setLayoutManager(linearLayoutManager);
     
         DisplayAllFriends();
-        
     }
-    
-    
     
     private void DisplayAllFriends()
     {

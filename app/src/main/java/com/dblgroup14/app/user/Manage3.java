@@ -2,18 +2,13 @@ package com.dblgroup14.app.user;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.management.ManageUserFragment;
@@ -24,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import org.w3c.dom.Text;
 
 public class Manage3 extends AppCompatActivity {
     
@@ -107,7 +101,7 @@ public class Manage3 extends AppCompatActivity {
     
     private void SendUserToFriendsListActivity()
     {
-        Intent friendsListIntent = new Intent(Manage3.this, FriendsListActivity.class);
+        Intent friendsListIntent = new Intent(Manage3.this, FriendsListFragment.class);
         startActivity(friendsListIntent);
         
     }

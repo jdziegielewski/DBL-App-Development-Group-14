@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".user.FriendsListActivity"
+            android:name=".user.FriendsListFragment"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".user.Manage3"
             android:screenOrientation="fullUser" />
@@ -40,10 +40,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".user.Manage3"
             android:screenOrientation="fullUser" />
-        <activity
-            android:name=".user.LoginActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="fullUser" />
+
         <activity
             android:name=".user.RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -75,6 +72,9 @@
             android:screenOrientation="fullUser" />
 
         <receiver android:name=".AlarmBroadcastReceiver" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

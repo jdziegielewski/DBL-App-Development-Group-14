@@ -4,7 +4,10 @@ package com.dblgroup14.app.user;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +15,9 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -27,74 +32,74 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity {
-    EditText mEmail,mPassword;
-    Button mLoginBtn;
-    TextView mCreateBtn, mForgotPass;
-    ProgressBar progressBar;
-    FirebaseAuth fAuth;
+public class LoginActivity extends Fragment {
+    private EditText mEmail, mPassword;
+    private Button mLoginBtn;
+    private TextView mCreateBtn, mForgotPass;
+    private ProgressBar progressBar;
+    private FirebaseAuth fAuth;
     private TextView mEyeToggle;
-    
-    
-    
-    
+    private Activity activity;
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_login, container, false);
+    }
+    
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        activity = getActivity();
+        assert activity != null;
         
-        mEmail = findViewById(R.id.email);
-        mPassword = findViewById(R.id.password);
-        progressBar = findViewById(R.id.progressBar);
+        mEmail = view.findViewById(R.id.email);
+        mPassword = view.findViewById(R.id.password);
+        progressBar = view.findViewById(R.id.progressBar);
         fAuth = FirebaseAuth.getInstance();
-        mLoginBtn = findViewById(R.id.loginBtn);
-        mCreateBtn = findViewById(R.id.createText);
-        mForgotPass = findViewById(R.id.ForgotPass);
-    
-    
-        mEyeToggle = findViewById(R.id.EYE);
+        mLoginBtn = view.findViewById(R.id.loginBtn);
+        mCreateBtn = view.findViewById(R.id.createButton);
+        mForgotPass = view.findViewById(R.id.ForgotPass);
+        
+        mEyeToggle = view.findViewById(R.id.EYE);
         mEyeToggle.setVisibility(View.GONE);
         mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-    
-    
+        
         mPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             
             }
-        
+            
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(mPassword.getText().length() > 0) {
+                if (mPassword.getText().length() > 0) {
                     mEyeToggle.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     mEyeToggle.setVisibility(View.GONE);
                 }
-            
+                
             }
-        
+            
             @Override
             public void afterTextChanged(Editable s) {
             
             }
         });
-    
+        
         mEyeToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mEyeToggle.getText() == "SHOW") {
+                if (mEyeToggle.getText() == "SHOW") {
                     mEyeToggle.setText("HIDE");
                     mPassword.setInputType((InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
                     mPassword.setSelection(mEyeToggle.length());
-                
-                }else {
+                    
+                } else {
                     mEyeToggle.setText("SHOW");
                     mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     mPassword.setSelection(mPassword.length());
                 }
-            
+                
             }
         });
         
@@ -103,51 +108,51 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
-    
-                if (TextUtils.isEmpty(email)){
+                
+                if (TextUtils.isEmpty(email)) {
                     mEmail.setError("Email is Required");
                     return;
                 }
-    
-                if (TextUtils.isEmpty(password)){
+                
+                if (TextUtils.isEmpty(password)) {
                     mPassword.setError("Password is Required");
                     return;
                 }
-    
-                if(password.length() < 6 ) {
+                
+                if (password.length() < 6) {
                     mPassword.setError("Password Must be greater or equal to 6 characters");
                 }
-    
+                
                 progressBar.setVisibility(View.VISIBLE);
                 
                 //authenticate the user
                 
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Logged in Successfully", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    
-    
-                        
-                        }else{
-                            Toast.makeText(LoginActivity.this, "Error ! " +task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Logged in Successfully", Toast.LENGTH_SHORT).show();
+                            
+                            startActivity(new Intent(getActivity(), MainActivity.class));
+                            
+                        } else {
+                            Toast.makeText(getActivity(), "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
-        
+                        
                     }
                 });
-    
-    
+                
+                
             }
         });
-    
-    
+        
+        
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
-            
+                startActivity(new Intent(getActivity(), RegisterActivity.class));
+                //for testing purpose:
+                //startActivity(new Intent(getActivity(), ProfileActivity.class));
             }
         });
         
@@ -170,15 +175,15 @@ public class LoginActivity extends AppCompatActivity {
                         fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(LoginActivity.this, "Resent Link Sent To Your Email", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "Resent Link Sent To Your Email", Toast.LENGTH_SHORT).show();
                                 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginActivity.this, "Ups! Error! Resent link could not be sent!" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "Ups! Error! Resent link could not be sent!" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 
-        
+                                
                             }
                         });
                     }
@@ -188,12 +193,13 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //close the dialog
-        
+                        
                     }
                 });
                 
                 passwordResetDialog.create().show();
             }
         });
+        
     }
 }
