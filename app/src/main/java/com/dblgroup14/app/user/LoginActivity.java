@@ -150,9 +150,9 @@ public class LoginActivity extends Fragment {
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), RegisterActivity.class));
+                //startActivity(new Intent(getActivity(), RegisterActivity.class));
                 //for testing purpose:
-                //startActivity(new Intent(getActivity(), ProfileActivity.class));
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
             }
         });
         
