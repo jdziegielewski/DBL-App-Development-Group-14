@@ -31,9 +31,8 @@ public class ManageUserFragment extends Fragment {
         // Instantiate correct child fragment
         Fragment childFragment;
         if (isLoggedIn) {
-            childFragment = new ManageUserLoginFragment();
+            childFragment = new ManageUserProfileFragment();
         } else {
-            // TODO: Instantiate manage user profile fragment
             childFragment = new ManageUserLoginFragment();
         }
         

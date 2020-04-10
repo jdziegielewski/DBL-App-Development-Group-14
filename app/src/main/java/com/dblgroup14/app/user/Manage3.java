@@ -99,9 +99,7 @@ public class Manage3 extends AppCompatActivity {
     }
     
     private void SendUserToFindProfileActivity() {
-        Intent loginIntent = new Intent(Manage3.this, ProfileActivity.class);
-        startActivity(loginIntent);
-        
+        finish();
     }
     
     private void SendUserToFindHomeActivity() {
