@@ -12,6 +12,7 @@ public abstract class SimpleDatabase {
     public static final String CURRENT_USERNAME = "LGN-username";
     public static final String COMPLETED_CHALLENGES = "CHA-completed";
     public static final String TOTAL_CHALLENGES = "CHA-total";
+    public static final String LAST_COMPLETED_TIME = "CHA-last_completed";
     
     private static final String PREFERENCES_NAME = "sleap-pref";
     

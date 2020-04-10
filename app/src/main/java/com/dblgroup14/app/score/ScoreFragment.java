@@ -31,7 +31,7 @@ import java.util.List;
 public class ScoreFragment extends Fragment {
     private LinearLayout scoresListContainer;
     private PieChart pieChart;
-    private TextView scoreTime;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_score, container, false);
@@ -40,16 +40,11 @@ public class ScoreFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    
-        // Set last completed time
-        scoreTime = view.findViewById(R.id.time_completed);
-        String currentTime = new SimpleDateFormat("MMM dd - HH:mm").format(new Date());
-        String scoreTimeText = "Last completed:  " + currentTime;
-        scoreTime.setText(scoreTimeText);
         
         // Get components
         scoresListContainer = view.findViewById(R.id.scoresListContainer);
         pieChart = view.findViewById(R.id.scoresPieChart);
+        TextView scoreTime = view.findViewById(R.id.time_completed);
         
         // Check if the user has done any challenges
         SharedPreferences db = SimpleDatabase.getSharedPreferences();
@@ -74,6 +69,11 @@ public class ScoreFragment extends Fragment {
             pieChart.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             pieChart.requestLayout();
         }
+        
+        // Set time of last challenge completion
+        long lastCompletionMillis = SimpleDatabase.getSharedPreferences().getLong(SimpleDatabase.LAST_COMPLETED_TIME, 0);
+        String timeOfLastCompletion = lastCompletionMillis == 0 ? "-" : new SimpleDateFormat("MMM dd - HH:mm").format(new Date(lastCompletionMillis));
+        scoreTime.setText(String.format("Last challenge completed: %s", timeOfLastCompletion));
         
         // Load user score database content
         LiveData<List<UserScore>> liveUserScores = AppDatabase.db().userScoreDao().all();
