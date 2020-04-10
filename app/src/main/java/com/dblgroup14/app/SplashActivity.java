@@ -6,14 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
     
     int SPLASH_TIME = 500;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
+        setContentView(R.layout.activity_splash);
     
         getSupportActionBar().hide();
     
@@ -21,7 +21,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //Do any action here. Now we are moving to next page
-                Intent mySuperIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
+                Intent mySuperIntent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(mySuperIntent);
             
                 //This 'finish()' is for exiting the app when back button pressed from Home page which is ActivityHome

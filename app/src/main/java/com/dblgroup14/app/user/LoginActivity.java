@@ -3,10 +3,8 @@ package com.dblgroup14.app.user;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,7 +41,7 @@ public class LoginActivity extends Fragment {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_login, container, false);
+        return inflater.inflate(R.layout.fragment_manage_user_login, container, false);
     }
     
     @Override

@@ -1,20 +1,16 @@
 package com.dblgroup14.app.user;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.dblgroup14.FindFriends;
 import com.dblgroup14.Friends;
 import com.dblgroup14.app.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -35,7 +31,7 @@ public class FriendsListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_friends_list, container, false);
+        return inflater.inflate(R.layout.fragment_mup_friends, container, false);
     }
     
     @Override

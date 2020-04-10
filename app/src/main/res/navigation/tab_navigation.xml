@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/tab_user"
-        android:name="com.dblgroup14.app.user.LoginActivity"
+        android:name="com.dblgroup14.app.management.ManageUserFragment"
         android:label="@string/title_tab_user"
-        tools:layout="@layout/activity_login" />
+        tools:layout="@layout/fragment_manage_user_login" />
 </navigation>

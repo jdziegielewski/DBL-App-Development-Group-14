@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class ManageChallengesFragment extends Fragment {
     @StringRes
-    private static final int[] TITLES = new int[] {R.string.tab_text_1, R.string.tab_text_2};
+    private static final int[] TITLES = new int[] {R.string.tab_default_challenges, R.string.tab_my_challenges};
     
     private ViewPager2 viewPager;
     private TabLayout tabLayout;

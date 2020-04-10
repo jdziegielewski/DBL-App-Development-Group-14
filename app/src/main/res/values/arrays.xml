@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="list_of_challenges">
-        <item>Rebus</item>
-        <item>Shaker</item>
-    </string-array>
-</resources>
