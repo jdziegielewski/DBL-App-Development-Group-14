@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 import com.dblgroup14.app.AlarmBroadcastReceiver;
+import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.SleapApplication;
 import com.dblgroup14.support.entities.Alarm;
 import java.text.DateFormat;
@@ -98,6 +99,7 @@ public abstract class AlarmScheduler {
      * @param calendar A Calendar instance containing the time that an alarm should ring
      * @param alarm    The alarm object
      */
+    public static String time;
     private static void setAlarm(Calendar calendar, Alarm alarm) {
         Context context = SleapApplication.getContext();
         
@@ -108,9 +110,13 @@ public abstract class AlarmScheduler {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         
-        // Show user a schedule message
+        // Show user a schedule message with the corresponding time
         DateFormat format = new SimpleDateFormat("EEEE dd MMM HH:mm");
-        Toast.makeText(context, "Alarm will ring next at\n" + format.format(calendar.getTime()), Toast.LENGTH_LONG).show();
+        time = format.format(calendar.getTime());
+        //Toast.makeText(context, "Alarm will ring next at\n" + time, Toast.LENGTH_LONG).show();
+        
+        // Show notification
+        MainActivity.CreateNotification();
     }
     
     private static PendingIntent createPendingIntent(Alarm alarm) {
