@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,12 +18,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+import com.bumptech.glide.Glide;
 import com.dblgroup14.FindFriends;
 import com.dblgroup14.app.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsActivity extends AppCompatActivity {
     
@@ -101,6 +107,7 @@ public class FriendsActivity extends AppCompatActivity {
             {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setStatus(model.getStatus());
+                viewHolder.setProfileimage(getApplicationContext(),model.getProfileimage());
                 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -131,13 +138,19 @@ public class FriendsActivity extends AppCompatActivity {
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder
     {
         View mView;
+        
     
         public FindFriendsViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
         }
+    
+        public void setProfileimage(Context ctx, String profileimage)
+        {
+            CircleImageView myImage = (CircleImageView) mView.findViewById(R.id.All_users_image);
+            Glide.with(ctx).load(profileimage).into(myImage);
         
-        //profile picture set
+        }
     
         public void setUsername(String username)
         {

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.bumptech.glide.Glide;
 import com.dblgroup14.FindFriends;
 import com.dblgroup14.Friends;
 import com.dblgroup14.app.R;
@@ -25,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.util.Objects;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsListFragment extends Fragment {
     
@@ -87,8 +92,16 @@ public class FriendsListFragment extends Fragment {
                         if (dataSnapshot.exists())
                         {
                             final String userName = dataSnapshot.child("username").getValue().toString();
-                            
+    
+                            if(dataSnapshot.hasChild("profileimage"))
+                            {
+                                final String profileImage = dataSnapshot.child("profileimage").getValue().toString();
+                                viewHolder.setProfileimage(Objects.requireNonNull(getActivity()).getApplicationContext(), profileImage);
+                            }
+                                                    
+                           
                             viewHolder.setUsername(userName);
+                            
                             
                         }
         
@@ -121,6 +134,13 @@ public class FriendsListFragment extends Fragment {
             
         }
     
+        public void setProfileimage(Context ctx, String profileimage)
+        {
+            CircleImageView myImage = (CircleImageView) mView.findViewById(R.id.All_users_image);
+            Glide.with(ctx).load(profileimage).into(myImage);
+        
+        }
+        
         public void setUsername(String username)
         {
             TextView myName = (TextView) mView.findViewById(R.id.All_users_name);

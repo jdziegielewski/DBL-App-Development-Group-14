@@ -10,6 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.bumptech.glide.Glide;
 import com.dblgroup14.app.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,11 +23,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonProfileActivity extends AppCompatActivity {
     
     private TextView userName, userEmail, userStatus, userPhone;
-    //image
+    private CircleImageView userProfileImage;
     private String senderUserId, receiverUserId, CURRENT_STATE, saveCurrentDate;
     private DatabaseReference FriendRequestRef, UserRef, FriendsRef;
     private FirebaseAuth fAuth;
@@ -68,11 +71,24 @@ public class PersonProfileActivity extends AppCompatActivity {
                     String myPhone = dataSnapshot.child("phone").getValue().toString();
                     String myEmail = dataSnapshot.child("email").getValue().toString();
                     String myProfileStatus = dataSnapshot.child("status").getValue().toString();
-                
+    
+                    if(dataSnapshot.hasChild("profileimage"))
+                    {
+                        String image = dataSnapshot.child("profileimage").getValue().toString();
+                        Glide.with(PersonProfileActivity.this).load(image).into(userProfileImage);
+                    }
+                    else
+                    {
+                        Toast.makeText(PersonProfileActivity.this, "User has no Profile Picture :( ", Toast.LENGTH_SHORT).show();
+        
+                    }
+    
+    
                     userName.setText(myUserName);
                     userEmail.setText("Email: " + myEmail);
                     userPhone.setText("Phone: " + myPhone);
                     userStatus.setText(myProfileStatus);
+                    
                     
                     MaintenanceButtons();
                 
@@ -379,6 +395,7 @@ public class PersonProfileActivity extends AppCompatActivity {
     
     private void InitializeFields()
     {
+        userProfileImage = (CircleImageView) findViewById(R.id.my_profile_picture);
         userName = (TextView) findViewById(R.id.my_profile_username);
         userEmail = (TextView) findViewById(R.id.my_profile_email);
         userStatus = (TextView) findViewById(R.id.my_profile_status);
