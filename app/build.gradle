@@ -81,4 +81,16 @@ dependencies {
 
     //firebase ui database
     implementation 'com.firebaseui:firebase-ui-database:2.1.1'
+
+    //Crop functionality user picture
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+
+    //Picasso useful tool for profile image
+
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+
+    //implementation
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

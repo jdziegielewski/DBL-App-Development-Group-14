@@ -23,11 +23,14 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import com.bumptech.glide.Glide;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.management.ChallengesListFragment;
 import com.dblgroup14.app.management.ManageChallengesFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,13 +49,26 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
    
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    ImageView ProfileImage;
+    final static int Gallery_Pick = 1;
+    private StorageReference UserProfileImageRef;
+    String currentUserId;
+    private FirebaseAuth fAuth;
+    private DatabaseReference UserRef;
+    
+    
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +94,118 @@ public class ProfileActivity extends AppCompatActivity {
         adapter.addFragment(new FriendsListFragment(), "My friends");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+    
+        ProfileImage = (CircleImageView) findViewById(R.id.ProfileImage);
+        fAuth = FirebaseAuth.getInstance();
+        currentUserId = fAuth.getCurrentUser().getUid();
+        UserRef = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserId);
+        
+        UserProfileImageRef = FirebaseStorage.getInstance().getReference().child("Profile Images");
+    
+        
+        
+        ProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                showImageChooser();
+            
+            
+            }
+        });
+        
+        UserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                
+                {
+                    if(dataSnapshot.hasChild("profileimage"))
+                    {
+                        String image = dataSnapshot.child("profileimage").getValue().toString();
+                        Glide.with(ProfileActivity.this).load(image).into(ProfileImage);
+                    }
+                    else
+                        {
+                            Toast.makeText(ProfileActivity.this, "Profile image do not exist in our Cloud...Please add an image by clicking the " +
+                                    "profile icon!", Toast.LENGTH_SHORT).show();
+                            
+                        }
+                    
+                    
+                }
+        
+            }
+    
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+        
+            }
+        });
+        
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                
+               // dialog.setTitle("Uploading picture.");
+               // dialog.show();
+                
+                StorageReference filePath = UserProfileImageRef.child(currentUserId + ".jpg");
+                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        if(task.isSuccessful()){
+                            Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
+                            
+                            result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    final String downloadUrl = uri.toString();
+                                    UserRef.child("profileimage").setValue(downloadUrl)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Glide.with(ProfileActivity.this).load(downloadUrl).into(ProfileImage);
+                                                        Toast.makeText(ProfileActivity.this, "Profile image successfully uploaded.", Toast.LENGTH_LONG).show();
+                                                       // dialog.dismiss();
+                                                    } else {
+                                                        String message = task.getException().getMessage();
+                                                        Toast.makeText(ProfileActivity.this, "Error: " + message, Toast.LENGTH_LONG).show();
+                                                        //dialog.dismiss();
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    }
+                });
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(ProfileActivity.this, "Error: Image cannot be cropped. Try again.", Toast.LENGTH_LONG).show();
+                //dialog.dismiss();
+            }
+        }
+    }
+    
+    private void showImageChooser(){
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .start(this);
+        
+    }
+    
+    
 }
+
 
