@@ -24,6 +24,7 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
+import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.management.ChallengesListFragment;
 import com.dblgroup14.app.management.ManageChallengesFragment;
@@ -94,6 +95,8 @@ public class ProfileActivity extends AppCompatActivity {
         adapter.addFragment(new FriendsListFragment(), "My friends");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        
+        
     
         ProfileImage = (CircleImageView) findViewById(R.id.ProfileImage);
         fAuth = FirebaseAuth.getInstance();
@@ -203,6 +206,12 @@ public class ProfileActivity extends AppCompatActivity {
                 .setAspectRatio(1, 1)
                 .start(this);
         
+    }
+    
+    public void logout(View view) {
+        FirebaseAuth.getInstance().signOut();//logout
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
     
     

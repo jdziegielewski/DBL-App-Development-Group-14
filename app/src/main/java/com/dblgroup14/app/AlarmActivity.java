@@ -185,6 +185,12 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
             repeatHandler.removeCallbacks(this::updateView);
         }
         
+        // Set last challenge complete time
+        long currentTimeMillis = System.currentTimeMillis();
+        SimpleDatabase.getSharedPreferences().edit()
+                .putLong(SimpleDatabase.LAST_COMPLETED_TIME, currentTimeMillis)
+                .apply();
+        
         // Finish activity
         super.finish();
     }
