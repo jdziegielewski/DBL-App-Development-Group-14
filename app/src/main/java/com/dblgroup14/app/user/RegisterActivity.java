@@ -34,7 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -44,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
     TextView mLoginBtn;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
-    FirebaseFirestore fStore;
     String userID;
     private TextView mEyeToggle;
     private TextView mEyeToggle2;
@@ -73,7 +71,6 @@ public class RegisterActivity extends AppCompatActivity {
         mLoginBtn = findViewById(R.id.createText);
         
         fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBar);
         
         mEyeToggle = findViewById(R.id.EYE);

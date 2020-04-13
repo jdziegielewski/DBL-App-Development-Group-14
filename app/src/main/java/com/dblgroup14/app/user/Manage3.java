@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.management.FriendsListFragment;
 import com.dblgroup14.app.management.ManageUserFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;

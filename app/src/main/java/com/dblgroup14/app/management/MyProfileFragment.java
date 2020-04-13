@@ -103,14 +103,14 @@ public class MyProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String myUserName = dataSnapshot.child("username").getValue().toString();
-                    String myPhone = dataSnapshot.child("phone").getValue().toString();
-                    String myEmail = dataSnapshot.child("email").getValue().toString();
-                    String myProfileStatus = dataSnapshot.child("status").getValue().toString();
-                
-                    fullName.setText(myUserName);
-                    email.setText(myEmail);
-                    phone.setText(myPhone);
+//                    String myUserName = dataSnapshot.child("username").getValue().toString();
+//                    String myPhone = dataSnapshot.child("phone").getValue().toString();
+//                    String myEmail = dataSnapshot.child("email").getValue().toString();
+//                    String myProfileStatus = dataSnapshot.child("status").getValue().toString();
+//
+//                    fullName.setText(myUserName);
+//                    email.setText(myEmail);
+//                    phone.setText(myPhone);
                 }
             }
         

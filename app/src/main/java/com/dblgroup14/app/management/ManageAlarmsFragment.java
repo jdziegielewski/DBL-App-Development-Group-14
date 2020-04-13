@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.entities.Alarm;
+import com.dblgroup14.support.entities.local.Alarm;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 

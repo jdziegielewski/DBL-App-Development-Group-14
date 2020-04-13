@@ -6,9 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import com.dblgroup14.support.FirebaseHandler;
-import com.dblgroup14.support.SimpleDatabase;
-import com.dblgroup14.support.entities.UserScore;
+import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.support.entities.local.UserScore;
 import java.util.List;
 
 @Dao
@@ -32,7 +31,7 @@ public abstract class UserScoreDao {
      */
     public UserScore getActiveUserScore() {
         // Check if there is a user logged in
-        String currentUsername = FirebaseHandler.getCurrentUsername();
+        String currentUsername = RemoteDatabase.getCurrentUsername();
         
         if (currentUsername == null) {
             return scoreOfUser("(default)");

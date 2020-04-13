@@ -8,9 +8,9 @@ import androidx.room.TypeConverters;
 import com.dblgroup14.support.dao.AlarmDao;
 import com.dblgroup14.support.dao.ChallengeDao;
 import com.dblgroup14.support.dao.UserScoreDao;
-import com.dblgroup14.support.entities.Alarm;
-import com.dblgroup14.support.entities.Challenge;
-import com.dblgroup14.support.entities.UserScore;
+import com.dblgroup14.support.entities.local.Alarm;
+import com.dblgroup14.support.entities.local.Challenge;
+import com.dblgroup14.support.entities.local.UserScore;
 
 @Database(entities = {Alarm.class, Challenge.class, UserScore.class}, version = 1)
 @TypeConverters({RoomTypeConverters.class})

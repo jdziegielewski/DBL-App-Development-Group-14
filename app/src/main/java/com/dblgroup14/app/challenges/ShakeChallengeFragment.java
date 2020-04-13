@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.dblgroup14.app.AlarmActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.edit.EditShakeChallengeFragment;
-import com.dblgroup14.support.entities.Challenge;
+import com.dblgroup14.support.entities.local.Challenge;
 import com.squareup.seismic.ShakeDetector;
 
 import static android.content.Context.SENSOR_SERVICE;

@@ -13,7 +13,7 @@ import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.SimpleDatabase;
-import com.dblgroup14.support.entities.UserScore;
+import com.dblgroup14.support.entities.local.UserScore;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;

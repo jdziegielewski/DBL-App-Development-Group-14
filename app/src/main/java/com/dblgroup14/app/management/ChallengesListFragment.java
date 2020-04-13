@@ -15,7 +15,7 @@ import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.dao.ChallengeDao;
-import com.dblgroup14.support.entities.Challenge;
+import com.dblgroup14.support.entities.local.Challenge;
 import java.util.List;
 
 public class ChallengesListFragment extends Fragment {

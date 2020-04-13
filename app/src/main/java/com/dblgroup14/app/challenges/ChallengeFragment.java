@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.dao.UserScoreDao;
-import com.dblgroup14.support.entities.UserScore;
+import com.dblgroup14.support.entities.local.UserScore;
 
 /**
  * The abstract superclass that hosts a challenge.

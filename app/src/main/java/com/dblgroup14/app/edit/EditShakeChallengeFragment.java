@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.NumberPicker;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.challenges.ShakeChallengeFragment;
-import com.dblgroup14.support.entities.Challenge;
+import com.dblgroup14.support.entities.local.Challenge;
 
 public class EditShakeChallengeFragment extends EditChallengeFragment {
     public static final String KEY_SHAKE_COUNT = "shake_count";

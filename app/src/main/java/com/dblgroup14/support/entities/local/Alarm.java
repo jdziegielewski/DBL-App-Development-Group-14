@@ -1,4 +1,4 @@
-package com.dblgroup14.support.entities;
+package com.dblgroup14.support.entities.local;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

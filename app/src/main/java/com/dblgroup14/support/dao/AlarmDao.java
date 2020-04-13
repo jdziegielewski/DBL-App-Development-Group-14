@@ -6,7 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import com.dblgroup14.support.entities.Alarm;
+import com.dblgroup14.support.entities.local.Alarm;
 import java.util.List;
 
 @Dao

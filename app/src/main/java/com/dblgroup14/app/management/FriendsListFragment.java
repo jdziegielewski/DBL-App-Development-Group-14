@@ -30,8 +30,6 @@ public class FriendsListFragment extends Fragment {
     
     private RecyclerView myFriendList;
     private DatabaseReference FriendsRef, UserRef;
-    private FirebaseAuth fAuth;
-    private String online_user_id;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,9 +45,9 @@ public class FriendsListFragment extends Fragment {
         addFriends.setOnClickListener(view1 -> {
             startActivity(new Intent(getActivity(), FriendsActivity.class));
         });
-        
-        fAuth = FirebaseAuth.getInstance();
-        online_user_id = fAuth.getCurrentUser().getUid();
+    
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        String online_user_id = fAuth.getCurrentUser().getUid();
         FriendsRef = FirebaseDatabase.getInstance().getReference().child("Friends").child(online_user_id);
         UserRef = FirebaseDatabase.getInstance().getReference().child("users");
         
