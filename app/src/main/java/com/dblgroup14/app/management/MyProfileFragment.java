@@ -1,6 +1,7 @@
 package com.dblgroup14.app.management;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 public class MyProfileFragment extends Fragment {
@@ -24,6 +26,8 @@ public class MyProfileFragment extends Fragment {
     private TextView phoneNumberText;
     private TextView emailNotVerifiedText;
     private Button verifyEmailBtn;
+    
+    private Pair<DatabaseReference, ValueEventListener> userDataVel;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +56,16 @@ public class MyProfileFragment extends Fragment {
         registerUserDataListener();
     }
     
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        
+        // Deregister event handler
+        if (userDataVel != null) {
+            userDataVel.first.removeEventListener(userDataVel.second);
+        }
+    }
+    
     /**
      * Sets the UI to an initial state in which everything is indicated as being loaded.
      */
@@ -69,7 +83,8 @@ public class MyProfileFragment extends Fragment {
      * Registers an event handler that updates the user data it whenever it changes.
      */
     private void registerUserDataListener() {
-        RemoteDatabase.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
+        DatabaseReference ref = RemoteDatabase.getCurrentUserReference();
+        ValueEventListener vel = ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Get user object value
@@ -80,12 +95,15 @@ public class MyProfileFragment extends Fragment {
                 }
                 
                 // Update user data
-                updateUi(user);
+                updateUI(user);
             }
             
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+        
+        // Set event handler pair
+        userDataVel = new Pair<>(ref, vel);
     }
     
     /**
@@ -93,7 +111,7 @@ public class MyProfileFragment extends Fragment {
      *
      * @param user The user data
      */
-    private void updateUi(User user) {
+    private void updateUI(User user) {
         // Get FirebaseAuth user instance
         FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
         

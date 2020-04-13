@@ -116,9 +116,9 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         ConstraintLayout mainBoxAlarm = newRow.findViewById(R.id.mainBoxAlarm);
         dropDownView.setVisibility(View.GONE);
         mainBoxAlarm.setOnClickListener(view12 -> {
-            if (dropDownView.getVisibility() == newRow.VISIBLE) {
+            if (dropDownView.getVisibility() == View.VISIBLE) {
                 dropDownView.setVisibility(View.GONE);
-            } else if (dropDownView.getVisibility() == newRow.GONE) {
+            } else if (dropDownView.getVisibility() == View.GONE) {
                 dropDownView.setVisibility(View.VISIBLE);
             }
         });

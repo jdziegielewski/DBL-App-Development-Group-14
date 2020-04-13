@@ -39,7 +39,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullUser" />
         <activity
-            android:name=".user.FriendsActivity"
+            android:name=".user.FindFriendsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullUser" />
         <activity

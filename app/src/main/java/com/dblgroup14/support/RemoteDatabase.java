@@ -36,8 +36,18 @@ public abstract class RemoteDatabase {
             return null;
         }
         
-        // Get database entry
-        return getTableReference(USERS_TABLE).child(currentUser.getUid());
+        // Get database reference
+        return getUserReference(currentUser.getUid());
+    }
+    
+    /**
+     * Gets the database reference to a user with the given uid.
+     *
+     * @param uid The uid of a user
+     * @return The database reference to the request user
+     */
+    public static DatabaseReference getUserReference(String uid) {
+        return getTableReference(USERS_TABLE).child(uid);
     }
     
     /**

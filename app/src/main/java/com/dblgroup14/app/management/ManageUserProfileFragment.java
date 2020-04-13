@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,6 +40,7 @@ public class ManageUserProfileFragment extends Fragment {
     private TabLayout tabLayout;
     
     private User currentUser;
+    private Pair<DatabaseReference, ValueEventListener> userDataVel;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,7 +120,8 @@ public class ManageUserProfileFragment extends Fragment {
      * Registers an event handler that updates the user data it whenever it changes.
      */
     private void registerUserDataListener() {
-        RemoteDatabase.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
+        DatabaseReference ref = RemoteDatabase.getCurrentUserReference();
+        ValueEventListener vel = ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Get user object value
@@ -137,6 +141,9 @@ public class ManageUserProfileFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+        
+        // Set event handler pair
+        userDataVel = new Pair<>(ref, vel);
     }
     
     /**
@@ -204,6 +211,10 @@ public class ManageUserProfileFragment extends Fragment {
             
             // Update profile picture data in user
             currentUser.profilePicture = fileName;
+            
+            // Reload profile picture
+            loadProfilePicture();
+            
             return RemoteDatabase.getCurrentUserReference().setValue(currentUser);
         }).addOnFailureListener(uTask -> Toast.makeText(getContext(), "Could not upload new profile picture! Try again.", Toast.LENGTH_LONG).show());
     }
