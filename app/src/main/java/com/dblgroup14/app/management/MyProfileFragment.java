@@ -1,4 +1,4 @@
-package com.dblgroup14.app.user;
+package com.dblgroup14.app.management;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,17 +32,20 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyProfileFragment extends Fragment {
     TextView fullName, email, phone, verifyMail;
     private FirebaseAuth fAuth;
     //FirebaseFirestore fStore;
     private String currentUserId;
-    String TAKE_IMAGE_URL = null;
-    int TAKE_IMAGE_CODE = 10001;
+    //String TAKE_IMAGE_URL = null;
+    //int TAKE_IMAGE_CODE = 10001;
     Button resendCode;
-    ImageView ProfileImage;
+    //ImageView ProfileImage;
     private DatabaseReference profileUserRef;
+    
+  
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class MyProfileFragment extends Fragment {
     
         currentUserId = fAuth.getCurrentUser().getUid();
         profileUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserId);
+        
     
         resendCode = view.findViewById(R.id.ErrVerifyBtn);
         verifyMail = view.findViewById(R.id.MsgVerifyErr);
@@ -115,6 +119,8 @@ public class MyProfileFragment extends Fragment {
             }
         });
     
+        
+    
     }
     
     public void logout(View view) {
@@ -123,71 +129,6 @@ public class MyProfileFragment extends Fragment {
         getActivity().finish();
     }
     
-    public void handleImageClick(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(intent, TAKE_IMAGE_CODE);
-        }
-    }
     
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAKE_IMAGE_CODE) {
-            switch (resultCode) {
-                case -1:
-                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                    ProfileImage.setImageBitmap(bitmap);
-                    handleUpload(bitmap);
-            }
-        }
-    }
     
-    private void handleUpload(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        StorageReference reference = FirebaseStorage.getInstance().getReference().child("profilepic").child(uid + ".jpeg");
-        
-        reference.putBytes(baos.toByteArray()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                getDownloadUrl(reference);
-                
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("tag", "onFailure: ", e.getCause());
-            }
-        });
-    }
-    
-    private void getDownloadUrl(StorageReference reference) {
-        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d("tag", "onSuccess: " + uri);
-                setUserProfileUrl(uri);
-            }
-        });
-    }
-    
-    private void setUserProfileUrl(Uri uri) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder().setPhotoUri(uri).build();
-        
-        user.updateProfile(request).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(getActivity(), "Profile Picture Updated successfully", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "Profile image upload failed...", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }

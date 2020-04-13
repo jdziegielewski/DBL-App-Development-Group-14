@@ -152,29 +152,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/createText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+            app:layout_constraintBottom_toBottomOf="@+id/loginBtn"
+            app:layout_constraintEnd_toEndOf="@+id/loginBtn"
+            app:layout_constraintTop_toTopOf="@+id/loginBtn" />
 
         <TextView
             android:id="@+id/createText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"
             android:text="Don't have an account yet?"
             android:textColor="#6E6E6E"
-            app:layout_constraintBottom_toTopOf="@+id/createButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
         <Button
             android:id="@+id/createButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/create_box"
             android:text="CREATE AN ACCOUNT"
             android:textColor="#000000"
@@ -182,7 +180,7 @@
             app:layout_constraintCircleRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/createText" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

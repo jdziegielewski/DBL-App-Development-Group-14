@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.SimpleDatabase;
+import com.dblgroup14.support.FirebaseHandler;
 
 public class ManageUserFragment extends Fragment {
     @Override
@@ -19,7 +19,7 @@ public class ManageUserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         
         // Instantiate correct child fragment
-        updateChildFragment(SimpleDatabase.isLoggedIn());
+        updateChildFragment(FirebaseHandler.isLoggedIn());
     }
     
     /**

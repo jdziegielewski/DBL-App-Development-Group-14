@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -21,7 +23,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        
+
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".user.FriendsListFragment"
+            android:name=".management.FriendsListFragment"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:parentActivityName=".user.Manage3"
             android:screenOrientation="fullUser" />
@@ -66,6 +68,11 @@
             android:name=".EditActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="fullUser" />
+
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <receiver android:name=".AlarmBroadcastReceiver" />
     </application>

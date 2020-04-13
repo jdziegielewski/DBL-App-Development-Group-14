@@ -1,19 +1,35 @@
 package com.dblgroup14.app;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import com.dblgroup14.app.management.ManageAlarmsFragment;
+import com.dblgroup14.support.AlarmScheduler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    // Notification channel
+    public static final String CHANNEL_1_ID = "channel1";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         // Setup navigation tabs
         setupNavigationTabs();
         createActionBarWithGradient();
+        
+        // Setup notification channel
+        CreateNotificationChannel();
+       
     }
     
     /**
@@ -62,4 +82,37 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
+    public void CreateNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel1 = new NotificationChannel(
+                    CHANNEL_1_ID,
+                    "Channel 1",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel1);
+            
+        }
+    }
+    
+    public static void CreateNotification() {
+        Context context = SleapApplication.getContext();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        String time = AlarmScheduler.time;
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+                new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        
+        // Setup notification
+        Notification notification = new NotificationCompat.Builder(context, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_alarm_on)
+                .setContentTitle("Alarm set")
+                .setContentText(time)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setSound(null)
+                .setContentIntent(contentIntent)
+                .build();
+        notificationManager.notify(1, notification);
+    }
 }

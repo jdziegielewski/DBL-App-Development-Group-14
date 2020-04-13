@@ -122,7 +122,7 @@ public class ManageUserLoginFragment extends Fragment {
                 .signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(t -> {
                     if (t.isSuccessful()) {
-                        // TODO: Store username in local database
+                        // TODO: Update stored score for user in local database
                         
                         // Send signal to swap lay-outs to parent fragment (instance of ManageUserFragment)
                         ManageUserFragment parent = (ManageUserFragment) getParentFragment();

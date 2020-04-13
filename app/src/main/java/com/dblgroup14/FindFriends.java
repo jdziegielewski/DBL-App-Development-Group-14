@@ -2,19 +2,24 @@ package com.dblgroup14;
 
 public class FindFriends
 {
-    //public String profileimage;
-    public String username,status;
+    
+    public String profileimage, username,status;
     
     public FindFriends()
     {
     
     }
     
-    public FindFriends(String username, String status)
+    public FindFriends(String profileimage, String username, String status)
     {
+        this.profileimage = profileimage;
         this.username = username;
         this.status = status;
         
+    }
+    
+    public String getProfileimage() {
+        return profileimage;
     }
     
     public String getUsername() {
