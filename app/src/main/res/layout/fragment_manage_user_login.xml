@@ -95,7 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <EditText
-            android:id="@+id/password"
+            android:id="@+id/password1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
@@ -118,9 +118,9 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/password"
-            app:layout_constraintEnd_toEndOf="@+id/password"
-            app:layout_constraintTop_toTopOf="@+id/password" />
+            app:layout_constraintBottom_toBottomOf="@+id/password1"
+            app:layout_constraintEnd_toEndOf="@+id/password1"
+            app:layout_constraintTop_toTopOf="@+id/password1" />
 
         <TextView
             android:id="@+id/ForgotPass"
@@ -130,7 +130,7 @@
             android:text="Forgot your password?"
             android:textColor="#6E6E6E"
             app:layout_constraintStart_toStartOf="@+id/textView11"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
+            app:layout_constraintTop_toBottomOf="@+id/password1" />
 
         <Button
             android:id="@+id/loginBtn"
@@ -157,7 +157,7 @@
             app:layout_constraintTop_toTopOf="@+id/loginBtn" />
 
         <TextView
-            android:id="@+id/createText"
+            android:id="@+id/loginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -180,7 +180,7 @@
             app:layout_constraintCircleRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/createText" />
+            app:layout_constraintTop_toBottomOf="@+id/loginText" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

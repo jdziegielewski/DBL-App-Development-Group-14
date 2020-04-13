@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.entities.remote.Friend;
+import com.dblgroup14.support.entities.remote.UserFriend;
 import com.dblgroup14.support.entities.remote.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -27,7 +27,7 @@ public class FriendsViewHolder extends RecyclerView.ViewHolder {
         this.profilePictureView = itemView.findViewById(R.id.All_users_image);
     }
     
-    public void setFriend(Context context, User friend, Friend relationModel, Uri profilePictureUri) {
+    public void setFriend(Context context, User friend, UserFriend relationModel, Uri profilePictureUri) {
         // Set name
         nameText.setText(friend.username);
         

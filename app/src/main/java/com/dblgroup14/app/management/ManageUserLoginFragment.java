@@ -36,7 +36,7 @@ public class ManageUserLoginFragment extends Fragment {
         
         // Get components
         emailInput = view.findViewById(R.id.email);
-        passwordInput = view.findViewById(R.id.password);
+        passwordInput = view.findViewById(R.id.password1);
         showPasswordToggle = view.findViewById(R.id.EYE);
         loginProgressBar = view.findViewById(R.id.progressBar);
         
@@ -65,7 +65,7 @@ public class ManageUserLoginFragment extends Fragment {
                 if (s.length() > 0) {
                     showPasswordToggle.setVisibility(View.VISIBLE);
                 } else {
-                    showPasswordToggle.setVisibility(View.INVISIBLE);
+                    showPasswordToggle.setVisibility(View.GONE);
                 }
             }
             

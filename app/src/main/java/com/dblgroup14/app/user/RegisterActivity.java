@@ -1,17 +1,13 @@
 package com.dblgroup14.app.user;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,285 +15,218 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.support.entities.remote.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
-    public static final String TAG = "TAG";
-    EditText mFullName, mEmail, mPassword, mPhone, mRePassword;
-    Button mRegisterBtn;
-    TextView mLoginBtn;
-    FirebaseAuth fAuth;
-    ProgressBar progressBar;
-    String userID;
-    private TextView mEyeToggle;
-    private TextView mEyeToggle2;
-    private DatabaseReference UsersRef;
+    private EditText usernameInput;
+    private EditText emailAddressInput;
+    private EditText phoneNumberInput;
+    private EditText passwordInput1;
+    private EditText passwordInput2;
+    private ProgressBar progressBar;
+    private TextView eyeToggle1;
+    private TextView eyeToggle2;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-        
+        // Hide action bar and change top bar color
         if (Build.VERSION.SDK_INT >= 21) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+            
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         }
         
-        mFullName = findViewById(R.id.Full_Name);
-        mEmail = findViewById(R.id.email);
-        mPassword = findViewById(R.id.password);
-        mPhone = findViewById(R.id.phone);
-        mRegisterBtn = findViewById(R.id.registerBtn);
-        mLoginBtn = findViewById(R.id.createText);
-        
-        fAuth = FirebaseAuth.getInstance();
+        // Get components
+        usernameInput = findViewById(R.id.Full_Name);
+        emailAddressInput = findViewById(R.id.email);
+        phoneNumberInput = findViewById(R.id.phone);
+        passwordInput1 = findViewById(R.id.password1);
+        passwordInput2 = findViewById(R.id.password2);
         progressBar = findViewById(R.id.progressBar);
+        eyeToggle1 = findViewById(R.id.EYE);
+        eyeToggle2 = findViewById(R.id.EYE2);
         
-        mEyeToggle = findViewById(R.id.EYE);
-        mEyeToggle.setVisibility(View.GONE);
-        mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        // Initialize components
+        eyeToggle1.setVisibility(View.GONE);
+        eyeToggle2.setVisibility(View.GONE);
         
-        mPassword.addTextChangedListener(new TextWatcher() {
+        // Set password input fields event handlers
+        setPasswordEventHandlers(passwordInput1, eyeToggle1);
+        setPasswordEventHandlers(passwordInput2, eyeToggle2);
+        
+        // Set on click listener for register button
+        findViewById(R.id.registerBtn).setOnClickListener(v -> validateRegistration());
+        
+        // Set on click listener for login text
+        findViewById(R.id.loginText).setOnClickListener(v -> finish());
+    }
+    
+    private void setPasswordEventHandlers(final EditText passwordInput, final TextView eyeToggle) {
+        // Set password text changed listener
+        passwordInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            
-            }
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (mPassword.getText().length() > 0) {
-                    mEyeToggle.setVisibility(View.VISIBLE);
-                } else {
-                    mEyeToggle.setVisibility(View.GONE);
-                }
-                
-            }
-            
-            @Override
-            public void afterTextChanged(Editable s) {
-            
-            }
-        });
-        
-        mEyeToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mEyeToggle.getText() == "SHOW") {
-                    mEyeToggle.setText("HIDE");
-                    mPassword.setInputType((InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
-                    mPassword.setSelection(mPassword.length());
-                    
-                } else {
-                    mEyeToggle.setText("SHOW");
-                    mPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    mPassword.setSelection(mPassword.length());
-                }
-                
-            }
-        });
-        
-        
-        mEyeToggle2 = findViewById(R.id.EYE2);
-        mEyeToggle2.setVisibility(View.GONE);
-        mRePassword = findViewById(R.id.password2);
-        mRePassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        
-        
-        mRePassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (mRePassword.getText().length() > 0) {
-                    mEyeToggle2.setVisibility(View.VISIBLE);
+                if (s.length() > 0) {
+                    eyeToggle.setVisibility(View.VISIBLE);
                 } else {
-                    mEyeToggle2.setVisibility(View.GONE);
+                    eyeToggle.setVisibility(View.GONE);
                 }
-                
             }
             
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) {}
+        });
+        
+        // Set password toggle click listener
+        eyeToggle.setOnClickListener(v -> {
+            int passInputType = passwordInput.getInputType();
+            if ((passInputType & InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                eyeToggle.setText("SHOW");
+                passInputType &= ~InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
+                passInputType |= InputType.TYPE_TEXT_VARIATION_PASSWORD;
+            } else {
+                eyeToggle.setText("HIDE");
+                passInputType |= InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
+            }
             
-            }
+            // Set input type and selection
+            passwordInput.setInputType(passInputType);
+            passwordInput.setSelection(passwordInput.length());
         });
+    }
+    
+    /**
+     * Validates the registration data for a new user.
+     */
+    private void validateRegistration() {
+        final String password1 = passwordInput1.getText().toString().trim();
+        final String password2 = passwordInput2.getText().toString().trim();
         
-        mEyeToggle2.setOnClickListener(new View.OnClickListener() {
+        // Validate password
+        if (password1.isEmpty() || password2.isEmpty()) {
+            passwordInput1.setError("Both passwords fields must be filled in");
+            passwordInput2.setError("Both passwords fields must be filled in");
+            return;
+        } else if (password1.length() < 6) {
+            passwordInput1.setError("Password must be of length 6 or longer");
+            return;
+        } else if (!password1.equals(password2)) {
+            passwordInput1.setError("Passwords must match");
+            passwordInput2.setError("Passwords must match");
+            return;
+        } else {
+            passwordInput1.setError(null);
+            passwordInput2.setError(null);
+        }
+        
+        // Create new user object
+        final User newUser = new User();
+        newUser.username = usernameInput.getText().toString().trim();
+        newUser.emailAddress = emailAddressInput.getText().toString().trim();
+        newUser.phoneNumber = phoneNumberInput.getText().toString().trim();
+        
+        // Validate username input
+        if (newUser.username.isEmpty()) {
+            usernameInput.setError("Username is required");
+            return;
+        } else if (newUser.username.length() < 4 || newUser.username.length() > 12) {
+            usernameInput.setError("Username length should be between 4 and 12 characters");
+            return;
+        } else {
+            usernameInput.setError(null);
+        }
+        
+        // Validate email input
+        if (newUser.emailAddress.isEmpty()) {
+            emailAddressInput.setError("Email is required");
+            return;
+        } else {
+            emailAddressInput.setError(null);
+        }
+        
+        // Check if user with certain username already exists
+        Query query = RemoteDatabase.getTableReference(RemoteDatabase.USERS_TABLE).orderByChild("username").equalTo(newUser.username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                if (mEyeToggle2.getText() == "SHOW") {
-                    mEyeToggle2.setText("HIDE");
-                    mRePassword.setInputType((InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD));
-                    mRePassword.setSelection(mRePassword.length());
-                    
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    registerNewUser(newUser, password1);
                 } else {
-                    mEyeToggle2.setText("SHOW");
-                    mRePassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    mRePassword.setSelection(mRePassword.length());
+                    usernameInput.setError("Username is already taken");
                 }
-                
             }
-        });
-        
-        
-        //if (fAuth.getCurrentUser() != null) {
-        //  startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        //finish();
-        //}
-        
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            
             @Override
-            public void onClick(View v) {
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-                String fullName = mFullName.getText().toString();
-                String phone = mPhone.getText().toString();
-                String rePassword = mRePassword.getText().toString().trim();
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+    }
+    
+    /**
+     * Registers a new user.
+     *
+     * @param newUser  A user object containing the new user's data
+     * @param password The user's password
+     */
+    private void registerNewUser(User newUser, String password) {
+        // Show progressbar
+        progressBar.setVisibility(View.VISIBLE);
+        
+        // Register a new user in Firebase
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(newUser.emailAddress, password).addOnCompleteListener(t -> {
+            if (t.isSuccessful()) {
+                // Send verification email
+                sendVerificationEmail();
                 
-                Query userNameQuery = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("username").equalTo(fullName);
-                userNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getChildrenCount() > 0) {
-                            Toast.makeText(RegisterActivity.this, "Choose a different username or name", Toast.LENGTH_SHORT).show();
-                        } else {
-                            
-                            if (TextUtils.isEmpty(fullName)) {
-                                mFullName.setError("Name is Required");
-                                return;
-                            }
-                            
-                            if (fullName.length() < 4 | fullName.length() > 12) {
-                                mFullName.setError("Name should be between 4 to 12 characters");
-                            }
-                            
-                            if (TextUtils.isEmpty(email)) {
-                                mEmail.setError("Email is Required");
-                                return;
-                            }
-                            
-                            if (TextUtils.isEmpty(password)) {
-                                mPassword.setError("Password is Required");
-                                
-                                return;
-                            }
-                            
-                            if (!password.equals(rePassword)) {
-                                mRePassword.setError("Passwords don't match");
-                                return;
-                            }
-                            
-                            if (password.length() < 6) {
-                                mPassword.setError("Password Must be greater or equal to 6 characters");
-                            }
-                            
-                            
-                            progressBar.setVisibility(View.VISIBLE);
-                            
-                            //start registering the user in our database
-                            
-                            fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        
-                                        //send verification link to email
-                                        
-                                        FirebaseUser fuser = fAuth.getCurrentUser();
-                                        fuser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(RegisterActivity.this, "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
-                                                
-                                                
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "onFailure: Email not sent " + e.getMessage());
-                                            }
-                                        });
-                                        
-                                        
-                                        Toast.makeText(RegisterActivity.this, "User Created", Toast.LENGTH_SHORT).show();
-                                        userID = fAuth.getCurrentUser().getUid();
-                                        UsersRef = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
-                                        //DocumentReference documentReference = fStore.collection("users").document(userID);
-                                        HashMap user = new HashMap();
-                                        user.put("username", fullName);
-                                        user.put("email", email);
-                                        user.put("phone", phone);
-                                        user.put("status", "Hey there, I am using Sleap app!");
-                                        UsersRef.updateChildren(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "onSuccess: user Profile is created for" + userID);
-                                                
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "onFailure: " + e.toString());
-                                                
-                                            }
-                                        });
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        
-                                        
-                                    } else {
-                                        Toast.makeText(RegisterActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT)
-                                                .show();
-                                        
-                                    }
-                                    
-                                }
-                            });
-                            
-                            
-                        }
+                // Register new user in database
+                RemoteDatabase.getCurrentUserReference().setValue(newUser).addOnCompleteListener(t2 -> {
+                    if (t2.isSuccessful()) {
+                        // Hide progress bar
+                        progressBar.setVisibility(View.INVISIBLE);
                         
-                    }
-                    
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    
+                        // Show message
+                        Toast.makeText(RegisterActivity.this, "Your account has been created!", Toast.LENGTH_LONG).show();
+                        
+                        // Finish activity
+                        finish();
                     }
                 });
+            } else {
+                // Hide progress bar
+                progressBar.setVisibility(View.INVISIBLE);
                 
-                
-            }
-            
-        });
-        
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+                // Show error message
+                Toast.makeText(RegisterActivity.this, "Could not register user! " + t.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        
+    }
+    
+    /**
+     * Sends a verification email to the newly created user.
+     */
+    private void sendVerificationEmail() {
+        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnCompleteListener(t -> {
+            if (t.isSuccessful()) {
+                Toast.makeText(this, "Verification email has been sent!", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Verification email could not be sent! Try again later.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

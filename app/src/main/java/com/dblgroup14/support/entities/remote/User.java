@@ -12,4 +12,8 @@ public class User {
     public String phoneNumber;
     public String profilePicture;
     public String status;
+    
+    public User() {
+        this.status = "Hey there! I am using Sleap app.";
+    }
 }

@@ -5,7 +5,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.RemoteDatabase;
-import com.dblgroup14.support.entities.remote.Friend;
+import com.dblgroup14.support.entities.remote.UserFriend;
 import com.dblgroup14.support.entities.remote.User;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -18,13 +18,13 @@ import com.google.firebase.storage.StorageReference;
 /**
  * The recycler view adapter for a friends list.
  */
-public class FriendsRecyclerAdapter extends FirebaseRecyclerAdapter<Friend, FriendsViewHolder> {
+public class FriendsRecyclerAdapter extends FirebaseRecyclerAdapter<UserFriend, FriendsViewHolder> {
     private final Context context;
     private final DatabaseReference userTableReference;
     private final boolean isSearchFriendList;
     
     public FriendsRecyclerAdapter(Context context, Query query, boolean isSearchFriendList) {
-        super(Friend.class, R.layout.all_users_display_layout, FriendsViewHolder.class, query);
+        super(UserFriend.class, R.layout.all_users_display_layout, FriendsViewHolder.class, query);
         
         this.context = context;
         this.userTableReference = RemoteDatabase.getTableReference(RemoteDatabase.USERS_TABLE);
@@ -32,7 +32,7 @@ public class FriendsRecyclerAdapter extends FirebaseRecyclerAdapter<Friend, Frie
     }
     
     @Override
-    protected void populateViewHolder(final FriendsViewHolder viewHolder, final Friend model, int pos) {
+    protected void populateViewHolder(final FriendsViewHolder viewHolder, final UserFriend model, int pos) {
         // Fetch friend data from database
         final String friendUid = getRef(pos).getKey();
         userTableReference.child(friendUid).addListenerForSingleValueEvent(new ValueEventListener() {

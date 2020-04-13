@@ -92,6 +92,11 @@ public class ManageUserProfileFragment extends Fragment {
             Window window = getActivity().getWindow();
             window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
+    
+        // Deregister event handler
+        if (userDataVel != null) {
+            userDataVel.first.removeEventListener(userDataVel.second);
+        }
     }
     
     @Override
