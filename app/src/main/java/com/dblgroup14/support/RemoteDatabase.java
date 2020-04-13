@@ -1,14 +1,18 @@
 package com.dblgroup14.support;
 
+import com.dblgroup14.support.entities.remote.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public abstract class RemoteDatabase {
-    private static final String USERS_TABLE = "users";
-    private static final String FRIENDS_TABLE = "user_friends";
-    private static final String FRIEND_REQUESTS_TABLE = "friend_requests";
+    public static final String USERS_TABLE = "users";
+    public static final String FRIENDS_TABLE = "user_friends";
+    public static final String FRIEND_REQUESTS_TABLE = "friend_requests";
+    public static final String PROFILE_PICTURES_FOLDER = "profile_pictures";
     
     /**
      * Returns the database reference to a 'table'.
@@ -16,7 +20,7 @@ public abstract class RemoteDatabase {
      * @param tableName The name of the table
      * @return A database reference
      */
-    private static DatabaseReference getTableReference(String tableName) {
+    public static DatabaseReference getTableReference(String tableName) {
         return FirebaseDatabase.getInstance().getReference().child(tableName);
     }
     
@@ -59,5 +63,15 @@ public abstract class RemoteDatabase {
      */
     public static boolean isLoggedIn() {
         return FirebaseAuth.getInstance().getCurrentUser() != null;
+    }
+    
+    /**
+     * Gets the storage reference of a user's profile picture.
+     *
+     * @param user The user to get the profile picture reference for
+     * @return The profile picture storage reference
+     */
+    public static StorageReference getProfilePictureReference(User user) {
+        return FirebaseStorage.getInstance().getReference().child(PROFILE_PICTURES_FOLDER).child(user.profilePicture);
     }
 }

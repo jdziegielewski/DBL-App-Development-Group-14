@@ -3,6 +3,7 @@ package com.dblgroup14.app.management;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -124,12 +125,15 @@ public class ManageUserLoginFragment extends Fragment {
                     if (t.isSuccessful()) {
                         // TODO: Update stored score for user in local database
                         
-                        // Send signal to swap lay-outs to parent fragment (instance of ManageUserFragment)
-                        ManageUserFragment parent = (ManageUserFragment) getParentFragment();
-                        if (parent == null) {
-                            throw new IllegalStateException("Parent fragment is not of type ManageUserFragment!");
-                        }
-                        parent.updateChildFragment(true);
+                        // Delay swapping of fragments to give Firebase time to register newly authenticated user
+                        new Handler().postDelayed(() -> getActivity().runOnUiThread(() -> {
+                            // Send signal to swap lay-outs to parent fragment (instance of ManageUserFragment)
+                            ManageUserFragment parent = (ManageUserFragment) getParentFragment();
+                            if (parent == null) {
+                                throw new IllegalStateException("Parent fragment is not of type ManageUserFragment!");
+                            }
+                            parent.updateChildFragment(true);
+                        }), 1);
                         
                         Toast.makeText(getContext(), "Login successful!", Toast.LENGTH_SHORT).show();
                     } else {

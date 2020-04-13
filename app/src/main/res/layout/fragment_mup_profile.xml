@@ -19,17 +19,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/profileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textColor="#474747"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/profileName2"
-                app:layout_constraintTop_toBottomOf="@+id/profileName2" />
-
-            <TextView
-                android:id="@+id/profileName2"
+                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
@@ -42,17 +32,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/profileEmail"
+                android:id="@+id/profileUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="E-mail"
+                android:text="Name"
                 android:textColor="#474747"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/profileName"
-                app:layout_constraintTop_toBottomOf="@+id/profileEmail2" />
+                app:layout_constraintStart_toStartOf="@+id/textView1"
+                app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
             <TextView
-                android:id="@+id/profileEmail2"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -60,33 +50,21 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/profileName2"
-                app:layout_constraintTop_toBottomOf="@+id/profileName" />
+                app:layout_constraintStart_toStartOf="@+id/textView1"
+                app:layout_constraintTop_toBottomOf="@+id/profileUsername" />
 
             <TextView
-                android:id="@+id/profilePhone"
+                android:id="@+id/profileEmailAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone number"
+                android:text="E-mail"
                 android:textColor="#474747"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/profilePhone2"
-                app:layout_constraintTop_toBottomOf="@+id/profilePhone2" />
+                app:layout_constraintStart_toStartOf="@+id/profileUsername"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
-                android:id="@+id/profilePhone2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="PHONE NUMBER"
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/profileEmail"
-                app:layout_constraintTop_toBottomOf="@+id/ErrVerifyBtn" />
-
-            <TextView
-                android:id="@+id/MsgVerifyErr"
+                android:id="@+id/emailNotVerifiedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -94,29 +72,49 @@
                 android:textColor="#D50000"
                 android:textSize="16sp"
                 android:textStyle="bold|italic"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@+id/profileEmail"
-                app:layout_constraintTop_toBottomOf="@+id/profileEmail" />
+                app:layout_constraintStart_toStartOf="@+id/profileEmailAddress"
+                app:layout_constraintTop_toBottomOf="@+id/profileEmailAddress" />
 
             <Button
-                android:id="@+id/ErrVerifyBtn"
+                android:id="@+id/verifyEmailBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/create_box"
                 android:paddingHorizontal="20dp"
                 android:text="Verify Now"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/MsgVerifyErr" />
+                app:layout_constraintTop_toBottomOf="@+id/emailNotVerifiedText" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="PHONE NUMBER"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/profileEmailAddress"
+                app:layout_constraintTop_toBottomOf="@+id/verifyEmailBtn" />
+
+            <TextView
+                android:id="@+id/profilePhoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone number"
+                android:textColor="#474747"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profilePhone">
+                app:layout_constraintTop_toBottomOf="@+id/profilePhoneNumber">
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

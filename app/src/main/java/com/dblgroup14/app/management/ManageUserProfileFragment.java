@@ -33,8 +33,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ManageUserProfileFragment extends Fragment {
-    private static final String PROFILE_PICTURE_FOLDER = "profile_pictures";
-    
     private CircleImageView profileImageView;
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -70,7 +68,7 @@ public class ManageUserProfileFragment extends Fragment {
         view.findViewById(R.id.logoutBtn).setOnClickListener(v -> logout());
         
         // Register user data update listener
-        registerUserUpdateListener();
+        registerUserDataListener();
         
         // Setup profile picture view
         setupProfilePictureView();
@@ -118,15 +116,14 @@ public class ManageUserProfileFragment extends Fragment {
     /**
      * Registers an event handler that updates the user data it whenever it changes.
      */
-    private void registerUserUpdateListener() {
-        // Register value changed listener on user object
+    private void registerUserDataListener() {
         RemoteDatabase.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Get user object value
                 User user = dataSnapshot.getValue(User.class);
                 if (user == null) {
-                    Toast.makeText(getContext(), "Something went wrong while loading the new user data!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Something went wrong while loading user data!", Toast.LENGTH_LONG).show();
                     return;
                 }
                 
@@ -163,8 +160,8 @@ public class ManageUserProfileFragment extends Fragment {
             return;
         }
         
-        // Create profile picture reference
-        StorageReference reference = FirebaseStorage.getInstance().getReference().child(PROFILE_PICTURE_FOLDER).child(currentUser.profilePicture);
+        // Get profile picture reference
+        StorageReference reference = RemoteDatabase.getProfilePictureReference(currentUser);
         
         // Obtain profile picture download url
         reference.getDownloadUrl().addOnCompleteListener(dlTask -> {
@@ -196,7 +193,7 @@ public class ManageUserProfileFragment extends Fragment {
         final String fileName = String.format("%s%s", userUid, fileExtension);
         StorageReference reference = FirebaseStorage.getInstance()
                 .getReference()
-                .child(PROFILE_PICTURE_FOLDER)
+                .child(RemoteDatabase.PROFILE_PICTURES_FOLDER)
                 .child(fileName);
         
         // Upload new profile picture
@@ -226,6 +223,7 @@ public class ManageUserProfileFragment extends Fragment {
      * Logs out the currently logged in user and switches manage user lay-out to the login screen.
      */
     private void logout() {
+        // Logout from Firebase
         FirebaseAuth.getInstance().signOut();
         
         // Send signal to swap lay-outs to parent fragment (instance of ManageUserFragment)
@@ -234,5 +232,8 @@ public class ManageUserProfileFragment extends Fragment {
             throw new IllegalStateException("Parent fragment is not of type ManageUserFragment!");
         }
         parent.updateChildFragment(false);
+        
+        // Show message to the user
+        Toast.makeText(getContext(), "Logged out successfully!", Toast.LENGTH_SHORT).show();
     }
 }

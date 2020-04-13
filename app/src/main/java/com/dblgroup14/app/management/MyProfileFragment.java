@@ -1,51 +1,29 @@
 package com.dblgroup14.app.management;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.dblgroup14.app.MainActivity;
 import com.dblgroup14.app.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.support.entities.remote.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import java.io.ByteArrayOutputStream;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyProfileFragment extends Fragment {
-    TextView fullName, email, phone, verifyMail;
-    private FirebaseAuth fAuth;
-    //FirebaseFirestore fStore;
-    private String currentUserId;
-    //String TAKE_IMAGE_URL = null;
-    //int TAKE_IMAGE_CODE = 10001;
-    Button resendCode;
-    //ImageView ProfileImage;
-    private DatabaseReference profileUserRef;
-    
-  
+    private TextView usernameText;
+    private TextView emailAddressText;
+    private TextView phoneNumberText;
+    private TextView emailNotVerifiedText;
+    private Button verifyEmailBtn;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,79 +34,99 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Setup navigation tabs
-    
-        phone = view.findViewById(R.id.profilePhone);
-        fullName = view.findViewById(R.id.profileName);
-        email = view.findViewById(R.id.profileEmail);
-    
-        fAuth = FirebaseAuth.getInstance();
-        //fStore = FirebaseFirestore.getInstance();
-    
-        currentUserId = fAuth.getCurrentUser().getUid();
-        profileUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(currentUserId);
         
-    
-        resendCode = view.findViewById(R.id.ErrVerifyBtn);
-        verifyMail = view.findViewById(R.id.MsgVerifyErr);
-    
-        FirebaseUser user = fAuth.getCurrentUser();
-    
-        if (!user.isEmailVerified()) {
-            verifyMail.setVisibility(View.VISIBLE);
-            resendCode.setVisibility(View.VISIBLE);
+        // Get components
+        usernameText = view.findViewById(R.id.profileUsername);
+        emailAddressText = view.findViewById(R.id.profileEmailAddress);
+        phoneNumberText = view.findViewById(R.id.profilePhoneNumber);
+        emailNotVerifiedText = view.findViewById(R.id.emailNotVerifiedText);
+        verifyEmailBtn = view.findViewById(R.id.verifyEmailBtn);
         
-            resendCode.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(v.getContext(), "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("tag", "onFailure: Email not sent " + e.getMessage());
-                            Toast.makeText(v.getContext(), "Verification Email not sent! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                
-                }
-            });
-        }
+        // Set click listener for verify email button
+        verifyEmailBtn.setOnClickListener(v -> sendEmailVerification());
+        
+        // Set initial UI state
+        setInitialUiState();
+        
+        // Register event handler to update user data
+        registerUserDataListener();
+    }
     
+    /**
+     * Sets the UI to an initial state in which everything is indicated as being loaded.
+     */
+    private void setInitialUiState() {
+        usernameText.setText("Loading...");
+        emailAddressText.setText("Loading...");
+        phoneNumberText.setText("Loading...");
+        
+        // Hide email not verified components
+        emailNotVerifiedText.setVisibility(View.GONE);
+        verifyEmailBtn.setVisibility(View.GONE);
+    }
     
-        profileUserRef.addValueEventListener(new ValueEventListener() {
+    /**
+     * Registers an event handler that updates the user data it whenever it changes.
+     */
+    private void registerUserDataListener() {
+        RemoteDatabase.getCurrentUserReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-//                    String myUserName = dataSnapshot.child("username").getValue().toString();
-//                    String myPhone = dataSnapshot.child("phone").getValue().toString();
-//                    String myEmail = dataSnapshot.child("email").getValue().toString();
-//                    String myProfileStatus = dataSnapshot.child("status").getValue().toString();
-//
-//                    fullName.setText(myUserName);
-//                    email.setText(myEmail);
-//                    phone.setText(myPhone);
+                // Get user object value
+                User user = dataSnapshot.getValue(User.class);
+                if (user == null) {
+                    Toast.makeText(getContext(), "Something went wrong while loading user data!", Toast.LENGTH_LONG).show();
+                    return;
                 }
+                
+                // Update user data
+                updateUi(user);
             }
-        
+            
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+    
+    /**
+     * Updates / fills the UI with user data.
+     *
+     * @param user The user data
+     */
+    private void updateUi(User user) {
+        // Get FirebaseAuth user instance
+        FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
+        
+        // Show / hide email verification UI elements
+        if (authUser.isEmailVerified()) {
+            emailNotVerifiedText.setVisibility(View.GONE);
+            verifyEmailBtn.setVisibility(View.GONE);
+        } else {
+            emailNotVerifiedText.setVisibility(View.VISIBLE);
+            verifyEmailBtn.setVisibility(View.VISIBLE);
+        }
+        
+        // Update UI elements
+        usernameText.setText(user.username);
+        emailAddressText.setText(user.emailAddress);
+        phoneNumberText.setText(user.phoneNumber);
+    }
+    
+    /**
+     * (Re)sends the a verification email to the user.
+     */
+    private void sendEmailVerification() {
+        // Get FirebaseAuth user instance
+        FirebaseUser authUser = FirebaseAuth.getInstance().getCurrentUser();
+        
+        // Send verification email
+        authUser.sendEmailVerification().addOnCompleteListener(t -> {
+            if (t.isSuccessful()) {
+                Toast.makeText(getContext(), "Verification email has been sent!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "An error occurred while sending the verification email! " + t.getException().getMessage(),
+                        Toast.LENGTH_LONG).show();
             }
         });
-    
-        
-    
     }
-    
-    public void logout(View view) {
-        FirebaseAuth.getInstance().signOut();//logout
-        startActivity(new Intent(getActivity(), MainActivity.class));
-        getActivity().finish();
-    }
-    
-    
-    
 }
