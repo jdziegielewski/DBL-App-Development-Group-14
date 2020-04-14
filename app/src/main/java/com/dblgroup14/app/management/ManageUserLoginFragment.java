@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
+import com.dblgroup14.app.SleapApplication;
 import com.dblgroup14.app.user.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -123,10 +124,11 @@ public class ManageUserLoginFragment extends Fragment {
                 .signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(t -> {
                     if (t.isSuccessful()) {
-                        // TODO: Update stored score for user in local database
-                        
                         // Delay swapping of fragments to give Firebase time to register newly authenticated user
                         new Handler().postDelayed(() -> getActivity().runOnUiThread(() -> {
+                            // Re-register global event handlers in SleapApplication
+                            SleapApplication.getInstance().registerRemoteEventListeners();
+                            
                             // Send signal to swap lay-outs to parent fragment (instance of ManageUserFragment)
                             ManageUserFragment parent = (ManageUserFragment) getParentFragment();
                             if (parent == null) {

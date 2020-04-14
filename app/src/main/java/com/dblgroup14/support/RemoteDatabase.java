@@ -12,17 +12,8 @@ public abstract class RemoteDatabase {
     public static final String USERS_TABLE = "users";
     public static final String FRIENDS_TABLE = "user_friends";
     public static final String FRIEND_REQUESTS_TABLE = "friend_requests";
+    public static final String SCORES_TABLE = "scores";
     public static final String PROFILE_PICTURES_FOLDER = "profile_pictures";
-    
-    /**
-     * Returns the database reference to a 'table'.
-     *
-     * @param tableName The name of the table
-     * @return A database reference
-     */
-    public static DatabaseReference getTableReference(String tableName) {
-        return FirebaseDatabase.getInstance().getReference().child(tableName);
-    }
     
     /**
      * Gets a real-time database reference to the entry of the currently logged in user.
@@ -41,6 +32,32 @@ public abstract class RemoteDatabase {
     }
     
     /**
+     * Gets a real-time database reference to score entry of the currently logged in user.
+     *
+     * @return A database reference or null if no user is logged in
+     */
+    public static DatabaseReference getCurrentUserScoreReference() {
+        // Get currently logged in user via FirebaseAuth
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            return null;
+        }
+        
+        // Get database reference
+        return getTableReference(SCORES_TABLE).child(currentUser.getUid());
+    }
+    
+    /**
+     * Returns the database reference to a 'table'.
+     *
+     * @param tableName The name of the table
+     * @return A database reference
+     */
+    public static DatabaseReference getTableReference(String tableName) {
+        return FirebaseDatabase.getInstance().getReference().child(tableName);
+    }
+    
+    /**
      * Gets the database reference to a user with the given uid.
      *
      * @param uid The uid of a user
@@ -48,22 +65,6 @@ public abstract class RemoteDatabase {
      */
     public static DatabaseReference getUserReference(String uid) {
         return getTableReference(USERS_TABLE).child(uid);
-    }
-    
-    /**
-     * Gets the username of the currently logged in user.
-     *
-     * @return The current user's username or null if no user is logged in
-     */
-    public static String getCurrentUsername() {
-        // Get database reference to the currently logged in user
-        DatabaseReference reference = getCurrentUserReference();
-        if (reference == null) {
-            return null;
-        }
-        
-        // Return the username of the current user
-        return reference.child("username").toString();
     }
     
     /**

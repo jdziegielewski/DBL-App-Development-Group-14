@@ -12,7 +12,13 @@ public class UserScore {
     @PrimaryKey
     @NonNull
     public String username;
-    public int score;
+    public long score;
+    
+    public UserScore()
+    {
+        this.username = "UNDEFINED";
+        this.score = 0;
+    }
     
     /**
      * Set new username for this user score object.

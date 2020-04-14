@@ -8,17 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.R;
 import com.dblgroup14.support.AppDatabase;
+import com.dblgroup14.support.RemoteDatabase;
 import com.dblgroup14.support.SimpleDatabase;
 import com.dblgroup14.support.entities.local.UserScore;
+import com.dblgroup14.support.entities.remote.User;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +53,23 @@ public class ScoreFragment extends Fragment {
         pieChart = view.findViewById(R.id.scoresPieChart);
         TextView scoreTime = view.findViewById(R.id.time_completed);
         
-        // Check if the user has done any challenges
+        // Load data and initialize pie chart
+        loadPieChartData();
+        
+        // Set time of last challenge completion
+        long lastCompletionMillis = SimpleDatabase.getSharedPreferences().getLong(SimpleDatabase.LAST_COMPLETED_TIME, 0);
+        String timeOfLastCompletion = lastCompletionMillis == 0 ? "-" : new SimpleDateFormat("MMM dd - HH:mm").format(new Date(lastCompletionMillis));
+        scoreTime.setText(String.format("Last challenge completed: %s", timeOfLastCompletion));
+        
+        // Load user score database content
+        LiveData<List<UserScore>> liveUserScores = AppDatabase.db().userScoreDao().all();
+        liveUserScores.observe(getViewLifecycleOwner(), this::updateUserScores);
+    }
+    
+    /**
+     * Fetches the user's challenge completed challenges data from the SimpleDatabase and initializes the pie chart.
+     */
+    private void loadPieChartData() {
         SharedPreferences db = SimpleDatabase.getSharedPreferences();
         int totalChallenges = db.getInt(SimpleDatabase.TOTAL_CHALLENGES, 0);
         
@@ -69,17 +92,13 @@ public class ScoreFragment extends Fragment {
             pieChart.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             pieChart.requestLayout();
         }
-        
-        // Set time of last challenge completion
-        long lastCompletionMillis = SimpleDatabase.getSharedPreferences().getLong(SimpleDatabase.LAST_COMPLETED_TIME, 0);
-        String timeOfLastCompletion = lastCompletionMillis == 0 ? "-" : new SimpleDateFormat("MMM dd - HH:mm").format(new Date(lastCompletionMillis));
-        scoreTime.setText(String.format("Last challenge completed: %s", timeOfLastCompletion));
-        
-        // Load user score database content
-        LiveData<List<UserScore>> liveUserScores = AppDatabase.db().userScoreDao().all();
-        liveUserScores.observe(getViewLifecycleOwner(), this::updateUserScores);
     }
     
+    /**
+     * Sets the lay-out of the pie chart and fills it with the given data.
+     *
+     * @param data The data to fill the pie chart with
+     */
     private void initializePieChart(final List<PieEntry> data) {
         // Initialize pie chart
         PieDataSet pieDataSet = new PieDataSet(data, " ");
@@ -100,23 +119,69 @@ public class ScoreFragment extends Fragment {
         pieDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
     }
     
+    /**
+     * Called whenever the user scores in the local database change.
+     *
+     * @param data The newly fetched list of user scores
+     */
     private void updateUserScores(final List<UserScore> data) {
         // Sort user scores
-        Collections.sort(data, (u1, u2) -> -Integer.compare(u1.score, u2.score));
+        Collections.sort(data, (u1, u2) -> -Long.compare(u1.score, u2.score));
         
-        // Update container
-        getActivity().runOnUiThread(() -> {
-            // Clear all child views
-            scoresListContainer.removeAllViews();
-            
-            // Spawn new views
-            for (int i = 0; i < data.size(); i++) {
-                scoresListContainer.addView(createScoreView(i, data.get(i)));
-            }
-        });
+        // Grab current user data
+        DatabaseReference userRef = RemoteDatabase.getCurrentUserReference();
+        if (userRef != null) {
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User currentUser = dataSnapshot.getValue(User.class);
+                    fillScoreList(data, currentUser.username);
+                }
+                
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
+            });
+        } else {
+            getActivity().runOnUiThread(() -> fillScoreList(data, null));
+        }
     }
     
-    private View createScoreView(int index, UserScore userScore) {
+    /**
+     * Fills the scores list with newly fetched scores.
+     *
+     * @param data            The fetched list of user scores
+     * @param currentUsername The username of the currently logged in user, or null if no user is logged in
+     */
+    private void fillScoreList(List<UserScore> data, String currentUsername) {
+        // Clear all child views
+        scoresListContainer.removeAllViews();
+        
+        // Spawn new views
+        int position = 0;
+        for (UserScore score : data) {
+            View newRowView = null;
+            if (currentUsername == null) {
+                newRowView = createScoreView(position, score, "(default)");
+            } else if (!score.username.equals("(default)")) {
+                newRowView = createScoreView(position, score, currentUsername);
+            }
+            
+            if (newRowView != null) {
+                scoresListContainer.addView(newRowView);
+                position++;
+            }
+        }
+    }
+    
+    /**
+     * Creates a view for a row to put in the list of scores.
+     *
+     * @param position        The position of the row in the scores list
+     * @param userScore       The UserScore object that is to be represented in this row
+     * @param currentUsername The username of the currently logged in user, or '(default)' if no user is logged in
+     * @return A new row view
+     */
+    private View createScoreView(int position, UserScore userScore, String currentUsername) {
         // Inflate new row view
         View rowView = getLayoutInflater().inflate(R.layout.score_row, scoresListContainer, false);
         
@@ -127,14 +192,14 @@ public class ScoreFragment extends Fragment {
         
         // Get formatted name of user
         String username;
-        if (userScore.username.equals("(default)")) {    // handle own score case
+        if (userScore.username.equals(currentUsername)) {    // handle own score case
             username = "You";
         } else {
             username = userScore.username;
         }
         
         // Set user name
-        scoreNameTextView.setText(String.format("%d. %s", index + 1, username));
+        scoreNameTextView.setText(String.format("%d. %s", position + 1, username));
         
         return rowView;
     }
