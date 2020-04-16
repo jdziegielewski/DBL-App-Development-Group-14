@@ -21,7 +21,8 @@ import com.dblgroup14.app.R;
 import com.dblgroup14.app.SleapApplication;
 import com.dblgroup14.app.user.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
-/*Fragment class that manages the log in page when user wants to use the app*/
+/*Fragment class that manages the log in page when user wants to use the app
+* On that page user log in and account creation is taken care of*/
 public class ManageUserLoginFragment extends Fragment {
     private EditText emailInput, passwordInput;
     private TextView showPasswordToggle;
