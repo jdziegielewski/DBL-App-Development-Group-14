@@ -19,7 +19,8 @@ import com.dblgroup14.support.dao.ChallengeDao;
 import com.dblgroup14.support.entities.local.Challenge;
 import java.util.List;
 
-/*fragment class to list the challenges available in the app when the user puts on the alarm*/
+/*fragment class ChallengesListFragment to list the challenges available in the app when the user puts on the alarm
+* it initializes the view of the list of challenges */
 public class ChallengesListFragment extends Fragment {
     public static final String KEY_TYPE = "type";
     
@@ -37,7 +38,7 @@ public class ChallengesListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
-        // Check if only default (built-in) challenges should be listed
+        // Check if only default (built-in) challenges should be listed in the app
         if (getArguments() == null || !getArguments().containsKey(KEY_TYPE)) {
             throw new IllegalArgumentException("No type provided");
         }
@@ -46,7 +47,7 @@ public class ChallengesListFragment extends Fragment {
         // Create array adapter
         challengeListAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, android.R.id.text1);
         
-        // Initialize challenges list view
+        // Initialize the challenges list view
         ListView challengeListView = view.findViewById(R.id.challengesListView);
         challengeListView.setAdapter(challengeListAdapter);
         challengeListView.setOnItemClickListener((parent, v, pos, id) -> {
@@ -58,7 +59,7 @@ public class ChallengesListFragment extends Fragment {
             }
         });
         
-        // Register live data binding
+        // Register a live data binding
         ChallengeDao dao = AppDatabase.db().challengeDao();
         LiveData<List<Challenge>> liveData = showDefaultsOnly ? dao.allDefault() : dao.allCustom();
         liveData.observe(getViewLifecycleOwner(), this::updateChallengeListAdapter);
@@ -74,6 +75,7 @@ public class ChallengesListFragment extends Fragment {
         }
     }
     
+    // show the list for the user
     private void showManageDialog(final Challenge c) {
         // Compile list of choices for the user
         String[] choices;
@@ -106,7 +108,7 @@ public class ChallengesListFragment extends Fragment {
                 .create();
         dialog.show();
     }
-    //create list from template method
+    //create the list from the template method
     private void createFromTemplate(Challenge c) {
         Intent intent = new Intent(getContext(), EditActivity.class);
         intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
@@ -122,8 +124,9 @@ public class ChallengesListFragment extends Fragment {
         intent.putExtra(EditActivity.KEY_EDIT_FRAGMENT_CLASS_NAME, c.getEditFragmentClassName());
         startActivity(intent);
     }
-    //delete own challenges method (not to be implemented)
+    //delete own challenges method (not to be implemented due to the changes in the requirements)
     private void deleteOwnChallenge(Challenge c) {
         // NOTTODO: Implement
     }
 }
+//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
