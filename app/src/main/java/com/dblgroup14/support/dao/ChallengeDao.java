@@ -9,6 +9,10 @@ import androidx.room.Query;
 import com.dblgroup14.support.entities.local.Challenge;
 import java.util.List;
 
+/**
+ * Class for the challenge related queries.
+ * This handles all the DB interaction for the challenges
+ */
 @Dao
 public abstract class ChallengeDao implements EditDaoInterface<Challenge> {
     @Query("SELECT * FROM challenges ORDER BY LENGTH(name)")

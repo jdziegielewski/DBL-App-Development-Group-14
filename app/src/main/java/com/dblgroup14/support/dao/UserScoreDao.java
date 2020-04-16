@@ -9,6 +9,12 @@ import com.dblgroup14.support.RemoteDatabase;
 import com.dblgroup14.support.entities.local.UserScore;
 import java.util.List;
 
+/**
+ *
+ *
+ *
+ *
+ */
 @Dao
 public abstract class UserScoreDao {
     @Query("SELECT * FROM user_scores")
