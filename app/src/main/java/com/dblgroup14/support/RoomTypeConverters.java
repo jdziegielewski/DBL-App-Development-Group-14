@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -26,7 +25,7 @@ public abstract class RoomTypeConverters {
         String[] parts = value.split(",");
         boolean[] result = new boolean[parts.length];
         for (int i = 0; i < parts.length; i++) {
-            result[i] = Boolean.valueOf(parts[i]);
+            result[i] = Boolean.parseBoolean(parts[i]);
         }
         return result;
     }

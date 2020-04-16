@@ -4,7 +4,7 @@ import android.view.View;
 import com.dblgroup14.support.AppDatabase;
 import com.dblgroup14.support.dao.EditDaoInterface;
 import com.dblgroup14.support.entities.local.Challenge;
-
+//class for editable challenges that are available to the user.
 public abstract class EditChallengeFragment extends EditFragment<Challenge> {
     
     @Override

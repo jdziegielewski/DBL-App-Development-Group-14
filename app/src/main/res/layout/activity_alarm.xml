@@ -17,7 +17,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/quit_challenge_icon" />
+        app:srcCompat="@drawable/quit_challenge_icon"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/hideBarsView"
@@ -28,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@+id/giveUpBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" tools:targetApi="o"/>
 
     <TextView
         android:id="@+id/systemTimeText"

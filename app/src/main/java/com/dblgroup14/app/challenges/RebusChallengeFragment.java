@@ -9,11 +9,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import com.dblgroup14.app.R;
 import java.util.Random;
-
+/*This is a rebus challenge with user giving the answer as an input
+ * The framework is the same as the math challenge*/
 public class RebusChallengeFragment extends ChallengeFragment {
     /* Built-in rebus content */
+    /*rebus*/
     @IdRes
     private static final Integer[] IMAGE_RESOURCES = {
             R.drawable.rebus_mixed_emotions,
@@ -26,6 +29,7 @@ public class RebusChallengeFragment extends ChallengeFragment {
             R.drawable.rebus_stick_around,
             R.drawable.rebus_time_is_money,
     };
+    /*rebus solution*/
     private static final String[] CORRECT_ANSWERS = {
             "mixed emotions",
             "balanced diet",
@@ -37,21 +41,21 @@ public class RebusChallengeFragment extends ChallengeFragment {
             "stick around",
             "time is money",
     };
-    
+    //additional variables
     private EditText answerInput;
     private int selectedImageIndex;
-    
+    //layout created when fragment first opened
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_challenge_rebus, container, false);
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Get components
-        final EditText answerInput = view.findViewById(R.id.answerInput);
+        answerInput = view.findViewById(R.id.answerInput);
         Button checkBtn = view.findViewById(R.id.checkBtn);
         ImageView rebusImage = view.findViewById(R.id.rebusImage);
         
@@ -62,9 +66,11 @@ public class RebusChallengeFragment extends ChallengeFragment {
         // Add check button listener
         checkBtn.setOnClickListener(v -> checkAnswer());
     }
-    
+    // Checks if the answer is correct, if it is correct the challenge will be completed
     private void checkAnswer() {
+        // Get the user answer
         String userAnswer = answerInput.getText().toString().trim().toLowerCase();
+        // Check answer
         if (userAnswer.equals(CORRECT_ANSWERS[selectedImageIndex])) {
             Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
             completeChallenge();

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import com.dblgroup14.app.R;
 import com.google.zxing.Result;
@@ -33,7 +34,7 @@ public class BarcodeChallengeFragment extends ChallengeFragment implements ZXing
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Get alarm activity components
@@ -52,7 +53,7 @@ public class BarcodeChallengeFragment extends ChallengeFragment implements ZXing
     }
     
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_ID) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startScanner();

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
+/*SplashActivity class that extends the app compat activity
+* it starts the main activity after some time */
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_TIME = 500;
     

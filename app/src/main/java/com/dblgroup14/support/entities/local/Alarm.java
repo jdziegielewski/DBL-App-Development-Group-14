@@ -84,7 +84,7 @@ public class Alarm {
      *
      * @param hours The hour at which the alarm will ring
      */
-    public void setHours(int hours) {
+    private void setHours(int hours) {
         if (hours < 0 || hours > 23) {
             throw new IllegalArgumentException("Invalid hours given");
         }
@@ -105,7 +105,7 @@ public class Alarm {
      *
      * @param minutes The minute at which the alarm will ring
      */
-    public void setMinutes(int minutes) {
+    private void setMinutes(int minutes) {
         if (minutes < 0 || minutes > 59) {
             throw new IllegalArgumentException("Invalid minutes given");
         }

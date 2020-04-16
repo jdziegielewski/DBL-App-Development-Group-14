@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.EditActivity;
@@ -18,6 +19,7 @@ import com.dblgroup14.support.dao.ChallengeDao;
 import com.dblgroup14.support.entities.local.Challenge;
 import java.util.List;
 
+/*fragment class to list the challenges available in the app when the user puts on the alarm*/
 public class ChallengesListFragment extends Fragment {
     public static final String KEY_TYPE = "type";
     
@@ -32,7 +34,7 @@ public class ChallengesListFragment extends Fragment {
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Check if only default (built-in) challenges should be listed
@@ -65,7 +67,7 @@ public class ChallengesListFragment extends Fragment {
     private void updateChallengeListAdapter(List<Challenge> data) {
         challengeList = data;
         
-        // Put challenge names in list adapter
+        // Put the challenge names in list adapter
         challengeListAdapter.clear();
         for (Challenge c : data) {
             challengeListAdapter.add(c.name);
@@ -73,7 +75,7 @@ public class ChallengesListFragment extends Fragment {
     }
     
     private void showManageDialog(final Challenge c) {
-        // Compile list of choices
+        // Compile list of choices for the user
         String[] choices;
         if (showDefaultsOnly) {
             choices = new String[] {"Create own from template"};
@@ -104,7 +106,7 @@ public class ChallengesListFragment extends Fragment {
                 .create();
         dialog.show();
     }
-    
+    //create list from template method
     private void createFromTemplate(Challenge c) {
         Intent intent = new Intent(getContext(), EditActivity.class);
         intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
@@ -112,6 +114,7 @@ public class ChallengesListFragment extends Fragment {
         startActivity(intent);
     }
     
+    //edit own challenges method
     private void editOwnChallenge(Challenge c) {
         Intent intent = new Intent(getContext(), EditActivity.class);
         intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
@@ -119,8 +122,8 @@ public class ChallengesListFragment extends Fragment {
         intent.putExtra(EditActivity.KEY_EDIT_FRAGMENT_CLASS_NAME, c.getEditFragmentClassName());
         startActivity(intent);
     }
-    
+    //delete own challenges method (not to be implemented)
     private void deleteOwnChallenge(Challenge c) {
-        // TODO: Implement
+        // NOTTODO: Implement
     }
 }

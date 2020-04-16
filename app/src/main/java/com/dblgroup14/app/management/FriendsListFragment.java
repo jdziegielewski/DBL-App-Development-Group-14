@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +26,7 @@ public class FriendsListFragment extends Fragment {
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Get components
@@ -41,9 +42,7 @@ public class FriendsListFragment extends Fragment {
         populateFriendsList();
         
         // Set on click listener to add friends button
-        view.findViewById(R.id.addFriend).setOnClickListener(view1 -> {
-            startActivity(new Intent(getActivity(), FindFriendsActivity.class));
-        });
+        view.findViewById(R.id.addFriend).setOnClickListener(view1 -> startActivity(new Intent(getActivity(), FindFriendsActivity.class)));
     }
     
     /**

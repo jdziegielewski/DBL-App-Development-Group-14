@@ -4,9 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 import com.dblgroup14.support.SimpleDatabase;
-
+/*Alarm class that is extension of broadcast receiver to manage correction of turning on the alarm
+* it receives signals that are sent to app by android when an alarm is triggered
+* it starts AlarmActivity */
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -91,14 +91,14 @@ public abstract class AlarmScheduler {
         AlarmManager alarmManager = (AlarmManager) SleapApplication.getContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
-    
+    public static String time;
     /**
      * Creates intent and calls Android AlarmManager API to trigger alarm at the requested time.
      *
      * @param calendar A Calendar instance containing the time that an alarm should ring
      * @param alarm    The alarm object
      */
-    public static String time;
+    
     private static void setAlarm(Calendar calendar, Alarm alarm) {
         Context context = SleapApplication.getContext();
         

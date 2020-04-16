@@ -9,9 +9,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import com.dblgroup14.app.R;
 import java.util.Random;
-
+/* */
 public class TriviaChallengeFragment extends ChallengeFragment {
     /* Questions, answers and correct answers */
     private static final String[] QUESTIONS = {
@@ -25,13 +26,13 @@ public class TriviaChallengeFragment extends ChallengeFragment {
             {"Rafael Nadal", "Novak Djokovic", "Roger Federer", "Pete Sampras"}
     };
     private static final Integer[] CORRECT_ANSWER_INDICES = {1, 0, 2};
-    
+    //additional variables
     private TextView questionTextView;
     private RadioGroup answerRadioGroup;
     private RadioButton[] answerRadioButtons;
-    
     private int questionIndex;
     
+    //layout created when fragment first opened
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_challenge_trivia, container, false);
@@ -39,7 +40,7 @@ public class TriviaChallengeFragment extends ChallengeFragment {
     
     @SuppressLint("ResourceType")
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Get components
@@ -83,7 +84,7 @@ public class TriviaChallengeFragment extends ChallengeFragment {
             }
         });
     }
-    
+    //randomization of the questions to be presented to the user
     private void selectRandomQuestion() {
         // Select random question index
         questionIndex = new Random().nextInt(QUESTIONS.length);
