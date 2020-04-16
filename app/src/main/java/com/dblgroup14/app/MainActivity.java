@@ -1,19 +1,14 @@
 package com.dblgroup14.app;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,13 +18,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import com.dblgroup14.app.management.ManageAlarmsFragment;
 import com.dblgroup14.support.AlarmScheduler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
+/*MainActivity of the app that is present when the app is started for the first time and set ups other tabs in the app to be explored by the user*/
 public class MainActivity extends AppCompatActivity {
     // Notification channel
-    public static final String CHANNEL_1_ID = "channel1";
+    private static final String CHANNEL_1_ID = "channel1";
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
-    public void CreateNotificationChannel() {
+    private void CreateNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
@@ -95,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             
         }
     }
-    
+    //create setup notification class
     public static void CreateNotification() {
         Context context = SleapApplication.getContext();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

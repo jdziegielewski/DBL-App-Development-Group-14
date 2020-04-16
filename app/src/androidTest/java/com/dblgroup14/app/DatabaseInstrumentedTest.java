@@ -61,9 +61,9 @@ public class DatabaseInstrumentedTest {
         assertEquals("test alarm", a.name);
         assertEquals(12, a.hours);
         assertEquals(0, a.minutes);
-        assertEquals(true, a.enabled);
+        assertTrue(a.enabled);
         assertEquals(100, a.volume);
-        assertEquals(true, a.repeats);
+        assertTrue(a.repeats);
         assertArrayEquals(new boolean[]{true, true, false, true, true, false, false}, a.days);
         
         // Delete entity
@@ -104,7 +104,7 @@ public class DatabaseInstrumentedTest {
         // Assert getXXX() results
         assertEquals("String", c2.getString("Test"));
         assertEquals(12, c2.getInt("Test1"));
-        assertEquals(true, c2.getBoolean("Test2"));
+        assertTrue(c2.getBoolean("Test2"));
         
         // Assert that non-existing keys throws exception
         try {
@@ -152,7 +152,7 @@ public class DatabaseInstrumentedTest {
         assertEquals(960, u2.score);
         
         // Delete entity
-        dao.delete(u2);
+        //dao.delete(u2);
         
         // Assert that entity does not exist
         assertNull(dao.scoreOfUser(TEST_USER_NAME));

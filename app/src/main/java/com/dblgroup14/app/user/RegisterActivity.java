@@ -31,8 +31,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText passwordInput1;
     private EditText passwordInput2;
     private ProgressBar progressBar;
-    private TextView eyeToggle1;
-    private TextView eyeToggle2;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
         passwordInput1 = findViewById(R.id.password1);
         passwordInput2 = findViewById(R.id.password2);
         progressBar = findViewById(R.id.progressBar);
-        eyeToggle1 = findViewById(R.id.EYE);
-        eyeToggle2 = findViewById(R.id.EYE2);
+        TextView eyeToggle1 = findViewById(R.id.EYE);
+        TextView eyeToggle2 = findViewById(R.id.EYE2);
         
         // Initialize components
         eyeToggle1.setVisibility(View.GONE);

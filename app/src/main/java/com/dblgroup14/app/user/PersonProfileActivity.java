@@ -46,7 +46,7 @@ public class PersonProfileActivity extends AppCompatActivity {
     private boolean hasSentFriendRequest;       // whether the our app's user has sent a friend request to the user being shown
     private String appUserUid;                  // the UID of our app's user
     
-    private List<Pair<DatabaseReference, ValueEventListener>> eventListeners = new ArrayList<>();
+    private final List<Pair<DatabaseReference, ValueEventListener>> eventListeners = new ArrayList<>();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

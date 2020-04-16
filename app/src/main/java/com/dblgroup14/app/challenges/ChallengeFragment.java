@@ -68,7 +68,7 @@ public abstract class ChallengeFragment extends Fragment {
             
             // Update score remotely
             if (username != null) {
-                RemoteDatabase.getCurrentUserScoreReference().setValue((long) score.score);
+                RemoteDatabase.getCurrentUserScoreReference().setValue(score.score);
             }
         });
     }

@@ -13,6 +13,7 @@ import com.dblgroup14.app.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+/*fragment class to choose challenges to open when the alarm rings in the app  when the user puts on the alarm*/
 public class ManageChallengesFragment extends Fragment {
     @StringRes
     private static final int[] TITLES = new int[] {R.string.tab_default_challenges, R.string.tab_my_challenges};
@@ -26,7 +27,7 @@ public class ManageChallengesFragment extends Fragment {
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@androidx.annotation.NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Get components
@@ -45,7 +46,7 @@ public class ManageChallengesFragment extends Fragment {
         TabLayoutMediator mediator = new TabLayoutMediator(tabLayout, viewPager, (tab, pos) -> tab.setText(TITLES[pos]));
         mediator.attach();
     }
-    
+    //list the challenges as arguments
     private class ViewPagerAdapter extends FragmentStateAdapter {
         public ViewPagerAdapter() {
             super(getActivity());

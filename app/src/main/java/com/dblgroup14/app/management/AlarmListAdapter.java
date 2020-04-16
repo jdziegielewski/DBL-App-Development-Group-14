@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
@@ -39,8 +40,9 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
      * @param parent   the view of the parent
      * @return the view rowView
      */
+    @NonNull
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View view, @NonNull ViewGroup parent) {
         // Get alarm object
         Alarm alarm = getItem(position);
         assert alarm != null;
@@ -52,7 +54,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
         // Initialize new row
         setTime(newRow, alarm);
         setDelete(newRow, alarm);
-        setDropDownMenu(newRow, alarm);
+        setDropDownMenu(newRow);
         setEditAlarmButton(newRow, alarm);
         setAlarmState(newRow, alarm);
         
@@ -107,11 +109,10 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
     
     /**
      * If the alarm box has been clicked, the drop down menu is shown
+     *  @param newRow The newly inflated row
      *
-     * @param newRow The newly inflated row
-     * @param alarm  The alarm matching alarm object
      */
-    private void setDropDownMenu(View newRow, Alarm alarm) {
+    private void setDropDownMenu(View newRow) {
         ConstraintLayout dropDownView = newRow.findViewById(R.id.dropDownView);
         ConstraintLayout mainBoxAlarm = newRow.findViewById(R.id.mainBoxAlarm);
         dropDownView.setVisibility(View.GONE);

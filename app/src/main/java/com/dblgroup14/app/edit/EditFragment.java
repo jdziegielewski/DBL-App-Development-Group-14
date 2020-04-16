@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.support.dao.EditDaoInterface;
 
 /**
  * The abstract superclass that hosts a fragment that shows or edits any type of object in this app.
  */
-public abstract class EditFragment<T extends Object> extends Fragment {
+public abstract class EditFragment<T> extends Fragment {
     protected T editObject;     // the object instance that is being edited
     protected boolean isEdit;   // whether an existing object instance will be edited
     
@@ -21,7 +22,7 @@ public abstract class EditFragment<T extends Object> extends Fragment {
     }
     
     @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Check whether arguments have been set

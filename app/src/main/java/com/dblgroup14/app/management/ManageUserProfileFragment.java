@@ -48,7 +48,7 @@ public class ManageUserProfileFragment extends Fragment {
     }
     
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@androidx.annotation.NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
         // Hide action bar and change window colors
@@ -155,12 +155,10 @@ public class ManageUserProfileFragment extends Fragment {
      * Sets up the image view that contains the user's profile picture.
      */
     private void setupProfilePictureView() {
-        profileImageView.setOnClickListener(v -> {
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1, 1)
-                    .start(getContext(), this);
-        });
+        profileImageView.setOnClickListener(v -> CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setAspectRatio(1, 1)
+                .start(getContext(), this));
     }
     
     /**

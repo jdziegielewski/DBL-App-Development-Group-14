@@ -15,9 +15,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * One entry in a friends list.
  */
 public class FriendsViewHolder extends RecyclerView.ViewHolder {
-    private TextView nameText;
-    private TextView secondaryText;
-    private CircleImageView profilePictureView;
+    private final TextView nameText;
+    private final TextView secondaryText;
+    private final CircleImageView profilePictureView;
     
     public FriendsViewHolder(View itemView) {
         super(itemView);

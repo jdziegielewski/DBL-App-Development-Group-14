@@ -16,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 /**
- * The recycler view adapter for a friends list.
+ * The recycler view adapter for a list of friends of the user of the app.
  */
 public class FriendsRecyclerAdapter extends FirebaseRecyclerAdapter<UserFriend, FriendsViewHolder> {
     private final Context context;
@@ -30,22 +30,22 @@ public class FriendsRecyclerAdapter extends FirebaseRecyclerAdapter<UserFriend, 
         this.userTableReference = RemoteDatabase.getTableReference(RemoteDatabase.USERS_TABLE);
         this.isSearchFriendList = isSearchFriendList;
     }
-    
+    //getting the user friends data
     @Override
     protected void populateViewHolder(final FriendsViewHolder viewHolder, final UserFriend model, int pos) {
-        // Fetch friend data from database
+        // Fetch the friend data from database
         final String friendUid = getRef(pos).getKey();
         userTableReference.child(friendUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Get friend user data
+                // Get the friend user data
                 User friend = dataSnapshot.getValue(User.class);
                 if (friend == null) {
                     viewHolder.setError();
                     return;
                 }
                 
-                // Get friends profile picture url
+                // Get the friends profile picture from url
                 if (friend.profilePicture != null && !friend.profilePicture.isEmpty()) {
                     StorageReference profilePicture = RemoteDatabase.getProfilePictureReference(friend);
                     profilePicture.getDownloadUrl().addOnCompleteListener(t -> {
