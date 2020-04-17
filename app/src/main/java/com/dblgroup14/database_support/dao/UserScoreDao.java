@@ -2,6 +2,7 @@ package com.dblgroup14.database_support.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -26,7 +27,10 @@ public abstract class UserScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void storeAll(List<UserScore> scores);
     
+    @Delete
+    public abstract void delete(UserScore score);
+    
     @Query("DELETE FROM user_scores WHERE `username` != '(default)'")
     public abstract void deleteAll();
-
+    
 }

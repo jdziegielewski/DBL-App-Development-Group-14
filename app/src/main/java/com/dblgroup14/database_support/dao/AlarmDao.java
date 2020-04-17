@@ -15,15 +15,13 @@ import java.util.List;
 @Dao
 public abstract class AlarmDao implements EditDaoInterface<Alarm> {
     /**
-     * Query that gets all the alrms of the user
+     * Query that gets all the alarms of the user
      */
     @Query("SELECT * FROM alarms")
     public abstract LiveData<List<Alarm>> all();
     
     /**
      * Query that gets a specific alarm by id
-     * @param id
-     * @return
      */
     @Query("SELECT * FROM alarms WHERE `id`=:id")
     public abstract Alarm get(int id);
@@ -31,15 +29,12 @@ public abstract class AlarmDao implements EditDaoInterface<Alarm> {
     /**
      * Method that stores an alarm into the database.
      * Conflicts are solved by replacing the old alarm with the new one.
-     * @param alarm is the alarm to be stored
-     *
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long store(Alarm alarm);
     
     /**
      * Method for removing an alarm from the database
-     * @param alarm is the alarm to be deleted
      */
     @Delete
     public abstract void delete(Alarm alarm);

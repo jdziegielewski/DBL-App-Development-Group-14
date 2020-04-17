@@ -155,7 +155,7 @@ public class DatabaseInstrumentedTest {
         assertEquals(960, u2.score);
         
         // Delete entity
-        //dao.delete(u2);
+        dao.delete(u2);
         
         // Assert that entity does not exist
         assertNull(dao.scoreOfUser(TEST_USER_NAME));

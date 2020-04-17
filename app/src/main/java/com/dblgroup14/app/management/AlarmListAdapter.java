@@ -18,7 +18,6 @@ import com.dblgroup14.database_support.AppDatabase;
 import com.dblgroup14.database_support.entities.local.Alarm;
 import java.util.Locale;
 
-//https://appsandbiscuits.com/listview-tutorial-android-12-ccef4ead27cc
 public class AlarmListAdapter extends ArrayAdapter<Alarm> {
     private final Activity activity;    // reference to the activity
     
