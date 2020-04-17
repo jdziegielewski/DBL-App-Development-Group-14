@@ -14,13 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.dao.ChallengeDao;
-import com.dblgroup14.support.entities.local.Challenge;
+import com.dblgroup14.database_support.AppDatabase;
+import com.dblgroup14.database_support.dao.ChallengeDao;
+import com.dblgroup14.database_support.entities.local.Challenge;
 import java.util.List;
 
-/*fragment class ChallengesListFragment to list the challenges available in the app when the user puts on the alarm
-* it initializes the view of the list of challenges */
+/**
+ * Fragment class ChallengesListFragment to list the challenges available to the user in the app.
+ * It initializes the view of the list of challenges in the ManageChallengeFragment.
+ */
 public class ChallengesListFragment extends Fragment {
     public static final String KEY_TYPE = "type";
     
@@ -65,6 +67,11 @@ public class ChallengesListFragment extends Fragment {
         liveData.observe(getViewLifecycleOwner(), this::updateChallengeListAdapter);
     }
     
+    /**
+     * Update the challenge list adapter with the newly fetched challenge data.
+     *
+     * @param data The list of newly fetched challenge data
+     */
     private void updateChallengeListAdapter(List<Challenge> data) {
         challengeList = data;
         
@@ -75,14 +82,18 @@ public class ChallengesListFragment extends Fragment {
         }
     }
     
-    // show the list for the user
+    /**
+     * Shows a dialog to the user containing options on how to manage a specific challenge in the list.
+     *
+     * @param c The challenge instance that is to be managed
+     */
     private void showManageDialog(final Challenge c) {
         // Compile list of choices for the user
         String[] choices;
         if (showDefaultsOnly) {
             choices = new String[] {"Create own from template"};
         } else {
-            choices = new String[] {"Edit", "Delete"};
+            choices = new String[] {"Edit"};
         }
         
         // Create dialog
@@ -90,25 +101,23 @@ public class ChallengesListFragment extends Fragment {
                 .setTitle("Manage challenge")
                 .setCancelable(true)
                 .setItems(choices, (d, w) -> {
-                    switch (w) {
-                        case 0:
-                            if (showDefaultsOnly) {
-                                createFromTemplate(c);
-                            } else {
-                                editOwnChallenge(c);
-                            }
-                            break;
-                        case 1:
-                            deleteOwnChallenge(c);
-                            break;
-                        default:
-                            break;
+                    if (w == 0) {
+                        if (showDefaultsOnly) {
+                            createFromTemplate(c);
+                        } else {
+                            editOwnChallenge(c);
+                        }
                     }
                 })
                 .create();
         dialog.show();
     }
-    //create the list from the template method
+    
+    /**
+     * Starts the EditActivity to create a new challenge from a built-in template.
+     *
+     * @param c The challenge instance to be used as a template
+     */
     private void createFromTemplate(Challenge c) {
         Intent intent = new Intent(getContext(), EditActivity.class);
         intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
@@ -116,7 +125,11 @@ public class ChallengesListFragment extends Fragment {
         startActivity(intent);
     }
     
-    //edit own challenges method
+    /**
+     * Starts the EditActivity to edit a challenge that was already created by the user.
+     *
+     * @param c The challenge instance that is to be edited
+     */
     private void editOwnChallenge(Challenge c) {
         Intent intent = new Intent(getContext(), EditActivity.class);
         intent.putExtra(EditActivity.KEY_OBJECT_TYPE, EditActivity.VAL_OBJECT_CHALLENGE);
@@ -124,9 +137,4 @@ public class ChallengesListFragment extends Fragment {
         intent.putExtra(EditActivity.KEY_EDIT_FRAGMENT_CLASS_NAME, c.getEditFragmentClassName());
         startActivity(intent);
     }
-    //delete own challenges method (not to be implemented due to the changes in the requirements)
-    private void deleteOwnChallenge(Challenge c) {
-        // NOTTODO: Implement
-    }
 }
-//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

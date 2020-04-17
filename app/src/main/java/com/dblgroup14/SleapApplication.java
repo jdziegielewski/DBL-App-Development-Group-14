@@ -1,15 +1,16 @@
-package com.dblgroup14.app;
+package com.dblgroup14;
 
 import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Pair;
 import androidx.annotation.NonNull;
-import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.RemoteDatabase;
-import com.dblgroup14.support.dao.UserScoreDao;
-import com.dblgroup14.support.entities.local.UserScore;
-import com.dblgroup14.support.entities.remote.User;
+import com.dblgroup14.app.challenges.ShakeChallengeFragment;
+import com.dblgroup14.database_support.AppDatabase;
+import com.dblgroup14.database_support.RemoteDatabase;
+import com.dblgroup14.database_support.dao.UserScoreDao;
+import com.dblgroup14.database_support.entities.local.UserScore;
+import com.dblgroup14.database_support.entities.remote.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +25,7 @@ public class SleapApplication extends Application {
     private String currentUserUid;
     private List<UserScore> friendScores;
     private List<Pair<DatabaseReference, ValueEventListener>> eventListeners;
+    public static String ShakeChallengeName;
     
     @Override
     public void onCreate() {
@@ -37,6 +39,7 @@ public class SleapApplication extends Application {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             registerRemoteEventListeners();
         }
+        ShakeChallengeName = ShakeChallengeFragment.class.getSimpleName();
     }
     
     @Override

@@ -3,13 +3,13 @@ package com.dblgroup14.app;
 import android.content.Context;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.dao.AlarmDao;
-import com.dblgroup14.support.dao.ChallengeDao;
-import com.dblgroup14.support.dao.UserScoreDao;
-import com.dblgroup14.support.entities.local.Alarm;
-import com.dblgroup14.support.entities.local.Challenge;
-import com.dblgroup14.support.entities.local.UserScore;
+import com.dblgroup14.database_support.AppDatabase;
+import com.dblgroup14.database_support.dao.AlarmDao;
+import com.dblgroup14.database_support.dao.ChallengeDao;
+import com.dblgroup14.database_support.dao.UserScoreDao;
+import com.dblgroup14.database_support.entities.local.Alarm;
+import com.dblgroup14.database_support.entities.local.Challenge;
+import com.dblgroup14.database_support.entities.local.UserScore;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,6 +23,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+/**
+ * Test class for the local database interaction database
+ */
 @RunWith(AndroidJUnit4.class)
 public class DatabaseInstrumentedTest {
     private static AppDatabase database;
@@ -152,7 +155,7 @@ public class DatabaseInstrumentedTest {
         assertEquals(960, u2.score);
         
         // Delete entity
-        //dao.delete(u2);
+        dao.delete(u2);
         
         // Assert that entity does not exist
         assertNull(dao.scoreOfUser(TEST_USER_NAME));

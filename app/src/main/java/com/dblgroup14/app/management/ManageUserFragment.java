@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.database_support.RemoteDatabase;
 
 public class ManageUserFragment extends Fragment {
     @Override

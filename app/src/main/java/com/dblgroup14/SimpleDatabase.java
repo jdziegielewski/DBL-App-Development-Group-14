@@ -1,8 +1,8 @@
-package com.dblgroup14.support;
+package com.dblgroup14;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.dblgroup14.app.SleapApplication;
+import com.dblgroup14.SleapApplication;
 
 /**
  * This class is used to access a simple database through Android's SharedPreferences API.

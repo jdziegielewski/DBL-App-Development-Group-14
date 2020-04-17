@@ -7,8 +7,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.entities.remote.UserFriend;
-import com.dblgroup14.support.entities.remote.User;
+import com.dblgroup14.database_support.entities.remote.UserFriend;
+import com.dblgroup14.database_support.entities.remote.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**

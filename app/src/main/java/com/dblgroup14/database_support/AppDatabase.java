@@ -1,16 +1,16 @@
-package com.dblgroup14.support;
+package com.dblgroup14.database_support;
 
 import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import com.dblgroup14.support.dao.AlarmDao;
-import com.dblgroup14.support.dao.ChallengeDao;
-import com.dblgroup14.support.dao.UserScoreDao;
-import com.dblgroup14.support.entities.local.Alarm;
-import com.dblgroup14.support.entities.local.Challenge;
-import com.dblgroup14.support.entities.local.UserScore;
+import com.dblgroup14.database_support.dao.AlarmDao;
+import com.dblgroup14.database_support.dao.ChallengeDao;
+import com.dblgroup14.database_support.dao.UserScoreDao;
+import com.dblgroup14.database_support.entities.local.Alarm;
+import com.dblgroup14.database_support.entities.local.Challenge;
+import com.dblgroup14.database_support.entities.local.UserScore;
 
 @Database(entities = {Alarm.class, Challenge.class, UserScore.class}, version = 1)
 @TypeConverters({RoomTypeConverters.class})

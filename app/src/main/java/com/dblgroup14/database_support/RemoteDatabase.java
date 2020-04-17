@@ -1,6 +1,6 @@
-package com.dblgroup14.support;
+package com.dblgroup14.database_support;
 
-import com.dblgroup14.support.entities.remote.User;
+import com.dblgroup14.database_support.entities.remote.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

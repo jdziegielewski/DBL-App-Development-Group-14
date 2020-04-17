@@ -14,8 +14,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.RemoteDatabase;
-import com.dblgroup14.support.entities.remote.User;
+import com.dblgroup14.database_support.RemoteDatabase;
+import com.dblgroup14.database_support.entities.remote.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -98,7 +98,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         
         // Set click listeners for top and bottom buttons
         topBtn.setOnClickListener(v -> topBtnClicked());
-        bottomBtn.setOnClickListener(v -> bottomBtnClicked());
+        bottomBtn.setOnClickListener(v -> declineFriendRequest());
     }
     
     @Override
@@ -269,13 +269,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         }
     }
     
-    /**
-     * Called whenever the app user taps the bottom button in the UI.
-     */
-    private void bottomBtnClicked() {
-        // Decline friend request
-        declineFriendRequest();
-    }
+
     
     /**
      * Sends a friend request to the user that is shown.

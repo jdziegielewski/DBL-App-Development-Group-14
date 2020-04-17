@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.database_support.RemoteDatabase;
 import com.google.firebase.database.Query;
 
 public class FindFriendsActivity extends AppCompatActivity {
@@ -44,6 +44,10 @@ public class FindFriendsActivity extends AppCompatActivity {
         
         // Add click listener to search button
         findViewById(R.id.Search_Friends_button).setOnClickListener(v -> searchFriends());
+    
+        //Show the complete list of friends at the beginning before starting to search by username
+        Query query = RemoteDatabase.getTableReference(RemoteDatabase.USERS_TABLE);
+        searchResultsRecyclerView.setAdapter(new FriendsRecyclerAdapter(this, query, true));
     }
     
     /**

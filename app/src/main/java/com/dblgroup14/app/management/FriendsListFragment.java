@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dblgroup14.app.R;
 import com.dblgroup14.app.user.FindFriendsActivity;
 import com.dblgroup14.app.user.FriendsRecyclerAdapter;
-import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.database_support.RemoteDatabase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 

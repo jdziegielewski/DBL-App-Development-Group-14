@@ -2,9 +2,9 @@ package com.dblgroup14.app.edit;
 
 import android.view.View;
 import android.widget.NumberPicker;
+import com.dblgroup14.SleapApplication;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.challenges.ShakeChallengeFragment;
-import com.dblgroup14.support.entities.local.Challenge;
+import com.dblgroup14.database_support.entities.local.Challenge;
 
 public class EditShakeChallengeFragment extends EditChallengeFragment {
     public static final String KEY_SHAKE_COUNT = "shake_count";
@@ -51,7 +51,7 @@ public class EditShakeChallengeFragment extends EditChallengeFragment {
         Challenge template = new Challenge();
         template.isEditable = true;
         template.setName("My Shake Challenge");     // TODO: Temporary
-        template.setSimpleClassName(ShakeChallengeFragment.class.getSimpleName());
+        template.setSimpleClassName(SleapApplication.ShakeChallengeName);
         template.put(KEY_SHAKE_COUNT, SHAKE_AMOUNTS[1]);    // set 10 shakes as default
         
         return template;

@@ -1,13 +1,18 @@
-package com.dblgroup14.support.dao;
+package com.dblgroup14.database_support.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import com.dblgroup14.support.entities.local.UserScore;
+import com.dblgroup14.database_support.entities.local.UserScore;
 import java.util.List;
 
+/**
+ * Class that handles the user related queries
+ * This handles all the DB interaction for the challenges
+ */
 @Dao
 public abstract class UserScoreDao {
     @Query("SELECT * FROM user_scores")
@@ -22,7 +27,10 @@ public abstract class UserScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void storeAll(List<UserScore> scores);
     
+    @Delete
+    public abstract void delete(UserScore score);
+    
     @Query("DELETE FROM user_scores WHERE `username` != '(default)'")
     public abstract void deleteAll();
-
+    
 }

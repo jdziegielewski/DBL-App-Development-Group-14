@@ -4,7 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.dblgroup14.support.SimpleDatabase;
+import com.dblgroup14.app.AlarmActivity;
+import com.dblgroup14.SimpleDatabase;
 /*Alarm class that is extension of broadcast receiver to manage correction of turning on the alarm
 * it receives signals that are sent to app by android when an alarm is triggered
 * it starts AlarmActivity */
