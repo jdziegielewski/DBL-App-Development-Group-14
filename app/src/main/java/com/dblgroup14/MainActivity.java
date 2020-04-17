@@ -77,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.actionbar_gradient));
     }
     
+    /**
+     * Sets up the notification Channel
+     */
     private void CreateNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel1 = new NotificationChannel(
@@ -90,7 +93,10 @@ public class MainActivity extends AppCompatActivity {
             
         }
     }
-    //create setup notification class
+    
+    /**
+     * create setup notification class
+     */
     public static void CreateNotification() {
         Context context = SleapApplication.getContext();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

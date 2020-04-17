@@ -41,12 +41,80 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         activity = (AppCompatActivity) getActivity();
         
         // Initialize UI
-        setTitle();
-        initializeTimeView(view);
-        initializeNameEditText(view);
-        initializeRepeatButton(view);
-        initializeRepeatDays(view);
-        initializeSeekBar(view);
+        
+        //  Sets the title in the action bar depending on if the alarm need to be created or edited
+        if (activity.getSupportActionBar() != null) {
+            if (isEdit) {
+                activity.getSupportActionBar().setTitle("Edit My Alarm");
+            } else {
+                activity.getSupportActionBar().setTitle("My New Alarm");
+            }
+        }
+        // Initialize the timeview
+        
+        /**
+         * Sets the timeView to the current time, sets a timePicker when the user clicks on the timeView
+         */
+        TextView time = view.findViewById(R.id.time);
+        time.setOnClickListener(v -> {
+            Calendar currentTime = Calendar.getInstance();
+            int curHour = currentTime.get(Calendar.HOUR_OF_DAY);
+            int curMin = currentTime.get(Calendar.MINUTE);
+            
+            TimePickerDialog timePicker = new TimePickerDialog(activity, (tp, hour, min) -> {
+                editObject.setTime(hour, min);
+                updateTimeView(time);
+            }, curHour, curMin, true); //Yes 24 hour time
+            timePicker.show();
+        });
+        updateTimeView(time);
+        /**
+         * Sets the name of the alarm in the nameEditText
+         */
+        nameEdit = view.findViewById(R.id.alarmNameInput);
+        nameEdit.setText(editObject.name);
+        /**
+         * Sets the repeat button to the right drawable and changes the layout and sets the repeat variable when the repeat button is clicked
+         */
+        ImageView repeatButton = view.findViewById(R.id.alarmRepeatBtn);
+        if (editObject.repeats) {
+            repeatButton.setBackgroundResource(R.drawable.ic_repeat);
+        } else {
+            repeatButton.setBackgroundResource(R.drawable.ic_repeat_gray);
+        }
+        repeatButton.setOnClickListener(v -> {
+            if (editObject.repeats) {
+                repeatButton.setBackgroundResource(R.drawable.ic_repeat_gray);
+            } else {
+                repeatButton.setBackgroundResource(R.drawable.ic_repeat);
+            }
+            editObject.setRepeats(!editObject.repeats);
+        });
+    
+        /**
+         * Sets for every day an onClickListener and changes the layout of the days to the enabled layouts if the day is enabled
+         */
+        TextView[] repeatDays = new TextView[] {
+                view.findViewById(R.id.repeatDay0), view.findViewById(R.id.repeatDay1), view.findViewById(R.id.repeatDay2),
+                view.findViewById(R.id.repeatDay3), view.findViewById(R.id.repeatDay4), view.findViewById(R.id.repeatDay5),
+                view.findViewById(R.id.repeatDay6)
+        };
+        updateRepeatDays(repeatDays);
+        for (TextView repeatDay : repeatDays) {
+            setOnClick(repeatDay);
+        }
+    
+        /**
+         * Sets the max volume and current volume in the seek bar
+         */
+        
+        AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
+        assert audioManager != null;
+        maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        volumeSeekBar = view.findViewById(R.id.alarmVolumeSeekBar);
+        volumeSeekBar.setMax((int) maxVolume);
+        volumeSeekBar.setProgress((int) (editObject.volume * maxVolume / 100));
+        
         initializeChallengesLiveData(view);
     }
     
@@ -96,37 +164,6 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         return R.layout.fragment_edit_alarm;
     }
     
-    /**
-     * Sets the title in the action bar depending on if the alarm need to be created or edited
-     */
-    private void setTitle() {
-        if (activity.getSupportActionBar() != null) {
-            if (isEdit) {
-                activity.getSupportActionBar().setTitle("Edit My Alarm");
-            } else {
-                activity.getSupportActionBar().setTitle("My New Alarm");
-            }
-        }
-    }
-    
-    /**
-     * Sets the timeView to the current time, sets a timePicker when the user clicks on the timeView
-     */
-    private void initializeTimeView(View view) {
-        TextView time = view.findViewById(R.id.time);
-        time.setOnClickListener(v -> {
-            Calendar currentTime = Calendar.getInstance();
-            int curHour = currentTime.get(Calendar.HOUR_OF_DAY);
-            int curMin = currentTime.get(Calendar.MINUTE);
-            
-            TimePickerDialog timePicker = new TimePickerDialog(activity, (tp, hour, min) -> {
-                editObject.setTime(hour, min);
-                updateTimeView(time);
-            }, curHour, curMin, true); //Yes 24 hour time
-            timePicker.show();
-        });
-        updateTimeView(time);
-    }
     
     /**
      * Updates the timeView to the chosen time
@@ -138,61 +175,7 @@ public class EditAlarmFragment extends EditFragment<Alarm> {
         time.setText(String.format(Locale.getDefault(), "%02d:%02d", hours, min));
     }
     
-    /**
-     * Sets the name of the alarm in the nameEditText
-     */
-    private void initializeNameEditText(View view) {
-        nameEdit = view.findViewById(R.id.alarmNameInput);
-        nameEdit.setText(editObject.name);
-    }
-    
-    /**
-     * Sets the repeat button to the right drawable and changes the layout and sets the repeat variable when the repeat button is clicked
-     */
-    private void initializeRepeatButton(View view) {
-        ImageView repeatButton = view.findViewById(R.id.alarmRepeatBtn);
-        if (editObject.repeats) {
-            repeatButton.setBackgroundResource(R.drawable.ic_repeat);
-        } else {
-            repeatButton.setBackgroundResource(R.drawable.ic_repeat_gray);
-        }
-        repeatButton.setOnClickListener(v -> {
-            if (editObject.repeats) {
-                repeatButton.setBackgroundResource(R.drawable.ic_repeat_gray);
-            } else {
-                repeatButton.setBackgroundResource(R.drawable.ic_repeat);
-            }
-            editObject.setRepeats(!editObject.repeats);
-        });
-    }
-    
-    /**
-     * Sets for every day an onClickListener and changes the layout of the days to the enabled layouts if the day is enabled
-     */
-    private void initializeRepeatDays(View view) {
-        TextView[] repeatDays = new TextView[] {
-                view.findViewById(R.id.repeatDay0), view.findViewById(R.id.repeatDay1), view.findViewById(R.id.repeatDay2),
-                view.findViewById(R.id.repeatDay3), view.findViewById(R.id.repeatDay4), view.findViewById(R.id.repeatDay5),
-                view.findViewById(R.id.repeatDay6)
-        };
-        
-        for (TextView repeatDay : repeatDays) {
-            setOnClick(repeatDay);
-        }
-        updateRepeatDays(repeatDays);
-    }
-    
-    /**
-     * Sets the max volume and current volume in the seek bar
-     */
-    private void initializeSeekBar(View view) {
-        AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
-        assert audioManager != null;
-        maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        volumeSeekBar = view.findViewById(R.id.alarmVolumeSeekBar);
-        volumeSeekBar.setMax((int) maxVolume);
-        volumeSeekBar.setProgress((int) (editObject.volume * maxVolume / 100));
-    }
+  
     
     /**
      * Puts all the available challenges in the layout

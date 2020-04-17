@@ -69,7 +69,24 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
     
     /* View listeners */
     
-    private final View.OnClickListener hideOnClickListener = v -> toggle();
+    private final View.OnClickListener hideOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (visible) {
+                hide();
+            } else {
+                // Show the system bar
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                visible = true;
+                
+                // Schedule a runnable to display UI elements after a delay
+                hideHandler.removeCallbacks(hidePart2Runnable);
+                hideHandler.postDelayed(showPart2Runnable, UI_ANIMATION_DELAY);
+            }
+            
+        }
+    };
     private final DialogInterface.OnClickListener losingPopupButtonListener = (o, i) -> finish();
     private final View.OnClickListener giveUpButtonListener = v -> {
         AlertDialog.Builder builder = new AlertDialog.Builder(AlarmActivity.this);
@@ -101,7 +118,16 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
         AsyncTask.execute(() -> {
             // Get alarm from database
             currentAlarm = AppDatabase.db().alarmDao().get(alarmId);
-            initializeAlarm();
+    
+            try {
+                Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                alarmSoundPlayer = MediaPlayer.create(getApplicationContext(), ringtoneUri);
+                alarmSoundPlayer.setScreenOnWhilePlaying(true);
+                alarmSoundPlayer.setLooping(true);
+                alarmSoundPlayer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             
             // Initialize challenge
             final List<Challenge> allChallenges = AppDatabase.db().challengeDao().allDirect();
@@ -222,19 +248,7 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
         repeatHandler.postDelayed(this::updateView, 1000);
     }
     
-    private void initializeAlarm() {
-        // TODO: Reschedule alarm if set to repeat
-        
-        try {
-            Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            alarmSoundPlayer = MediaPlayer.create(getApplicationContext(), ringtoneUri);
-            alarmSoundPlayer.setScreenOnWhilePlaying(true);
-            alarmSoundPlayer.setLooping(true);
-            alarmSoundPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
     
     private void initializeChallenge(List<Challenge> allChallenges) {
         // Find a (random) challenge that belongs to this alarm
@@ -286,13 +300,6 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
     }
     
-    private void toggle() {
-        if (visible) {
-            hide();
-        } else {
-            show();
-        }
-    }
     
     private void hide() {
         // Hide UI first
@@ -307,17 +314,6 @@ public class AlarmActivity extends AppCompatActivity implements ChallengeFragmen
         hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY);
     }
     
-    @SuppressLint("InlinedApi")
-    private void show() {
-        // Show the system bar
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        visible = true;
-        
-        // Schedule a runnable to display UI elements after a delay
-        hideHandler.removeCallbacks(hidePart2Runnable);
-        hideHandler.postDelayed(showPart2Runnable, UI_ANIMATION_DELAY);
-    }
     
     /**
      * Schedules a call to hide() in delay milliseconds, canceling any

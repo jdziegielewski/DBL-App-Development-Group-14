@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Dao
 public abstract class ChallengeDao implements EditDaoInterface<Challenge> {
+    // Get all the challenges both custom and default
     @Query("SELECT * FROM challenges ORDER BY LENGTH(name)")
     public abstract LiveData<List<Challenge>> all();
     
@@ -26,7 +27,7 @@ public abstract class ChallengeDao implements EditDaoInterface<Challenge> {
     
     @Query("SELECT * FROM challenges")
     public abstract List<Challenge> allDirect();
-    
+    // Get challenge by ID
     @Query("SELECT * FROM challenges WHERE `id`=:id")
     public abstract Challenge get(int id);
     

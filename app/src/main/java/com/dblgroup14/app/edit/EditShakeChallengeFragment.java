@@ -46,6 +46,10 @@ public class EditShakeChallengeFragment extends EditChallengeFragment {
         return super.update();
     }
     
+    /**
+     * Method for creating a new challenge with the user data
+     * @return the new challenge
+     */
     @Override
     protected Challenge createNew() {
         Challenge template = new Challenge();
