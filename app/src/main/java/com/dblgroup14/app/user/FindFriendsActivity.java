@@ -44,6 +44,10 @@ public class FindFriendsActivity extends AppCompatActivity {
         
         // Add click listener to search button
         findViewById(R.id.Search_Friends_button).setOnClickListener(v -> searchFriends());
+    
+        //Show the complete list of friends at the beginning before starting to search by username
+        Query query = RemoteDatabase.getTableReference(RemoteDatabase.USERS_TABLE);
+        searchResultsRecyclerView.setAdapter(new FriendsRecyclerAdapter(this, query, true));
     }
     
     /**
