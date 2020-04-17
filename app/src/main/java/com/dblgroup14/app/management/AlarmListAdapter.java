@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.AlarmScheduler;
-import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.entities.local.Alarm;
+import com.dblgroup14.app.AlarmScheduler;
+import com.dblgroup14.database_support.AppDatabase;
+import com.dblgroup14.database_support.entities.local.Alarm;
 import java.util.Locale;
 
 //https://appsandbiscuits.com/listview-tutorial-android-12-ccef4ead27cc

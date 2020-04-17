@@ -1,4 +1,4 @@
-package com.dblgroup14.support.entities.remote;
+package com.dblgroup14.database_support.entities.remote;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import com.dblgroup14.support.dao.EditDaoInterface;
+import com.dblgroup14.database_support.dao.EditDaoInterface;
 
 /**
  * The abstract superclass that hosts a fragment that shows or edits any type of object in this app.

@@ -1,13 +1,12 @@
-package com.dblgroup14.support;
+package com.dblgroup14.app;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import com.dblgroup14.app.AlarmBroadcastReceiver;
-import com.dblgroup14.app.MainActivity;
-import com.dblgroup14.app.SleapApplication;
-import com.dblgroup14.support.entities.local.Alarm;
+import com.dblgroup14.MainActivity;
+import com.dblgroup14.SleapApplication;
+import com.dblgroup14.database_support.entities.local.Alarm;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

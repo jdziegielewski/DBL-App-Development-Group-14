@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.RemoteDatabase;
+import com.dblgroup14.database_support.RemoteDatabase;
 import com.google.firebase.database.Query;
 
 public class FindFriendsActivity extends AppCompatActivity {

@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import com.dblgroup14.app.EditActivity;
 import com.dblgroup14.app.R;
-import com.dblgroup14.support.AppDatabase;
-import com.dblgroup14.support.dao.ChallengeDao;
-import com.dblgroup14.support.entities.local.Challenge;
+import com.dblgroup14.database_support.AppDatabase;
+import com.dblgroup14.database_support.dao.ChallengeDao;
+import com.dblgroup14.database_support.entities.local.Challenge;
 import java.util.List;
 
 /*fragment class ChallengesListFragment to list the challenges available in the app when the user puts on the alarm

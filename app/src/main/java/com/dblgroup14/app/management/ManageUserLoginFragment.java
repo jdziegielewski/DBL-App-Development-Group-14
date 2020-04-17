@@ -18,7 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.dblgroup14.app.R;
-import com.dblgroup14.app.SleapApplication;
+import com.dblgroup14.SleapApplication;
 import com.dblgroup14.app.user.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 /*Fragment class that manages the log in page when user wants to use the app

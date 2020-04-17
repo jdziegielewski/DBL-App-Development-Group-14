@@ -1,4 +1,4 @@
-package com.dblgroup14.support.dao;
+package com.dblgroup14.database_support.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -6,7 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import com.dblgroup14.support.entities.local.Alarm;
+import com.dblgroup14.database_support.entities.local.Alarm;
 import java.util.List;
 
 /**

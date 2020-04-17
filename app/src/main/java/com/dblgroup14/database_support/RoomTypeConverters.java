@@ -1,4 +1,4 @@
-package com.dblgroup14.support;
+package com.dblgroup14.database_support;
 
 import androidx.room.TypeConverter;
 import com.google.gson.Gson;
@@ -7,19 +7,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Type converter functions for the Room Database library
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 public abstract class RoomTypeConverters {
+    /**
+     * Function that converts strings to arrays of booleans
+     * @param value is the string to be converted into an array
+     * @return an array of booleans
+     */
     @TypeConverter
     public static boolean[] booleanArrFromString(String value) {
         String[] parts = value.split(",");
@@ -30,6 +24,11 @@ public abstract class RoomTypeConverters {
         return result;
     }
     
+    /**
+     * Function that converts arrays of booleans to strings.
+     * @param array is the array of booleans to be converted
+     * @return a string with all the booleans
+     */
     @TypeConverter
     public static String booleanArrToString(boolean[] array) {
         StringBuilder builder = new StringBuilder();
