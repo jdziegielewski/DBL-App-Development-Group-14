@@ -17,6 +17,7 @@ import static android.Manifest.permission.CAMERA;
 
 /**
  * For reading the barcodes and QR codes in the barcode challenge we used zxing libary 'me.dm7.barcodescanner:zxing:1.9'
+ * The challenge intends the user to scan a barcode or a QR code in order to complete the challenge successfully to turn off the alarm
  */
 
 public class BarcodeChallengeFragment extends ChallengeFragment implements ZXingScannerView.ResultHandler {

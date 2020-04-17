@@ -22,7 +22,7 @@ import com.dblgroup14.app.SleapApplication;
 import com.dblgroup14.app.user.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 /*Fragment class that manages the log in page when user wants to use the app
-* On that page user log in and account creation is taken care of*/
+* On that page user log in and account creation is taken care of */
 public class ManageUserLoginFragment extends Fragment {
     private EditText emailInput, passwordInput;
     private TextView showPasswordToggle;
@@ -42,7 +42,7 @@ public class ManageUserLoginFragment extends Fragment {
         passwordInput = view.findViewById(R.id.password1);
         showPasswordToggle = view.findViewById(R.id.EYE);
         loginProgressBar = view.findViewById(R.id.progressBar);
-        
+        // Variables of the layout
         Button loginBtn = view.findViewById(R.id.loginBtn);
         TextView forgotPasswordText = view.findViewById(R.id.ForgotPass);
         Button createAccountBtn = view.findViewById(R.id.createButton);
@@ -56,7 +56,7 @@ public class ManageUserLoginFragment extends Fragment {
         forgotPasswordText.setOnClickListener(v -> forgotPassword());
         createAccountBtn.setOnClickListener(v -> startActivity(new Intent(getContext(), RegisterActivity.class)));
     }
-    
+    // method setPasswordEventHandlers to set the password text changed listener, set input type and selection and toggle click listener
     private void setPasswordEventHandlers() {
         // Set password text changed listener
         passwordInput.addTextChangedListener(new TextWatcher() {
