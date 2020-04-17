@@ -27,7 +27,7 @@ Greetings!
 Team 14
 Tessa van Beers, Calin Botoroaga, Jens Coenders, Julian Dziegielewski, Mihai-Dragos Ungureanu, Arjen van Vastenhoven
 
-Functionalities:
+App Functionalities:
 -The user is able to set an alarm and on the Alarm page (clock icon) via the plus symbol. For the Alarm he can choose the time to wake up, the days when the alarm will ring, the Alarm Name and Volume and the Challenge he wants to solve while the alarm goes off.
 -On the Challenges page (labyrinth icon) the user can see the Built-in Challenges and Create his own challenge that will appear on 'My Challenges' tab. At the moment we are only supporting one editable challenge that is the 'Shake Phone Challenge'
 -On the Score page (podium icon), the user is able to see a complete Leaderboard of him and his friends based on the points gained while competing the challenges (or lost while snoozing an alarm). Additionally he can see on this page, on the top, a pie chart where the percentage of completed challenges vs the snoozed challenges is showed.
